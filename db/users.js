@@ -59,7 +59,7 @@ async function getUserById(userId) {
   }
 }
 
-//do we want this to be select all so user can see there profile.
+//do we want this to be select all so user can see their profile.
 async function getUserByUsername(username) {
   try {
     const { rows: [user] } = await client.query(`
