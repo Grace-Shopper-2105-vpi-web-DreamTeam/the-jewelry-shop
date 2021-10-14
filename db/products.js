@@ -109,6 +109,24 @@ const updateProduct = async ({id, name, description, price, quantity, categoty, 
 
 // delete product (ADMIN)
 
+const deleteProduct = async (id) => {
+    try {
+        const {
+            rows: [deletedProdcut] 
+        } = await client.query(
+            `
+            DELETE FROM products
+            WHERE id=$1
+            RETURNING *;
+            `, 
+            [id]
+        );
+        return deletedProdcut;
+    } catch (error) {
+        throw error;
+    }
+}
+
 // add product to cart (TBC if this is something that should be in the cart file)
 
 module.exports = {
@@ -116,5 +134,6 @@ module.exports = {
     getAllProducts,
     getProductById,
     getProductByCatagoty,
-    updateProduct
+    updateProduct,
+    deleteProduct
 }
