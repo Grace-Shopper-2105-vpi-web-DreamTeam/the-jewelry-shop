@@ -6,8 +6,22 @@ const client = new Client(DB_URL);
 
 // database methods
 
+const {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  getProductByCatagoty,
+  updateProduct,
+  deleteProduct
+} = require("./products")
+
 // export
 module.exports = {
   client,
-  // db methods
+  createProduct,
+  getAllProducts,
+  getProductById,
+  getProductByCatagoty,
+  updateProduct,
+  deleteProduct
 } 
