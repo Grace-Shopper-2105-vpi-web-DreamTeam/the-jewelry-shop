@@ -30,4 +30,4 @@ apiRouter.use(async (req, res, next) => {
   }
 });
 
-apiRouter.use('/users', require('./routers/users'));
+apiRouter.use('/users', require('./users'));
