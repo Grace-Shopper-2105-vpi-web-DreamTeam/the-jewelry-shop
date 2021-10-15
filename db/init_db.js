@@ -1,18 +1,19 @@
 // code to build and initialize DB goes here
-const { bindComplete } = require('pg-protocol/dist/messages');
+//const { bindComplete } = require('pg-protocol/dist/messages');
 const {
   client
   // other db methods 
 } = require('./index');
+const {
+  createUser
+} = require('./users')
 
 async function buildTables() {
   try {
-    client.connect();
-
     // drop tables in correct order
     console.log('Dropping all tables...');
 
-    client.query(`
+    await client.query(`
     DROP TABLE IF EXISTS order_item;
     DROP TABLE IF EXISTS cart_item;
     DROP TABLE IF EXISTS orders;
@@ -40,38 +41,43 @@ async function buildTables() {
       category VARCHAR(255) NOT NULL,
       price DECIMAL(19, 4),
       inventory INTEGER,
-      image BYTEA(max) NOT NULL
+      image BYTEA NOT NULL
     );
-    CREATE TABLE cart(
-      id SERIAL PRIMARY KEY,
-      "userId" REFERENCES users(id),
-      total DECIMAL(19, 4)
-      quantity INTEGER,
-      "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
-    );
+    `)
+    await client.query(`
     CREATE TABLE orders(
       id SERIAL PRIMARY KEY, 
-      "userId" REFERENCES users(id),
+      "userId" INTEGER REFERENCES users(id),
       total DECIMAL(19, 4)
     );
+    `)
+    //had to remove but there is an error... not sure what?    "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
+    await client.query(`
+    CREATE TABLE cart(
+      id SERIAL PRIMARY KEY,
+      "userId" INTEGER REFERENCES users(id),
+      total DECIMAL(19, 4),
+      quantity INTEGER
+    );
+    
     CREATE TABLE cart_item(
       id SERIAL PRIMARY KEY,
-      "cartId" REFERENCES cart(id)
-      "productId" REFERENCES products(id),
+      "cartId" INTEGER REFERENCES cart(id),
+      "productId" INTEGER REFERENCES products(id),
       quantity INTEGER,
-      price DECIMAL(19, 4), 
+      price DECIMAL(19, 4) 
     );
     CREATE TABLE order_item(
       id SERIAL PRIMARY KEY,
-      "orderId" REFERENCES orders(id),
-      "productId" REFERENCES products(id),
+      "orderId" INTEGER REFERENCES orders(id),
+      "productId" INTEGER REFERENCES products(id),
       quantity INTEGER
     )
     `)
 
     console.log('Finished constructing tables!');
   } catch (error) {
-    console.error('Error constructing tables!');
+    console.error('Error constructing tables!', error);
 
     throw new Error("error while making the tables!")
   }
@@ -179,14 +185,15 @@ async function rebuildDB() {
     client.connect();
     await buildTables();
     await createInitialUsers();
-    await createInitialProducts();
-    await createInitialCarts();
-    await createInitialOrders();
-    await createInitialOrderItems();
-    await createInitialCartItems();
+    // await createInitialProducts();
+    // await createInitialCarts();
+    // await createInitialOrders();
+    // await createInitialOrderItems();
+    // await createInitialCartItems();
     console.log('RebuildDB function was successful!')
   } catch(error) {
     console.log('Error during rebuildDB')
     throw error;
   }
 }
+rebuildDB();

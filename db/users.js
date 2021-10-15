@@ -1,22 +1,21 @@
-const client = require('./client');
+const {client} = require('./index');
 
 const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
-
-const createUser = async ({ username, email, password }) => {
+//tookout on conflict  ON CONFLICT ("emailAddress") DO NOTHING
+const createUser = async ({ username, emailAddress, password }) => {
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
     const {
       rows: [user]
     } = await client.query(
       `
-      INSERT INTO users(username, email, password)
+      INSERT INTO users(username, "emailAddress", password)
       VALUES ($1, $2, $3)
       ON CONFLICT (username) DO NOTHING
-      ON CONFLICT (email) DO NOTHING
       RETURNING *;
     `,
-      [username, email, hashedPassword]
+      [username, emailAddress, hashedPassword]
     );
     delete user.password;
     return user;
@@ -74,13 +73,13 @@ async function getUserByUsername(username) {
   }
 }
 
-async function getUserByEmail(email) {
+async function getUserByEmailAddress(emailAddress) {
   try {
     const { rows: [user] } = await client.query(`
             SELECT *
             FROM users
-            WHERE email = $1;
-        `, [email]);
+            WHERE emailAddress = $1;
+        `, [emailAddress]);
 
     return user;
   } catch (error) {
@@ -91,7 +90,7 @@ async function getUserByEmail(email) {
 async function getAllUsers() {
   try {
     const { rows } = await client.query(`
-          SELECT id, username, email
+          SELECT id, username, emailAddress
           FROM users
     `);
 
@@ -131,7 +130,7 @@ module.exports = {
   getUser,
   getUserById,
   getUserByUsername,
-  getUserByEmail,
+  getUserByEmailAddress,
   getAllUsers,
   deleteUser
 }

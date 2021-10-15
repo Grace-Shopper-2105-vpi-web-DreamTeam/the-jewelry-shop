@@ -31,3 +31,4 @@ apiRouter.use(async (req, res, next) => {
 });
 
 apiRouter.use('/users', require('./users'));
+module.exports = apiRouter
