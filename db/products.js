@@ -4,18 +4,23 @@ const {client} = require("./index.js");
 
 // create product (ADMIN)
 
-const createProduct = async ({title, description, category, price, inventory}) => {
+const createProduct = async ({title, description, category, price, inventory, isActive}) => {
+
+    if(!isActive && isActive !== false ) {
+        isActive = true;
+    }
+
      try {
         const {
             rows: [product]
         } = await client.query(
             `
-            INSERT INTO products (title, description, category, price, inventory)
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO products (title, description, category, price, inventory, "isActive")
+            VALUES ($1, $2, $3, $4, $5, $6)
             ON CONFLICT (title) DO NOTHING
             RETURNING *;
             `,
-            [title, description, category, price, inventory]
+            [title, description, category, price, inventory, isActive]
         );
         return product;
     } catch (error) {
@@ -36,6 +41,25 @@ const getAllProducts = async () => {
             `
         );
         return products;
+    } catch (error) {
+        throw error;
+    }
+}
+
+//getAllAvailableProducts 
+
+const getAllActiveProducts = async () => {
+    try {
+        const { 
+            rows: activeProducts 
+        } = await client.query(
+            `
+            SELECT * 
+            FROM products
+            WHERE "isActive" = true;
+            `
+        );
+        return activeProducts
     } catch (error) {
         throw error;
     }
@@ -63,7 +87,7 @@ const getProductById = async (id) => {
 
 // get products by catagory 
 
-const getProductByCatagoty = async (category) => {
+const getProductByCategory = async (category) => {
     try {
         const {
             rows: products
@@ -72,6 +96,7 @@ const getProductByCatagoty = async (category) => {
             SELECT * 
             FROM products
             WHERE category=$1
+            AND "isActive"=true;
             `, 
             [category]
         );
@@ -128,13 +153,33 @@ const deleteProduct = async (id) => {
     }
 }
 
+const deactivateProduct = async (id) => {
+    try {
+        const {
+            rows: [deactivatedProdcut] 
+        } = await client.query(
+            `
+            UPDATE products
+            SET "isActive" = false
+            WHERE id=$1
+            RETURNING *;
+            `, 
+            [id]
+        );
+        return deactivatedProdcut;
+    } catch (error) {
+        throw error;
+    }
+}
 // add product to cart (TBC if this is something that should be in the cart file)
 
 module.exports = {
     createProduct,
     getAllProducts,
+    getAllActiveProducts,
     getProductById,
-    getProductByCatagoty,
+    getProductByCategory,
     updateProduct,
-    deleteProduct
+    deleteProduct, 
+    deactivateProduct
 }

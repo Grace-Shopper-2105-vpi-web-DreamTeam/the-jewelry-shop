@@ -6,7 +6,7 @@ const {
     createProduct,
     getAllProducts,
     getProductById,
-    getProductByCatagoty,
+    getProductByCategory,
     updateProduct,
     deleteProduct
 } = require("../db");
@@ -27,15 +27,15 @@ productsRouter.get("/", async (req, res, next) => {
     }
 })
 
-// get products by catagory *** TBD IF THIS IS CORRECT
-productsRouter.get("/:productCatagory", async (req, res, next) => {
+// get products by category *** TBD IF THIS IS CORRECT
+productsRouter.get("/:productCategory", async (req, res, next) => {
     try {
-        const { catagory } = req.params;
-        const products = await getProductByCatagoty({catagory});
+        const { category } = req.params;
+        const products = await getProductByCategory({category});
         if(!products) {
             next({
                 name: "ProductsNotFound",
-                message: `No Product found for catagoty ${catagory}`
+                message: `No Product found for catagoty ${category}`
               })
         }
         res.send(products)

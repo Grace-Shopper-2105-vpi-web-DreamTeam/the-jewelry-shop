@@ -7,11 +7,13 @@ const {
 
 const {
   createProduct, 
-  getAllProducts, 
+  getAllProducts,
+  getAllActiveProducts, 
   getProductById, 
-  getProductByCatagoty, 
+  getProductByCategory, 
   updateProduct,
   deleteProduct,
+  deactivateProduct
 } = require("./products");
 
 const {
@@ -58,7 +60,8 @@ async function buildTables() {
         description TEXT NOT NULL,
         category VARCHAR(255) NOT NULL,
         price DECIMAL(19, 4),
-        inventory INTEGER
+        inventory INTEGER,
+        "isActive" BOOLEAN DEFAULT true
       );
     `);
 
@@ -131,7 +134,8 @@ async function createInitialProducts() {
       {title: 'Medical ID Bracelet', description: 'Basic stainless steel bracelet with custom name and medical information', category: 'bracelets', price: '50.99', inventory: 5000},
       {title: '"B" Necklace', description: 'Stylish stainless steel necklace with a "B" pendant', category: 'necklaces', price: '129.99', inventory: 352},
       {title: 'Beaded Bracelet Set', description: 'Set of 5 different beaded bracelets', category: 'bracelets', price: '29.99', inventory: 26},
-      {title: 'Diamond Earrings', description: 'Beautiful, simple set of diamond earrings', category: 'earrings', price: '999.99', inventory: 43},
+      {title: 'Diamond Earrings', description: 'Beautiful, simple set of diamond earrings', category: 'earrings', price: '999.99', inventory: 43, isActive: true},
+      {title: 'Diamond Drop Earrings', description: 'Delicate drop diamond earrings, limited edition', category: 'earrings', price: '1999.99', inventory: 23, isActive: false},
     ]
 
     //const watch = await createProduct({title: 'Medical ID Bracelet', description: 'Basic stainless steel bracelet with custom name and medical information', category: 'bracelets', price: '50.99', inventory: 5000})
@@ -229,13 +233,19 @@ async function testDB() {
     const products = await getAllProducts();
     console.log("results:", products);
 
+    console.log("Calling active Prodcuts");
+    const activeProductsResults = await getAllActiveProducts();
+    console.log("active products", activeProductsResults);
+
     console.log("Calling getProductById");
     const diamondEarrings = await getProductById(5);
     console.log("product id results:", diamondEarrings);
 
-    console.log("calling getProductByCatagory");
-    const bracelets = await getProductByCatagoty("bracelets");
+    console.log("calling getProductByCategory");
+    const bracelets = await getProductByCategory("bracelets");
+    const earrings = await getProductByCategory("earrings")
     console.log("results for bracelets", bracelets)
+    console.log("results for earrings", earrings)
 
     console.log("calling updateProduct");
     const updateProductResult = await updateProduct(
@@ -248,9 +258,16 @@ async function testDB() {
     );
     console.log("the result of update", updateProductResult)
 
+    console.log("calling deactivateProduct")
+    const deactivateProductResult = await deactivateProduct(products[1].id);
+    console.log("deactivated result", deactivateProductResult);
+
     console.log("calling deleteProduct")
     const deleteProductResult = await deleteProduct(products[3].id)
     console.log("deleted product", deleteProductResult);
+
+    const productsAfterDelete = await getAllProducts();
+    console.log("after delete", productsAfterDelete)
 
     console.log("Finished database tests!");
   } catch (error) {
