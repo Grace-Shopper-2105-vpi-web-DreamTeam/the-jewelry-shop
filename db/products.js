@@ -1,20 +1,21 @@
-const { client } = require('./index')
+const {client} = require("./index.js");
 
 // adaptors needed 
 
 // create product (ADMIN)
 
-const createProduct = async ({name, description, price, quantity, categoty, photo}) => {
-    try {
+const createProduct = async ({title, description, category, price, inventory}) => {
+     try {
         const {
             rows: [product]
         } = await client.query(
             `
-            INSTER INTO products (name, description, price, quantity, catagory, photo)
-            VALUES ($1, $2, $3, $4, $5, $6)
-            returning *;
+            INSERT INTO products (title, description, category, price, inventory)
+            VALUES ($1, $2, $3, $4, $5)
+            ON CONFLICT (title) DO NOTHING
+            RETURNING *;
             `,
-            [name, description, price, quantity, categoty, photo]
+            [title, description, category, price, inventory]
         );
         return product;
     } catch (error) {
