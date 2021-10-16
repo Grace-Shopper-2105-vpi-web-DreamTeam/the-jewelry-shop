@@ -45,21 +45,17 @@ async function buildTables() {
     CREATE TABLE cart(
       id SERIAL PRIMARY KEY,
       "userId" REFERENCES users(id),
-      total DECIMAL(19, 4)
-      quantity INTEGER,
-      "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
     );
     CREATE TABLE orders(
       id SERIAL PRIMARY KEY, 
-      "userId" REFERENCES users(id),
-      total DECIMAL(19, 4)
+      "userId" REFERENCES users(id)
     );
     CREATE TABLE cart_item(
       id SERIAL PRIMARY KEY,
       "cartId" REFERENCES cart(id)
       "productId" REFERENCES products(id),
       quantity INTEGER,
-      price DECIMAL(19, 4), 
+      price REFERENCES products(price)
     );
     CREATE TABLE order_item(
       id SERIAL PRIMARY KEY,
@@ -86,7 +82,8 @@ async function createInitialUsers() {
       {emailAddress: "glamgal123@gmail.com", username: 'glamgal', password: 'glamgal123'},
       {emailAddress: "griffb@gmail.com", username: 'griff', password: 'worstleagueplayer7'},
       {emailAddress: "jacksons@gmail.com", username: 'jackson', password: 'edm4evur'},
-      {emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123'},
+      {emailAddress: "fazerain@gmail.com", username: 'rain', password: 'rain123'},
+      {emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123', isAdmin: true},
     ]
 
     const users = await Promise.all(usersToCreate.map(createUser));
@@ -108,6 +105,11 @@ async function createInitialProducts() {
       {title: '"B" Necklace', description: 'Stylish stainless steel necklace with a "B" pendant', category: 'necklaces', price: '129.99', inventory: '352'},
       {title: 'Beaded Bracelet Set', description: 'Set of 5 different beaded bracelets', category: 'bracelets', price: '29.99', inventory: '26'},
       {title: 'Diamond Earrings', description: 'Beautiful, simple set of diamond earrings', category: 'earrings', price: '999.99', inventory: '43'},
+      {title: 'Seiko Presage', description: 'Sports watch with a variety of color variants', category: 'watches', price: '559.99', inventory: '295'},
+      {title: 'Crucifix Necklace', description: 'Simple chain with a crucifix pendant', category: 'necklaces', price: '49.99', inventory: '2152'},
+      {title: 'Omega Aqua Terra', description: 'Everyday watch on bracelet sea green dial', category: 'watches', price: '5,700', inventory: '132'},
+      {title: 'Wedding Bands', description: 'Matching set of simple gold wedding bands', category: 'rings', price: '1400.79', inventory: '32'},
+      {title: 'Claddagh Ring', description: 'Classic piece of Irish jewelry, turn the heart inside if you are in a relationship and outside if not', category: 'rings', price: '36.45', inventory: '21'},
     ]
 
     const products = await Promise.all(productsToCreate.map(createProduct));
@@ -124,10 +126,17 @@ async function createInitialCarts() {
   console.log('Starting to create carts...');
   try {
     const cartsToCreate = [
-      {}
+      {userId: 1},
+      {userId: 2},
+      {userId: 3},
+      {userId: 4},
+      {userId: 5},
+      {userId: 6}
     ]
     
     const carts = await Promise.all(cartsToCreate.map(createCart));
+    console.log('Carts created: ', carts);
+    console.log('Finished creating carts!')
   } catch (error) {
     console.error('Error creating carts!');
     throw error;
@@ -138,7 +147,12 @@ async function createInitialOrders() {
   console.log('Starting to create orders...');
   try {
     const ordersToCreate = [
-      {userId: 1,}
+      {userId: 1},
+      {userId: 2},
+      {userId: 1},
+      {userId: 3},
+      {userId: 5},
+      {userId: 4}
     ]
 
     const orders = await Promise.all(ordersToCreate.map(createOrders));
@@ -153,9 +167,60 @@ async function createInitialOrderItems() {
   try {
     const orderItemsToCreate = [
       {
-        orderId: 1
+        orderId: 1,
+        productId: 4,
+        quantity: 2
+      },
+      {
+        orderId: 1, 
+        productId: 2, 
+        quantity: 1
+      },
+      {
+        orderId: 2,
+        productId: 4,
+        quantity: 3
+      },
+      {
+        orderId: 2,
+        productId: 1, 
+        quantity: 1
+      },
+      {
+        orderId: 3,
+        productId: 2,
+        quantity: 1
+      },
+      {
+        orderId: 3, 
+        productId: 1, 
+        quantity: 1
+      },
+      {
+        orderId: 3,
+        productId: 5,
+        quantity: 3
+      },
+      {
+        orderId: 4,
+        productId: 4,
+        quantity: 2
+      },
+      {
+        orderId: 5, 
+        productId: 2, 
+        quantity: 7
+      },
+      {
+        orderId: 5,
+        productId: 3,
+        quantity: 6
       }
     ]
+
+  const orderItems = await Promise.all(orderItemsToCreate.map(addOrderItemToOrder));
+  console.log('order items created: ', orderItems)
+  console.log('Finished creating order items!')
   } catch (error) {
     console.error('Error creating order items!')
     throw error;
@@ -166,8 +231,66 @@ async function createInitialCartItems() {
   console.log('Starting to create cart items...');
   try {
     const cartItemsToCreate = [
-
+      {
+        cartId: 1,
+        productId: 2,
+        quantity: 3
+      },
+      {
+        cartId: 1,
+        productId: 1,
+        quantity: 1
+      },
+      {
+        cartId: 1,
+        productId: 5, 
+        quantity: 2
+      },
+      {
+        cartId: 2, 
+        productId: 1,
+        quantity: 2
+      },
+      {
+        cartId: 3,
+        productId: 5, 
+        quantity: 1
+      },
+      {
+        cartId: 3, 
+        productId: 4,
+        quantity: 2
+      },
+      {
+        cartId: 3, 
+        productId: 1,
+        quantity: 1
+      },
+      {
+        cartId: 4,
+        productId: 5,
+        quantity: 10
+      },
+      {
+        cartId: 5, 
+        productId: 2, 
+        quantity: 1
+      },
+      {
+        cartId: 5,
+        productId: 3,
+        quantity: 3
+      },
+      {
+        cartId: 5,
+        productId: 4,
+        quantity: 1
+      }
     ]
+
+    const cartItems = await Promise.all(cartItemsToCreate.map(addCartItemToCart));
+    console.log('cart items created: ', cartItems)
+    console.log('Finished creating cart items!')
   } catch (error) {
     console.error('Error creating cart items!')
     throw error;
