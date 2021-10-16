@@ -6,11 +6,17 @@ const {
 } = require('./index');
 
 const {
-  createProduct
+  createProduct, 
+  getAllProducts, 
+  getProductById, 
+  getProductByCatagoty, 
+  updateProduct,
+  deleteProduct,
 } = require("./products");
 
 const {
-  createUser
+  createUser,
+  getAllUsers
 } = require('./users')
 
 async function dropTables() {
@@ -208,9 +214,52 @@ async function rebuildDB() {
   } catch(error) {
     console.log('Error during rebuildDB')
     throw error;
-  } finally {
-    client.end();
+  } 
+}
+
+async function testDB() {
+  try {
+    console.log("Starting to test database...");
+
+    // console.log("Calling getAllUsers");
+    // const users = await getAllUsers();
+    // console.log("getAllUsers:", users);
+
+    console.log("Calling getAllProducts");
+    const products = await getAllProducts();
+    console.log("results:", products);
+
+    console.log("Calling getProductById");
+    const diamondEarrings = await getProductById(5);
+    console.log("product id results:", diamondEarrings);
+
+    console.log("calling getProductByCatagory");
+    const bracelets = await getProductByCatagoty("bracelets");
+    console.log("results for bracelets", bracelets)
+
+    console.log("calling updateProduct");
+    const updateProductResult = await updateProduct(
+      products[2].id, 
+      {
+        title: '"J Necklace', 
+        description: 'Stylish stainless steel necklace with a "J" pendant', 
+        inventory: 500
+      }
+    );
+    console.log("the result of update", updateProductResult)
+
+    console.log("calling deleteProduct")
+    const deleteProductResult = await deleteProduct(products[3].id)
+    console.log("deleted product", deleteProductResult);
+
+    console.log("Finished database tests!");
+  } catch (error) {
+    console.error("Error testing database!");
+    throw error;
   }
 }
 
-rebuildDB();
+rebuildDB()
+  .then(testDB)
+  .catch(console.error)
+  .finally(() => client.end());

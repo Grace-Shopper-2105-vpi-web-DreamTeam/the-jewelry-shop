@@ -63,19 +63,19 @@ const getProductById = async (id) => {
 
 // get products by catagory 
 
-const getProductByCatagoty = async (catagory) => {
+const getProductByCatagoty = async (category) => {
     try {
         const {
-            rows: [product]
+            rows: products
         } = await client.query(
             `
             SELECT * 
             FROM products
-            WHERE catagory=$1
+            WHERE category=$1
             `, 
-            [catagory]
+            [category]
         );
-        return product;
+        return products;
     } catch (error) {
         throw error;
     }
@@ -83,8 +83,8 @@ const getProductByCatagoty = async (catagory) => {
 
 // edit product (ADMIN)
 
-const updateProduct = async ({id, name, description, price, quantity, categoty, photo}) => {
-    const fields = {name, description, price, quantity, categoty, photo}
+const updateProduct = async (id, fields = {}) => {
+
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index +1}`).join(", ");
     if(setString.length === 0 ) {
         return;
