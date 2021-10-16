@@ -8,6 +8,10 @@ const {
   createProduct
 } = require("./products");
 
+const {
+  createUser
+} = require('./users')
+
 async function dropTables() {
   try {
       // drop tables in correct order
@@ -34,7 +38,13 @@ async function buildTables() {
     console.log('Starting to build tables...');
 
     await client.query(`
-    
+    CREATE TABLE users(
+      id SERIAL PRIMARY KEY,
+      "emailAddress" VARCHAR(255) UNIQUE NOT NULL,
+      username VARCHAR(255) UNIQUE NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      "isAdmin" BOOLEAN DEFAULT false
+    );
     CREATE TABLE products (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) UNIQUE NOT NULL,
@@ -49,15 +59,6 @@ async function buildTables() {
 
     // await client.query(`
     
-    // CREATE TABLE products(
-    //   id SERIAL PRIMARY KEY,
-    //   title VARCHAR(255) UNIQUE NOT NULL,
-    //   description TEXT NOT NULL,
-    //   category VARCHAR(255) NOT NULL,
-    //   price DECIMAL(19, 4),
-    //   inventory INTEGER,
-    //   image BYTEA(max) NOT NULL
-    // );
     // CREATE TABLE cart(
     //   id SERIAL PRIMARY KEY,
     //   "userId" REFERENCES users(id),
@@ -93,27 +94,27 @@ async function buildTables() {
   }
 }
 
-// // async function createInitialUsers() {
-// //   console.log('Starting to create users...');
-// //   try {
-// //     const usersToCreate = [
-// //       {emailAddress: "greg123@gmail.com", username: 'greg', password: 'greg123' },
-// //       {emailAddress: "albert123@gmail.com", username: 'albert', password: 'bertie99'},
-// //       {emailAddress: "glamgal123@gmail.com", username: 'glamgal', password: 'glamgal123'},
-// //       {emailAddress: "griffb@gmail.com", username: 'griff', password: 'worstleagueplayer7'},
-// //       {emailAddress: "jacksons@gmail.com", username: 'jackson', password: 'edm4evur'},
-// //       {emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123', isAdmind: true},
-// //     ]
+async function createInitialUsers() {
+  console.log('Starting to create users...');
+  try {
+    const usersToCreate = [
+      {emailAddress: "greg123@gmail.com", username: 'greg', password: 'greg123' },
+      {emailAddress: "albert123@gmail.com", username: 'albert', password: 'bertie99'},
+      {emailAddress: "glamgal123@gmail.com", username: 'glamgal', password: 'glamgal123'},
+      {emailAddress: "griffb@gmail.com", username: 'griff', password: 'worstleagueplayer7'},
+      {emailAddress: "jacksons@gmail.com", username: 'jackson', password: 'edm4evur'},
+      {emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123', isAdmin: true},
+    ]
 
-// //     const users = await Promise.all(usersToCreate.map(createUser));
-// //     console.log('Users created:');
-// //     console.log(users);
-// //     console.log('Finished creating users!');
-// //   } catch (error) {
-// //     console.error('Error creating users!');
-// //     throw error;
-// //   }
-// // }
+    const users = await Promise.all(usersToCreate.map(createUser));
+    console.log('Users created:');
+    console.log(users);
+    console.log('Finished creating users!');
+  } catch (error) {
+    console.error('Error creating users!');
+    throw error;
+  }
+}
 
 async function createInitialProducts() {
   console.log('Starting to create products...');
@@ -196,7 +197,7 @@ async function rebuildDB() {
     client.connect();
     await dropTables();
     await buildTables();
-    // await createInitialUsers();
+    await createInitialUsers();
     await createInitialProducts();
     // await createInitialCarts();
     // await createInitialOrders();
