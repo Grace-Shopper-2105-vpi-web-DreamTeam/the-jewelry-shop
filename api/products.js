@@ -99,11 +99,34 @@ productsRouter.patch("/:productId", requiredNotSent({requiredParams: ["title", "
 async (req, res, next) => {
   const { productId } = req.params;
   const {title, description, category, price, inventory, isActive} = req.body; 
+  const updateFields = {}
+
+  if (title) {
+      updateFields.title = title;
+  }
+
+  if (description) {
+    updateFields.description = description;
+  }
+  
+  if (category) {
+        updateFields.category = category;
+  }
+  
+  if (price) {
+        updateFields.price = price;
+  }
+  
+  if (inventory) {
+        updateFields.inventory = inventory;
+  }
+  
+  if (isActive) {
+        updateFields.isActive = isActive;
+  }
 
   try {
       const originalProduct = await getProductById(productId);
-
-      console.log("the original product is", originalProduct)
 
       if(!originalProduct) {
           next({
@@ -111,8 +134,7 @@ async (req, res, next) => {
             message: `No Product found by Id ${productId}`
           })
       } else {
-          const updatedProduct = await updateProduct({id: productId, title, description, category, price, inventory, isActive});
-          console.log("the updateded product is", updatedProduct)
+          const updatedProduct = await updateProduct(productId, updateFields);
           res.send(updatedProduct)
       }
   } catch (error) {
