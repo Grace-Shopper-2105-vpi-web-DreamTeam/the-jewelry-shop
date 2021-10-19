@@ -4,18 +4,23 @@ const {client} = require("./index.js");
 
 // create product (ADMIN)
 
-const createProduct = async ({title, description, category, price, inventory}) => {
+const createProduct = async ({title, description, category, price, inventory, isActive}) => {
+
+    if(!isActive && isActive !== false ) {
+        isActive = true;
+    }
+
      try {
         const {
             rows: [product]
         } = await client.query(
             `
-            INSERT INTO products (title, description, category, price, inventory)
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO products (title, description, category, price, inventory, "isActive")
+            VALUES ($1, $2, $3, $4, $5, $6)
             ON CONFLICT (title) DO NOTHING
             RETURNING *;
             `,
-            [title, description, category, price, inventory]
+            [title, description, category, price, inventory, isActive]
         );
         return product;
     } catch (error) {
@@ -36,6 +41,25 @@ const getAllProducts = async () => {
             `
         );
         return products;
+    } catch (error) {
+        throw error;
+    }
+}
+
+//getAllAvailableProducts 
+
+const getAllActiveProducts = async () => {
+    try {
+        const { 
+            rows: activeProducts 
+        } = await client.query(
+            `
+            SELECT * 
+            FROM products
+            WHERE "isActive" = true;
+            `
+        );
+        return activeProducts
     } catch (error) {
         throw error;
     }
@@ -63,19 +87,20 @@ const getProductById = async (id) => {
 
 // get products by catagory 
 
-const getProductByCatagoty = async (catagory) => {
+const getProductByCategory = async (category) => {
     try {
         const {
-            rows: [product]
+            rows: products
         } = await client.query(
             `
             SELECT * 
             FROM products
-            WHERE catagory=$1
+            WHERE category=$1
+            AND "isActive"=true;
             `, 
-            [catagory]
+            [category]
         );
-        return product;
+        return products;
     } catch (error) {
         throw error;
     }
@@ -83,8 +108,8 @@ const getProductByCatagoty = async (catagory) => {
 
 // edit product (ADMIN)
 
-const updateProduct = async ({id, name, description, price, quantity, categoty, photo}) => {
-    const fields = {name, description, price, quantity, categoty, photo}
+const updateProduct = async (id, fields = {}) => {
+
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index +1}`).join(", ");
     if(setString.length === 0 ) {
         return;
@@ -128,13 +153,33 @@ const deleteProduct = async (id) => {
     }
 }
 
+const deactivateProduct = async (id) => {
+    try {
+        const {
+            rows: [deactivatedProdcut] 
+        } = await client.query(
+            `
+            UPDATE products
+            SET "isActive" = false
+            WHERE id=$1
+            RETURNING *;
+            `, 
+            [id]
+        );
+        return deactivatedProdcut;
+    } catch (error) {
+        throw error;
+    }
+}
 // add product to cart (TBC if this is something that should be in the cart file)
 
 module.exports = {
     createProduct,
     getAllProducts,
+    getAllActiveProducts,
     getProductById,
-    getProductByCatagoty,
+    getProductByCategory,
     updateProduct,
-    deleteProduct
+    deleteProduct, 
+    deactivateProduct
 }
