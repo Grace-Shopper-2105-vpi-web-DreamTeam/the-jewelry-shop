@@ -115,6 +115,9 @@ const updateProduct = async (id, fields = {}) => {
         return;
     }
 
+    console.log("the id is", id);
+
+    console.log("the fields are", fields);
     try {
         const {
             rows: [product]
