@@ -19,7 +19,11 @@ const {
 const {
   createUser,
   getAllUsers
-} = require('./users')
+} = require('./users');
+
+const {
+  createCart 
+} = require('./cart');
 
 async function dropTables() {
   try {
@@ -32,6 +36,7 @@ async function dropTables() {
     DROP TABLE IF EXISTS cart;
     DROP TABLE IF EXISTS products;
     DROP TABLE IF EXISTS users;
+    
     `);
     
     console.log('Finished dropping tables!');
@@ -47,46 +52,40 @@ async function buildTables() {
     console.log('Starting to build tables...');
 
     await client.query(`
-    CREATE TABLE users(
-      id SERIAL PRIMARY KEY,
-      "emailAddress" VARCHAR(255) UNIQUE NOT NULL,
-      username VARCHAR(255) UNIQUE NOT NULL,
-      password VARCHAR(255) NOT NULL,
-      "isAdmin" BOOLEAN DEFAULT false
-    );
-    CREATE TABLE products (
+      CREATE TABLE users(
         id SERIAL PRIMARY KEY,
-        title VARCHAR(255) UNIQUE NOT NULL,
-        description TEXT NOT NULL,
-        category VARCHAR(255) NOT NULL,
-        price DECIMAL(19, 4),
-        inventory INTEGER,
-        "isActive" BOOLEAN DEFAULT true
+        "emailAddress" VARCHAR(255) UNIQUE NOT NULL,
+        username VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        "isAdmin" BOOLEAN DEFAULT false
+      );
+      CREATE TABLE products(
+          id SERIAL PRIMARY KEY,
+          title VARCHAR(255) UNIQUE NOT NULL,
+          description TEXT NOT NULL,
+          category VARCHAR(255) NOT NULL,
+          price DECIMAL(19, 4),
+          inventory INTEGER,
+          "isActive" BOOLEAN DEFAULT true
+      );
+      CREATE TABLE cart(
+           id SERIAL PRIMARY KEY,
+           "userId" INTEGER REFERENCES users(id),
+           "isCheckedOut" BOOLEAN DEFAULT false
       );
     `);
-
+   
     //image BYTEA(max) NOT NULL
 
-    // await client.query(`
-    
-    // CREATE TABLE cart(
-    //   id SERIAL PRIMARY KEY,
-    //   "userId" REFERENCES users(id),
-    //   total DECIMAL(19, 4)
-    //   quantity INTEGER,
-    //   "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
-    // );
-    // CREATE TABLE orders(
+    // CREATE TABLE orders (
     //   id SERIAL PRIMARY KEY, 
-    //   "userId" REFERENCES users(id),
-    //   total DECIMAL(19, 4)
+    //   "userId" REFERENCES users(id)
     // );
-    // CREATE TABLE cart_item(
+    // CREATE TABLE cart_item (
     //   id SERIAL PRIMARY KEY,
     //   "cartId" REFERENCES cart(id)
     //   "productId" REFERENCES products(id),
-    //   quantity INTEGER,
-    //   price DECIMAL(19, 4), 
+    //   quantity INTEGER
     // );
     // CREATE TABLE order_item(
     //   id SERIAL PRIMARY KEY,
@@ -94,8 +93,6 @@ async function buildTables() {
     //   "productId" REFERENCES products(id),
     //   quantity INTEGER
     // );
-    // `)
-
     console.log('Finished constructing tables!');
   } catch (error) {
     console.error('Error constructing tables!');
@@ -149,59 +146,180 @@ async function createInitialProducts() {
   }
 }
 
-// // async function createInitialCarts() {
-// //   console.log('Starting to create carts...');
-// //   try {
-// //     const cartsToCreate = [
-// //       {}
-// //     ]
+async function createInitialCarts() {
+  console.log('Starting to create carts...');
+  try {
+    const cartsToCreate = [
+      {userId: 1, isCheckedOut: false},
+      {userId: 2, isCheckedOut: false},
+      {userId: 3, isCheckedOut: false},
+      {userId: 4, isCheckedOut: false},
+      {userId: 5, isCheckedOut: false},
+      {userId: 6, isCheckedOut: true}
+    ]
     
-// //     const carts = await Promise.all(cartsToCreate.map(createCart));
-// //   } catch (error) {
-// //     console.error('Error creating carts!');
-// //     throw error;
-// //   }
-// // }
+    const carts = await Promise.all(cartsToCreate.map(createCart));
+    console.log('Carts created: ', carts);
+    console.log('Finished creating carts!')
+  } catch (error) {
+    console.error('Error creating carts!');
+    throw error;
+  }
+}
 
-// // async function createInitialOrders() {
-// //   console.log('Starting to create orders...');
-// //   try {
-// //     const ordersToCreate = [
-// //       {userId: 1,}
-// //     ]
+// async function createInitialOrders() {
+//   console.log('Starting to create orders...');
+//   try {
+//     const ordersToCreate = [
+//       {userId: 1},
+//       {userId: 2},
+//       {userId: 1},
+//       {userId: 3},
+//       {userId: 5},
+//       {userId: 4}
+//     ]
 
-// //     const orders = await Promise.all(ordersToCreate.map(createOrders));
-// //   } catch (error) {
-// //     console.error('Error creating orders!');
-// //     throw error;
-// //   }
-// // }
+//     const orders = await Promise.all(ordersToCreate.map(createOrders));
+//   } catch (error) {
+//     console.error('Error creating orders!');
+//     throw error;
+//   }
+// }
 
-// // async function createInitialOrderItems() {
-// //   console.log('Starting to create order items...');
-// //   try {
-// //     const orderItemsToCreate = [
-// //       {
-// //         orderId: 1
-// //       }
-// //     ]
-// //   } catch (error) {
-// //     console.error('Error creating order items!')
-// //     throw error;
-// //   }
-// // } 
+// async function createInitialOrderItems() {
+//   console.log('Starting to create order items...');
+//   try {
+//     const orderItemsToCreate = [
+//       {
+//         orderId: 1,
+//         productId: 4,
+//         quantity: 2
+//       },
+//       {
+//         orderId: 1, 
+//         productId: 2, 
+//         quantity: 1
+//       },
+//       {
+//         orderId: 2,
+//         productId: 4,
+//         quantity: 3
+//       },
+//       {
+//         orderId: 2,
+//         productId: 1, 
+//         quantity: 1
+//       },
+//       {
+//         orderId: 3,
+//         productId: 2,
+//         quantity: 1
+//       },
+//       {
+//         orderId: 3, 
+//         productId: 1, 
+//         quantity: 1
+//       },
+//       {
+//         orderId: 3,
+//         productId: 5,
+//         quantity: 3
+//       },
+//       {
+//         orderId: 4,
+//         productId: 4,
+//         quantity: 2
+//       },
+//       {
+//         orderId: 5, 
+//         productId: 2, 
+//         quantity: 7
+//       },
+//       {
+//         orderId: 5,
+//         productId: 3,
+//         quantity: 6
+//       }
+//     ]
 
-// // async function createInitialCartItems() {
-// //   console.log('Starting to create cart items...');
-// //   try {
-// //     const cartItemsToCreate = [
+//   const orderItems = await Promise.all(orderItemsToCreate.map(addOrderItemToOrder));
+//   console.log('order items created: ', orderItems)
+//   console.log('Finished creating order items!')
+//   } catch (error) {
+//     console.error('Error creating order items!')
+//     throw error;
+//   }
+// } 
 
-// //     ]
-// //   } catch (error) {
-// //     console.error('Error creating cart items!')
-// //     throw error;
-// //   }
-// // }
+// async function createInitialCartItems() {
+//   console.log('Starting to create cart items...');
+//   try {
+//     const cartItemsToCreate = [
+//       {
+//         cartId: 1,
+//         productId: 2,
+//         quantity: 3
+//       },
+//       {
+//         cartId: 1,
+//         productId: 1,
+//         quantity: 1
+//       },
+//       {
+//         cartId: 1,
+//         productId: 5, 
+//         quantity: 2
+//       },
+//       {
+//         cartId: 2, 
+//         productId: 1,
+//         quantity: 2
+//       },
+//       {
+//         cartId: 3,
+//         productId: 5, 
+//         quantity: 1
+//       },
+//       {
+//         cartId: 3, 
+//         productId: 4,
+//         quantity: 2
+//       },
+//       {
+//         cartId: 3, 
+//         productId: 1,
+//         quantity: 1
+//       },
+//       {
+//         cartId: 4,
+//         productId: 5,
+//         quantity: 10
+//       },
+//       {
+//         cartId: 5, 
+//         productId: 2, 
+//         quantity: 1
+//       },
+//       {
+//         cartId: 5,
+//         productId: 3,
+//         quantity: 3
+//       },
+//       {
+//         cartId: 5,
+//         productId: 4,
+//         quantity: 1
+//       }
+//     ]
+
+//     const cartItems = await Promise.all(cartItemsToCreate.map(addCartItemToCart));
+//     console.log('cart items created: ', cartItems)
+//     console.log('Finished creating cart items!')
+//   } catch (error) {
+//     console.error('Error creating cart items!')
+//     throw error;
+//   }
+// }
 
 async function rebuildDB() {
   try {
@@ -210,7 +328,7 @@ async function rebuildDB() {
     await buildTables();
     await createInitialUsers();
     await createInitialProducts();
-    // await createInitialCarts();
+    await createInitialCarts();
     // await createInitialOrders();
     // await createInitialOrderItems();
     // await createInitialCartItems();
