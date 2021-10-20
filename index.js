@@ -21,8 +21,18 @@ server.use(express.json());
 const path = require('path');
 server.use(express.static(path.join(__dirname, 'build')));
 
+
 // here's our API
-server.use('/api', apiRouter);
+server.use('/api', require("./api"));
+
+server.use((req, res, next) => {
+  console.log("<____Body Logger START____>");
+  console.log(req.body.message);
+  console.log("<_____Body Logger END_____>");
+
+  //next();
+  res.status(400).send(req.body.message)
+});
 
 // by default serve up the react app if we don't recognize the route
 server.use((req, res, next) => {

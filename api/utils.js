@@ -1,5 +1,11 @@
+const {
+  getUserById
+
+} = require("../db/users");
+
 function requireLogin(req, res, next) {
   if (!req.user) {
+
     res.status(401);
     next({
       name: "MissingUserError",
@@ -10,20 +16,23 @@ function requireLogin(req, res, next) {
   next();
 }
 
-  async function requireAdmin(req, res, next) {
-    const user = await getUserById(req.user.id);
-    if (!user.isAdmin) {
-      res.status(401);
-      next({
-        name: "MissingAdminStatus",
-        message: "Only admins can preform this function"
-      });
-    }
-
-    next();
+async function requireAdmin(req, res, next) {
+  const user = await getUserById(req.user.id);
+  if (!user.isAdmin) {
+    res.status(401);
+    next({
+      name: "MissingAdminStatus",
+      message: "Only admins can preform this function"
+    });
   }
 
-  module.exports = {
-    requireLogin,
-    requireAdmin
-  }
+  next();
+}
+
+
+
+
+module.exports = {
+  requireLogin,
+  requireAdmin
+}

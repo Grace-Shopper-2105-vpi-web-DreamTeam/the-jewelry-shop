@@ -7,9 +7,10 @@ const {
     createUser,
     getUserById,
     getUserByUsername,
-    getUserByEmail,
+    getUserByEmailAddress,
     getAllUsers,
     deleteUser,
+    updateUserById,
 } = require("../db/users");
 
 const { requireLogin, requireAdmin } = require("./utils");
@@ -21,6 +22,7 @@ usersRouter.use((req, res, next) => {
 });
 
 usersRouter.get("/me", requireLogin, async (req, res, next) => {
+    
     const { id } = req.user;
     try {
         const user = await getUserById(id);
@@ -31,15 +33,22 @@ usersRouter.get("/me", requireLogin, async (req, res, next) => {
 });
 
 //someone please review this delete not sure if this is right!
-usersRouter.delete("/:userId", requireLogin, requireAdmin, async (req, res, next) => {
-    const {userId} = req.params
+usersRouter.delete("/admin/:userId", requireLogin, requireAdmin, async (req, res, next) => {
+   console.log("hello delete", req.params.userId)
+    const { userId } = req.params
     try {
         const user = await getUserById(userId);
-        if(user){
+        if (user) {
             const destoryUser = await deleteUser(userId)
             res.send(destoryUser);
+        } else {
+            res.status(401)
+            next({
+                name: "UserDoesNotExistsError",
+                message: "A user by that username does not exists",
+            });
+
         }
-    
     } catch (error) {
         next(error);
     }
@@ -54,47 +63,77 @@ usersRouter.get("/admin", requireLogin, requireAdmin, async (req, res, next) => 
     }
 });
 
-// usersRouter.get("/:username/orders", async (req, res, next) => {
-//     const { username } = req.params;
-//     const userOrders = await getOrdersByUser({ username });
+usersRouter.put("/admin/:userId", requireLogin, async (req, res, next) => {
+    const { userId } = req.params
+    try {
+        const user = await getUserById(userId);
+        if (user) {
+            const updateUser = await updateUserById(userId)
+            res.send(updateUser);
+        } else {
+            res.status(401)
+            next({
+                name: "UserDoesNotExistsError",
+                message: "A user by that username does not exists",
+            });
+
+        }
+
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
+// usersRouter.get("/:userId/orders", async (req, res, next) => {
+//     const { userId } = req.params;
+//     const userOrders = await getUserById({ userId });
 //     res.send(userOrders)
 
 // });
 
-// usersRouter.get("/:username/cart", async (req, res, next) => {
-//     const { username } = req.params;
-//     const userCart = await getCartByUser({ username });
+// usersRouter.get("/:userId/cart", async (req, res, next) => {
+//     const { userId } = req.params;
+//     const userCart = await getUserById({ userId });
 //     res.send(userCart);
 // });
 
 usersRouter.post("/register", async (req, res, next) => {
-    const { username, email,  password } = req.body;
+    const { username, emailAddress, password } = req.body;
+
     try {
-        const _user = await getUserByUsername(username);
-        if (_user) {
+        const user = await getUserByUsername(username);
+     
+        if (user) {
+            res.status(401)
             next({
                 name: "UserExistsError",
                 message: "A user by that username already exists",
             });
         }
-        const userEmail = await getUserByEmail(email);
+       
+        const userEmail = await getUserByEmailAddress(emailAddress);
+        
         if (userEmail) {
             next({
                 name: "EmailExistsError",
                 message: "A user with this email already exists",
             });
         }
-        else if (password.length < 8) {
+        if (password.length < 8) {
+            res.status(401)
             next({
                 name: "PasswordLengthError",
                 message: "Password must be 8 or more characters",
             });
         } else {
-            const user = await createUser({ username, password });
+            const user = await createUser({ username, emailAddress, password });
             const token = jwt.sign(
                 {
                     id: user.id,
                     username: user.username,
+                    emailAddress: user.emailAddress
                 },
                 process.env.JWT_SECRET,
                 {
@@ -115,6 +154,7 @@ usersRouter.post("/register", async (req, res, next) => {
 usersRouter.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
     if (!username || !password) {
+        res.status(401)
         next({
             name: "MissingCredentialsError",
             message: "Please supply both a username and password",
@@ -139,6 +179,7 @@ usersRouter.post("/login", async (req, res, next) => {
                 token: token,
             });
         } else {
+            res.status(401)
             next({
                 name: "IncorrectCredentialsError",
                 message: "Username or password is incorrect",

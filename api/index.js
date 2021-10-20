@@ -3,8 +3,8 @@ const apiRouter = express.Router();
 
 const jwt = require("jsonwebtoken");
 const {getUserById} = require("../db/users");
+require('dotenv').config();
 const {JWT_SECRET} = process.env;
-
 
 apiRouter.use(async (req, res, next) => {
   const prefix = 'Bearer ';

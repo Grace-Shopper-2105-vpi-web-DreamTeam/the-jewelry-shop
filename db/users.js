@@ -1,8 +1,9 @@
-const {client} = require('./index');
+const { client } = require('./index');
 
 const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
 //tookout on conflict  ON CONFLICT ("emailAddress") DO NOTHING
+
 const createUser = async ({ username, emailAddress, password }) => {
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
@@ -43,10 +44,28 @@ const getUser = async ({ username, password }) => {
 async function getUserById(userId) {
   try {
     const { rows: [user] } = await client.query(`
-            SELECT id, username
+            SELECT id, username, "isAdmin"
             FROM users
-            WHERE id = ${userId}
-      `);
+            WHERE id = $1
+      `, [userId]);
+
+    if (!user) {
+      return null
+    }
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function updateUserById(userId) {
+  try {
+    const { rows: [user] } = await client.query(`
+            UPDATE users 
+            SET "isAdmin" = $1
+            WHERE id = $2
+      `, [true, userId]);
 
     if (!user) {
       return null
@@ -62,7 +81,7 @@ async function getUserById(userId) {
 async function getUserByUsername(username) {
   try {
     const { rows: [user] } = await client.query(`
-            SELECT id, username
+            SELECT id, username, password
             FROM users
             WHERE username = $1;
         `, [username]);
@@ -76,9 +95,9 @@ async function getUserByUsername(username) {
 async function getUserByEmailAddress(emailAddress) {
   try {
     const { rows: [user] } = await client.query(`
-            SELECT *
+            SELECT id, "emailAddress", username, password
             FROM users
-            WHERE emailAddress = $1;
+            WHERE "emailAddress" = $1
         `, [emailAddress]);
 
     return user;
@@ -90,7 +109,7 @@ async function getUserByEmailAddress(emailAddress) {
 async function getAllUsers() {
   try {
     const { rows } = await client.query(`
-          SELECT id, username, emailAddress
+          SELECT id, username, "emailAddress", "isAdmin"
           FROM users
     `);
 
@@ -132,5 +151,6 @@ module.exports = {
   getUserByUsername,
   getUserByEmailAddress,
   getAllUsers,
-  deleteUser
+  deleteUser,
+  updateUserById
 }
