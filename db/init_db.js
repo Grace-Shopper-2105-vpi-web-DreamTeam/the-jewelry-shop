@@ -4,6 +4,9 @@
 const {
   client
 } = require('./index');
+const {
+  createUser
+} = require('./users')
 
 const {
   createProduct, 
@@ -15,11 +18,6 @@ const {
   deleteProduct,
   deactivateProduct
 } = require("./products");
-
-const {
-  createUser,
-  getAllUsers
-} = require('./users')
 
 async function dropTables() {
   try {
@@ -54,7 +52,7 @@ async function buildTables() {
       password VARCHAR(255) NOT NULL,
       "isAdmin" BOOLEAN DEFAULT false
     );
-    CREATE TABLE products (
+     CREATE TABLE products (
         id SERIAL PRIMARY KEY,
         title VARCHAR(255) UNIQUE NOT NULL,
         description TEXT NOT NULL,
@@ -98,7 +96,7 @@ async function buildTables() {
 
     console.log('Finished constructing tables!');
   } catch (error) {
-    console.error('Error constructing tables!');
+    console.error('Error constructing tables!', error);
 
     throw new Error("error while making the tables!")
   }

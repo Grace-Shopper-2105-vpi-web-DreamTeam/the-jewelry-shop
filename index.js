@@ -3,6 +3,10 @@ require('dotenv').config();
 const express = require('express');
 const server = express();
 
+const bodyParser = require("body-parser");
+server.use(bodyParser.json());
+//const apiRouter = require('./api')
+
 // create logs for everything
 const morgan = require('morgan');
 server.use(morgan('dev'));
@@ -13,6 +17,7 @@ server.use(express.json());
 // here's our static files
 const path = require('path');
 server.use(express.static(path.join(__dirname, 'build')));
+
 
 // here's our API
 server.use('/api', require('./api'));
