@@ -22,8 +22,20 @@ const {
 } = require('./users');
 
 const {
-  createCart 
+  createCart,
+  checkoutCart,
+  getCartById,
+  getAllActiveCarts,
+  addUserIdToCart,
+  getCartByUserId
+  //getCartByCartId 
 } = require('./cart');
+
+const {
+  addItemToCart,
+  //getCartItemsById
+  //attachProductInfoToCartItem
+} = require('./cart_item')
 
 async function dropTables() {
   try {
@@ -50,7 +62,6 @@ async function buildTables() {
   try {
     // build tables in correct order
     console.log('Starting to build tables...');
-
     await client.query(`
       CREATE TABLE users(
         id SERIAL PRIMARY KEY,
@@ -60,20 +71,28 @@ async function buildTables() {
         "isAdmin" BOOLEAN DEFAULT false
       );
       CREATE TABLE products(
-          id SERIAL PRIMARY KEY,
-          title VARCHAR(255) UNIQUE NOT NULL,
-          description TEXT NOT NULL,
-          category VARCHAR(255) NOT NULL,
-          price DECIMAL(19, 4),
-          inventory INTEGER,
-          "isActive" BOOLEAN DEFAULT true
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) UNIQUE NOT NULL,
+        description TEXT NOT NULL,
+        category VARCHAR(255) NOT NULL,
+        price DECIMAL(19, 4),
+        inventory INTEGER,
+        "isActive" BOOLEAN DEFAULT true
       );
       CREATE TABLE cart(
-           id SERIAL PRIMARY KEY,
-           "userId" INTEGER REFERENCES users(id),
-           "isCheckedOut" BOOLEAN DEFAULT false
+        id SERIAL PRIMARY KEY,
+        "userId" INTEGER REFERENCES users(id),
+        "isActive" BOOLEAN DEFAULT true
+      );
+      CREATE TABLE cart_item (
+        id SERIAL PRIMARY KEY,
+        "cartId" INTEGER REFERENCES cart(id),
+        "productId" INTEGER REFERENCES products(id),
+        quantity INTEGER,
+        UNIQUE ("cartId", "productId")
       );
     `);
+
    
     //image BYTEA(max) NOT NULL
 
@@ -81,12 +100,7 @@ async function buildTables() {
     //   id SERIAL PRIMARY KEY, 
     //   "userId" REFERENCES users(id)
     // );
-    // CREATE TABLE cart_item (
-    //   id SERIAL PRIMARY KEY,
-    //   "cartId" REFERENCES cart(id)
-    //   "productId" REFERENCES products(id),
-    //   quantity INTEGER
-    // );
+    //  
     // CREATE TABLE order_item(
     //   id SERIAL PRIMARY KEY,
     //   "orderId" REFERENCES orders(id),
@@ -111,6 +125,8 @@ async function createInitialUsers() {
       {emailAddress: "griffb@gmail.com", username: 'griff', password: 'worstleagueplayer7'},
       {emailAddress: "jacksons@gmail.com", username: 'jackson', password: 'edm4evur'},
       {emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123', isAdmin: true},
+      {emailAddress: "admin1234@gmail.com", username: 'admin12', password: 'admin1234', isAdmin: true},
+      {emailAddress: "admin1235@gmail.com", username: 'admin123', password: 'admin12345', isAdmin: true}
     ]
 
     const users = await Promise.all(usersToCreate.map(createUser));
@@ -150,12 +166,13 @@ async function createInitialCarts() {
   console.log('Starting to create carts...');
   try {
     const cartsToCreate = [
-      {userId: 1, isCheckedOut: false},
-      {userId: 2, isCheckedOut: false},
-      {userId: 3, isCheckedOut: false},
-      {userId: 4, isCheckedOut: false},
-      {userId: 5, isCheckedOut: false},
-      {userId: 6, isCheckedOut: true}
+      {userId: 1, isActive: true},
+      {userId: 2, isActive: true},
+      {userId: 3, isActive: true},
+      {userId: 4},
+      {userId: 5, isActive: false},
+      {userId: 6, isActive: true},
+      {isActive: true}
     ]
     
     const carts = await Promise.all(cartsToCreate.map(createCart));
@@ -251,75 +268,75 @@ async function createInitialCarts() {
 //   }
 // } 
 
-// async function createInitialCartItems() {
-//   console.log('Starting to create cart items...');
-//   try {
-//     const cartItemsToCreate = [
-//       {
-//         cartId: 1,
-//         productId: 2,
-//         quantity: 3
-//       },
-//       {
-//         cartId: 1,
-//         productId: 1,
-//         quantity: 1
-//       },
-//       {
-//         cartId: 1,
-//         productId: 5, 
-//         quantity: 2
-//       },
-//       {
-//         cartId: 2, 
-//         productId: 1,
-//         quantity: 2
-//       },
-//       {
-//         cartId: 3,
-//         productId: 5, 
-//         quantity: 1
-//       },
-//       {
-//         cartId: 3, 
-//         productId: 4,
-//         quantity: 2
-//       },
-//       {
-//         cartId: 3, 
-//         productId: 1,
-//         quantity: 1
-//       },
-//       {
-//         cartId: 4,
-//         productId: 5,
-//         quantity: 10
-//       },
-//       {
-//         cartId: 5, 
-//         productId: 2, 
-//         quantity: 1
-//       },
-//       {
-//         cartId: 5,
-//         productId: 3,
-//         quantity: 3
-//       },
-//       {
-//         cartId: 5,
-//         productId: 4,
-//         quantity: 1
-//       }
-//     ]
+async function createInitialCartItems() {
+  console.log('Starting to create cart items...');
+  try {
+    const cartItemsToCreate = [
+      { 
+        cartId: 1, 
+        productId: 2, 
+        quantity: 3 
+      },
+      {
+        cartId: 1,
+        productId: 1,
+        quantity: 1
+      },
+      {
+        cartId: 1,
+        productId: 5, 
+        quantity: 2
+      },
+      {
+        cartId: 2, 
+        productId: 1,
+        quantity: 2
+      },
+      {
+        cartId: 3,
+        productId: 5, 
+        quantity: 1
+      },
+      {
+        cartId: 3, 
+        productId: 4,
+        quantity: 2
+      },
+      {
+        cartId: 3, 
+        productId: 1,
+        quantity: 1
+      },
+      {
+        cartId: 4,
+        productId: 5,
+        quantity: 10
+      },
+      {
+        cartId: 5, 
+        productId: 2, 
+        quantity: 1
+      },
+      {
+        cartId: 5,
+        productId: 3,
+        quantity: 3
+      },
+      {
+        cartId: 5,
+        productId: 4,
+        quantity: 1
+      }
+    ]
 
-//     const cartItems = await Promise.all(cartItemsToCreate.map(addCartItemToCart));
-//     console.log('cart items created: ', cartItems)
-//     console.log('Finished creating cart items!')
-//   } catch (error) {
-//     console.error('Error creating cart items!')
-//     throw error;
-//   }
-// }
+    const cartItems = await Promise.all(cartItemsToCreate.map(addItemToCart));
+    console.log('cart items created: ', cartItems)
+    console.log('Finished creating cart items!')
+  } catch (error) {
+    console.error('Error creating cart items!')
+    throw error;
+  }
+}
 
 async function rebuildDB() {
   try {
@@ -331,7 +348,7 @@ async function rebuildDB() {
     await createInitialCarts();
     // await createInitialOrders();
     // await createInitialOrderItems();
-    // await createInitialCartItems();
+    await createInitialCartItems();
     console.log('RebuildDB function was successful!')
   } catch(error) {
     console.log('Error during rebuildDB')
@@ -343,49 +360,65 @@ async function testDB() {
   try {
     console.log("Starting to test database...");
 
+    console.log("calling checkoutCart");
+    const checkedOutCart = await checkoutCart(6);
+    console.log("checkedOutCart", checkedOutCart);
+
+    console.log("calling getCartById")
+    const cart = await getCartById(7);
+    console.log("cart is ", cart)
+
+    console.log("calling getAllActiveCarts ")
+    const activeCarts = await getAllActiveCarts();
+    console.log("active carts are", activeCarts)
+
+    console.log("calling addUserIdToCart")
+    const cartWithUser = await addUserIdToCart(8, 7)
+    console.log("updated cart is", cartWithUser)
+
     // console.log("Calling getAllUsers");
     // const users = await getAllUsers();
     // console.log("getAllUsers:", users);
 
-    console.log("Calling getAllProducts");
-    const products = await getAllProducts();
-    console.log("results:", products);
+    // console.log("Calling getAllProducts");
+    // const products = await getAllProducts();
+    // console.log("results:", products);
 
-    console.log("Calling active Prodcuts");
-    const activeProductsResults = await getAllActiveProducts();
-    console.log("active products", activeProductsResults);
+    // console.log("Calling active Prodcuts");
+    // const activeProductsResults = await getAllActiveProducts();
+    // console.log("active products", activeProductsResults);
 
-    console.log("Calling getProductById");
-    const diamondEarrings = await getProductById(5);
-    console.log("product id results:", diamondEarrings);
+    // console.log("Calling getProductById");
+    // const diamondEarrings = await getProductById(5);
+    // console.log("product id results:", diamondEarrings);
 
-    console.log("calling getProductByCategory");
-    const bracelets = await getProductByCategory("bracelets");
-    const earrings = await getProductByCategory("earrings")
-    console.log("results for bracelets", bracelets)
-    console.log("results for earrings", earrings)
+    // console.log("calling getProductByCategory");
+    // const bracelets = await getProductByCategory("bracelets");
+    // const earrings = await getProductByCategory("earrings")
+    // console.log("results for bracelets", bracelets)
+    // console.log("results for earrings", earrings)
 
-    console.log("calling updateProduct");
-    const updateProductResult = await updateProduct(
-      products[2].id, 
-      {
-        title: '"J Necklace', 
-        description: 'Stylish stainless steel necklace with a "J" pendant', 
-        inventory: 500
-      }
-    );
-    console.log("the result of update", updateProductResult)
+    // console.log("calling updateProduct");
+    // const updateProductResult = await updateProduct(
+    //   products[2].id, 
+    //   {
+    //     title: '"J Necklace', 
+    //     description: 'Stylish stainless steel necklace with a "J" pendant', 
+    //     inventory: 500
+    //   }
+    // );
+    // console.log("the result of update", updateProductResult)
 
-    console.log("calling deactivateProduct")
-    const deactivateProductResult = await deactivateProduct(products[1].id);
-    console.log("deactivated result", deactivateProductResult);
+    // console.log("calling deactivateProduct")
+    // const deactivateProductResult = await deactivateProduct(products[1].id);
+    // console.log("deactivated result", deactivateProductResult);
 
-    console.log("calling deleteProduct")
-    const deleteProductResult = await deleteProduct(products[3].id)
-    console.log("deleted product", deleteProductResult);
+    // console.log("calling deleteProduct")
+    // const deleteProductResult = await deleteProduct(products[3].id)
+    // console.log("deleted product", deleteProductResult);
 
-    const productsAfterDelete = await getAllProducts();
-    console.log("after delete", productsAfterDelete)
+    // const productsAfterDelete = await getAllProducts();
+    // console.log("after delete", productsAfterDelete)
 
     console.log("Finished database tests!");
   } catch (error) {
