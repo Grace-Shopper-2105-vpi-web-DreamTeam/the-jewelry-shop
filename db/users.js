@@ -46,7 +46,7 @@ async function getUserById(userId) {
   try {
     const { rows: [user] } = await client.query(`
 
-            SELECT id, username, "isAdmin"
+            SELECT id, username, "emailAddress", "isAdmin"
             FROM users
             WHERE id = $1
       `, [userId]);
@@ -61,17 +61,38 @@ async function getUserById(userId) {
   }
 }
 
-async function updateUserById(userId) {
+async function updateUserById( id, fields = {} ) {
+    console.log("id", id)
+      const setString = Object.keys(fields).map(
+        (key, index) => `"${ key }"=$${ index + 1 }`
+      ).join(', ');
+    console.log("setString", setString)
+    console.log(Object.values(fields))
+      if (setString.length === 0) {
+        return;
+      }
+      try {
+        const { rows: [ user ]} = await client.query(`
+          UPDATE users
+          SET ${ setString }
+          WHERE id=${id}
+          RETURNING *;
+        `, Object.values(fields));
+        return user;
+      } catch (error) {
+        throw error;
+      }
+    }
+
+async function updateUserToAdminById(userId) {
+
   try {
     const { rows: [user] } = await client.query(`
             UPDATE users 
             SET "isAdmin" = $1
             WHERE id = $2
+            RETURNING *;
       `, [true, userId]);
-
-    if (!user) {
-      return null
-    }
 
     return user;
   } catch (error) {
@@ -123,15 +144,15 @@ async function getAllUsers() {
 
 async function deleteUser(id) {
   try {
-    await client.query(`
-          DELETE FROM cart
-          WHERE "userId"=$1;
-      `, [id]);
+//     await client.query(`
+//           DELETE FROM cart
+//           WHERE "userId"=$1;
+//       `, [id]);
 
-    await client.query(`
-      DELETE FROM orders
-      WHERE "userId"=$1;
-  `, [id]);
+//     await client.query(`
+//       DELETE FROM orders
+//       WHERE "userId"=$1;
+//   `, [id]);
 
     const { rows: [user] } = await client.query(`
           DELETE FROM users
@@ -154,5 +175,6 @@ module.exports = {
   getUserByEmailAddress,
   getAllUsers,
   deleteUser,
+  updateUserToAdminById,
   updateUserById
 }

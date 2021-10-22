@@ -1,11 +1,12 @@
 // code to build and initialize DB goes here
-// const { bindComplete } = require('pg-protocol/dist/messages');
+const { bindComplete } = require('pg-protocol/dist/messages');
 
 const {
   client
 } = require('./index');
 const {
-  createUser
+  createUser, 
+  getAllUsers
 } = require('./users')
 
 const {
@@ -223,49 +224,49 @@ async function testDB() {
   try {
     console.log("Starting to test database...");
 
-    // console.log("Calling getAllUsers");
-    // const users = await getAllUsers();
-    // console.log("getAllUsers:", users);
+    console.log("Calling getAllUsers");
+    const users = await getAllUsers();
+    console.log("getAllUsers:", users);
 
     console.log("Calling getAllProducts");
     const products = await getAllProducts();
     console.log("results:", products);
 
-    console.log("Calling active Prodcuts");
-    const activeProductsResults = await getAllActiveProducts();
-    console.log("active products", activeProductsResults);
+    // console.log("Calling active Prodcuts");
+    // const activeProductsResults = await getAllActiveProducts();
+    // console.log("active products", activeProductsResults);
 
-    console.log("Calling getProductById");
-    const diamondEarrings = await getProductById(5);
-    console.log("product id results:", diamondEarrings);
+    // console.log("Calling getProductById");
+    // const diamondEarrings = await getProductById(5);
+    // console.log("product id results:", diamondEarrings);
 
-    console.log("calling getProductByCategory");
-    const bracelets = await getProductByCategory("bracelets");
-    const earrings = await getProductByCategory("earrings")
-    console.log("results for bracelets", bracelets)
-    console.log("results for earrings", earrings)
+    // console.log("calling getProductByCategory");
+    // const bracelets = await getProductByCategory("bracelets");
+    // const earrings = await getProductByCategory("earrings")
+    // console.log("results for bracelets", bracelets)
+    // console.log("results for earrings", earrings)
 
-    console.log("calling updateProduct");
-    const updateProductResult = await updateProduct(
-      products[2].id, 
-      {
-        title: '"J Necklace', 
-        description: 'Stylish stainless steel necklace with a "J" pendant', 
-        inventory: 500
-      }
-    );
-    console.log("the result of update", updateProductResult)
+    // console.log("calling updateProduct");
+    // const updateProductResult = await updateProduct(
+    //   products[2].id, 
+    //   {
+    //     title: '"J Necklace', 
+    //     description: 'Stylish stainless steel necklace with a "J" pendant', 
+    //     inventory: 500
+    //   }
+    // );
+    // console.log("the result of update", updateProductResult)
 
-    console.log("calling deactivateProduct")
-    const deactivateProductResult = await deactivateProduct(products[1].id);
-    console.log("deactivated result", deactivateProductResult);
+    // console.log("calling deactivateProduct")
+    // const deactivateProductResult = await deactivateProduct(products[1].id);
+    // console.log("deactivated result", deactivateProductResult);
 
-    console.log("calling deleteProduct")
-    const deleteProductResult = await deleteProduct(products[3].id)
-    console.log("deleted product", deleteProductResult);
+    // console.log("calling deleteProduct")
+    // const deleteProductResult = await deleteProduct(products[3].id)
+    // console.log("deleted product", deleteProductResult);
 
-    const productsAfterDelete = await getAllProducts();
-    console.log("after delete", productsAfterDelete)
+    // const productsAfterDelete = await getAllProducts();
+    // console.log("after delete", productsAfterDelete)
 
     console.log("Finished database tests!");
   } catch (error) {

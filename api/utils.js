@@ -3,6 +3,8 @@ const {
   } = require("../db/users");
   
   function requireLogin(req, res, next) {
+
+    console.log("the user is", req.user)
     if (!req.user) {
   
       res.status(401);
@@ -17,6 +19,8 @@ const {
   
   async function requireAdmin(req, res, next) {
     const user = await getUserById(req.user.id);
+
+    console.log("the user is", user);
     if (!user.isAdmin) {
       res.status(401);
       next({

@@ -10,6 +10,7 @@ const {
     getUserByEmailAddress,
     getAllUsers,
     deleteUser,
+    updateUserToAdminById,
     updateUserById
 } = require("../db/users");
 
@@ -31,9 +32,8 @@ usersRouter.get("/me", requireLogin, async (req, res, next) => {
     }
 });
 
-//someone please review this delete not sure if this is right!
-usersRouter.delete("/admin/:userId", requireLogin, requireAdmin, async (req, res, next) => {
-   console.log("hello delete", req.params.userId)
+// this only works if we just delete user. Not cart or order 
+usersRouter.delete("/admin/:userId", requireAdmin, async (req, res, next) => {
     const { userId } = req.params
     try {
         const user = await getUserById(userId);
@@ -62,13 +62,16 @@ usersRouter.get("/admin", requireLogin, requireAdmin, async (req, res, next) => 
     }
 });
 
-usersRouter.put("/admin/:userId", requireLogin, async (req, res, next) => {
+usersRouter.patch("/admin/:userId", requireLogin, async (req, res, next) => {
     const { userId } = req.params
+
     try {
         const user = await getUserById(userId);
+        
         if (user) {
-            const updateUser = await updateUserById(userId)
-            res.send(updateUser);
+            const newAdmin = await  updateUserToAdminById(userId)
+           
+            res.send(newAdmin);
         } else {
             res.status(401)
             next({
@@ -83,8 +86,6 @@ usersRouter.put("/admin/:userId", requireLogin, async (req, res, next) => {
     }
 });
 
-
-
 // usersRouter.get("/:userId/orders", async (req, res, next) => {
 //     const { userId } = req.params;
 //     const userOrders = await getUserById({ userId });
@@ -97,6 +98,31 @@ usersRouter.put("/admin/:userId", requireLogin, async (req, res, next) => {
 //     const userCart = await getUserById({ userId });
 //     res.send(userCart);
 // });
+
+usersRouter.patch('/:userId', requireLogin, async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const { emailAddress, username } = req.body;
+        const updateFields = {};
+        if (emailAddress) {
+            
+            updateFields.emailAddress = emailAddress;
+            await updateUserById(userId,updateFields);
+            delete updateFields.emailAddress
+        }
+        if (username) {
+            
+            updateFields.username = username;
+            await updateUserById(userId,updateFields);
+            delete updateFields.username
+        }
+        const remadeUser = await getUserById(userId);
+        res.send(remadeUser);
+
+    } catch ({ name, message }) {
+        next({ name, message });
+    }
+});
 
 usersRouter.post("/register", async (req, res, next) => {
     const { username, emailAddress, password } = req.body;
@@ -156,7 +182,6 @@ usersRouter.post("/register", async (req, res, next) => {
 usersRouter.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
 
-    console.log(username, password)
     if (!username || !password) {
         res.status(401)
         next({
