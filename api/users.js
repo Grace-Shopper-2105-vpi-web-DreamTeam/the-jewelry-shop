@@ -7,9 +7,11 @@ const {
     createUser,
     getUserById,
     getUserByUsername,
-    getUserByEmail,
+    getUserByEmailAddress,
     getAllUsers,
     deleteUser,
+    updateUserToAdminById,
+    updateUserById
 } = require("../db/users");
 
 const { requireLogin, requireAdmin } = require("./utils");
@@ -30,16 +32,22 @@ usersRouter.get("/me", requireLogin, async (req, res, next) => {
     }
 });
 
-//someone please review this delete not sure if this is right!
-usersRouter.delete("/:userId", requireLogin, requireAdmin, async (req, res, next) => {
-    const {userId} = req.params
+// this only works if we just delete user. Not cart or order 
+usersRouter.delete("/admin/:userId", requireAdmin, async (req, res, next) => {
+    const { userId } = req.params
     try {
         const user = await getUserById(userId);
-        if(user){
+        if (user) {
             const destoryUser = await deleteUser(userId)
             res.send(destoryUser);
+        } else {
+            res.status(401)
+            next({
+                name: "UserDoesNotExistsError",
+                message: "A user by that username does not exists",
+            });
+
         }
-    
     } catch (error) {
         next(error);
     }
@@ -54,47 +62,106 @@ usersRouter.get("/admin", requireLogin, requireAdmin, async (req, res, next) => 
     }
 });
 
-// usersRouter.get("/:username/orders", async (req, res, next) => {
-//     const { username } = req.params;
-//     const userOrders = await getOrdersByUser({ username });
-//     res.send(userOrders)
+usersRouter.patch("/admin/:userId", requireLogin, async (req, res, next) => {
+    const { userId } = req.params
 
+    try {
+        const user = await getUserById(userId);
+        
+        if (user) {
+            const newAdmin = await  updateUserToAdminById(userId)
+           
+            res.send(newAdmin);
+        } else {
+            res.status(401)
+            next({
+                name: "UserDoesNotExistsError",
+                message: "A user by that username does not exists",
+            });
+
+        }
+
+    } catch (error) {
+        next(error);
+    }
+});
+
+// usersRouter.get("/:userId/orders", async (req, res, next) => {
+//     const { userId } = req.params;
+//     const userOrders = await getUserById({ userId });
+//     res.send(userOrders)
 // });
 
-// usersRouter.get("/:username/cart", async (req, res, next) => {
-//     const { username } = req.params;
-//     const userCart = await getCartByUser({ username });
+
+// usersRouter.get("/:userId/cart", async (req, res, next) => {
+//     const { userId } = req.params;
+//     const userCart = await getUserById({ userId });
 //     res.send(userCart);
 // });
 
-usersRouter.post("/register", async (req, res, next) => {
-    const { username, email,  password } = req.body;
+usersRouter.patch('/:userId', requireLogin, async (req, res, next) => {
     try {
-        const _user = await getUserByUsername(username);
-        if (_user) {
+        const { userId } = req.params;
+        const { emailAddress, username } = req.body;
+        const updateFields = {};
+        if (emailAddress) {
+            
+            updateFields.emailAddress = emailAddress;
+            await updateUserById(userId,updateFields);
+            delete updateFields.emailAddress
+        }
+        if (username) {
+            
+            updateFields.username = username;
+            await updateUserById(userId,updateFields);
+            delete updateFields.username
+        }
+        const remadeUser = await getUserById(userId);
+        res.send(remadeUser);
+
+    } catch ({ name, message }) {
+        next({ name, message });
+    }
+});
+
+usersRouter.post("/register", async (req, res, next) => {
+    const { username, emailAddress, password } = req.body;
+
+    try {
+        const user = await getUserByUsername(username);
+     
+        if (user) {
+            res.status(401)
             next({
                 name: "UserExistsError",
                 message: "A user by that username already exists",
             });
         }
-        const userEmail = await getUserByEmail(email);
+       
+        const userEmail = await getUserByEmailAddress(emailAddress);
+        
         if (userEmail) {
             next({
                 name: "EmailExistsError",
                 message: "A user with this email already exists",
             });
         }
-        else if (password.length < 8) {
+      
+        if (password.length < 8) {
+            res.status(401)
             next({
                 name: "PasswordLengthError",
                 message: "Password must be 8 or more characters",
             });
         } else {
-            const user = await createUser({ username, password });
+            const user = await createUser({ username, emailAddress, password });
+
             const token = jwt.sign(
                 {
                     id: user.id,
                     username: user.username,
+                    emailAddress: user.emailAddress
+
                 },
                 process.env.JWT_SECRET,
                 {
@@ -114,7 +181,9 @@ usersRouter.post("/register", async (req, res, next) => {
 
 usersRouter.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
+
     if (!username || !password) {
+        res.status(401)
         next({
             name: "MissingCredentialsError",
             message: "Please supply both a username and password",
@@ -139,6 +208,7 @@ usersRouter.post("/login", async (req, res, next) => {
                 token: token,
             });
         } else {
+            res.status(401)
             next({
                 name: "IncorrectCredentialsError",
                 message: "Username or password is incorrect",
@@ -149,5 +219,5 @@ usersRouter.post("/login", async (req, res, next) => {
     }
 });
 
-module.exports = usersRouter;
 
+module.exports = usersRouter;

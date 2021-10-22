@@ -1,9 +1,11 @@
-const {client} = require('./index');
+const { client } = require('./index');
 
 const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
 //tookout on conflict  ON CONFLICT ("emailAddress") DO NOTHING
+
 const createUser = async ({ username, emailAddress, password, isAdmin }) => {
+
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
     const {
@@ -43,10 +45,11 @@ const getUser = async ({ username, password }) => {
 async function getUserById(userId) {
   try {
     const { rows: [user] } = await client.query(`
-            SELECT id, username
+
+            SELECT id, username, "emailAddress", "isAdmin"
             FROM users
-            WHERE id = ${userId}
-      `);
+            WHERE id = $1
+      `, [userId]);
 
     if (!user) {
       return null
@@ -58,11 +61,50 @@ async function getUserById(userId) {
   }
 }
 
+async function updateUserById( id, fields = {} ) {
+    console.log("id", id)
+      const setString = Object.keys(fields).map(
+        (key, index) => `"${ key }"=$${ index + 1 }`
+      ).join(', ');
+    console.log("setString", setString)
+    console.log(Object.values(fields))
+      if (setString.length === 0) {
+        return;
+      }
+      try {
+        const { rows: [ user ]} = await client.query(`
+          UPDATE users
+          SET ${ setString }
+          WHERE id=${id}
+          RETURNING *;
+        `, Object.values(fields));
+        return user;
+      } catch (error) {
+        throw error;
+      }
+    }
+
+async function updateUserToAdminById(userId) {
+
+  try {
+    const { rows: [user] } = await client.query(`
+            UPDATE users 
+            SET "isAdmin" = $1
+            WHERE id = $2
+            RETURNING *;
+      `, [true, userId]);
+
+    return user;
+  } catch (error) {
+    throw error;
+  }
+}
+
 //do we want this to be select all so user can see their profile.
 async function getUserByUsername(username) {
   try {
     const { rows: [user] } = await client.query(`
-            SELECT id, username
+            SELECT id, username, password
             FROM users
             WHERE username = $1;
         `, [username]);
@@ -76,9 +118,9 @@ async function getUserByUsername(username) {
 async function getUserByEmailAddress(emailAddress) {
   try {
     const { rows: [user] } = await client.query(`
-            SELECT *
+            SELECT id, "emailAddress", username, password
             FROM users
-            WHERE emailAddress = $1;
+            WHERE "emailAddress" = $1
         `, [emailAddress]);
 
     return user;
@@ -90,7 +132,7 @@ async function getUserByEmailAddress(emailAddress) {
 async function getAllUsers() {
   try {
     const { rows } = await client.query(`
-          SELECT id, username, emailAddress
+          SELECT id, username, "emailAddress", "isAdmin"
           FROM users
     `);
 
@@ -102,15 +144,15 @@ async function getAllUsers() {
 
 async function deleteUser(id) {
   try {
-    await client.query(`
-          DELETE FROM cart
-          WHERE "userId"=$1;
-      `, [id]);
+//     await client.query(`
+//           DELETE FROM cart
+//           WHERE "userId"=$1;
+//       `, [id]);
 
-    await client.query(`
-      DELETE FROM orders
-      WHERE "userId"=$1;
-  `, [id]);
+//     await client.query(`
+//       DELETE FROM orders
+//       WHERE "userId"=$1;
+//   `, [id]);
 
     const { rows: [user] } = await client.query(`
           DELETE FROM users
@@ -132,5 +174,7 @@ module.exports = {
   getUserByUsername,
   getUserByEmailAddress,
   getAllUsers,
-  deleteUser
+  deleteUser,
+  updateUserToAdminById,
+  updateUserById
 }

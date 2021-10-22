@@ -75,9 +75,8 @@ productsRouter.get("/category/:category", async (req, res, next) => {
     }
 })
 
-// create product (ADMIN) ** NEED TO ADD REQUIRE ADMIN ONCE LOG IN IS FUNCTIONAL **
-
-productsRouter.post("/", async (req, res, next) => {
+// create product (ADMIN) 
+productsRouter.post("/", requireAdmin, async (req, res, next) => {
     try {
         const { title, description, category, price, inventory, isActive } = req.body;
         const product = await createProduct({title, description, category, price, inventory, isActive});
@@ -94,12 +93,14 @@ productsRouter.post("/", async (req, res, next) => {
     }
 } )
 
-// edit product (ADMIN) ** NEED TO ADD REQUIRE ADMIN ONCE LOG IN IS FUNCTIONAL **
-productsRouter.patch("/:productId", requiredNotSent({requiredParams: ["title", "description", "category", "price", "inventory", "isActive"], atLeastOne: true}), 
+// edit product (ADMIN)
+productsRouter.patch("/:productId", requireAdmin, requiredNotSent({requiredParams: ["title", "description", "category", "price", "inventory", "isActive"], atLeastOne: true}), 
 async (req, res, next) => {
   const { productId } = req.params;
   const {title, description, category, price, inventory, isActive} = req.body; 
   const updateFields = {}
+
+  console.log("isactive", isActive)
 
   if (title) {
       updateFields.title = title;
@@ -121,7 +122,7 @@ async (req, res, next) => {
         updateFields.inventory = inventory;
   }
   
-  if (isActive) {
+  if (isActive || isActive === false) {
         updateFields.isActive = isActive;
   }
 
@@ -142,9 +143,9 @@ async (req, res, next) => {
   }
 })
 
-// delete product (ADMIN) ** NEED TO ADD REQUIRE ADMIN ONCE LOG IN IS FUNCTIONAL **
+// delete product (ADMIN)
 
-productsRouter.delete("/:productId", async (req, res, next) => {
+productsRouter.delete("/:productId", requireAdmin, async (req, res, next) => {
     const { productId } = req.params;
     
     try {
@@ -164,7 +165,7 @@ productsRouter.delete("/:productId", async (req, res, next) => {
     }
 }) 
 
-productsRouter.delete("/deactivate/:productId", async (req, res, next) => {
+productsRouter.delete("/deactivate/:productId", requireAdmin, async (req, res, next) => {
     const { productId } = req.params;
     
     try {
