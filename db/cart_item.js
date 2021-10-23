@@ -1,7 +1,7 @@
 
 const { report } = require("../api/products.js");
 const {client} = require("./index.js");
-//need to check that the manipulator of the cart item is the user
+//need to check that the manipulator of the cart item is the use
 
 // create cart item 
 
@@ -25,39 +25,52 @@ const addItemToCart = async ({cartId, productId, quantity}) => {
     }
 } 
 
-const getCartItems = async () => {
+//this exists just for testing purposes 
+const getAllCartItems = async () => {
     try {
         const {
-            rows: cart_items
+            rows: cartItems
+        } = await client.query(
+            `
+            SELECT *
+            FROM cart_item;
+            `
+        );
+        return cartItems;
+    } catch (error) {
+        throw error
+    }
+}
+
+
+//this seems to be working
+const getCartItemById = async (cartItemId) => {
+
+    try {
+        const {
+        rows: [cart_item]
         } = await client.query(`
-            SELECT * 
+            SELECT cart_item.*, products.title, products.description, products.price
             FROM cart_item
-        `)
+            INNER JOIN products
+            ON products.id = cart_item."productId"
+            WHERE cart_item.id = $1
+        `, [cartItemId]);
+
+        if (!cart_item) {
+            return null;
+        }
+
+        return cart_item;
+
     } catch (error) {
         
     }
 }
-// const getCartItemsByCartId = async (id) => {
-//     try {
-//         const { rows: cartItems } = await client.query(`
-//             SELECT products.title, cart_item.quantity products.price, 
-//             FROM cart_item
-//             INNER JOIN products
-//             ON cart_item."productId" = products.id
-//             WHERE cart_item."cartId" = $1;
-//         `, [id]);
 
-//         if (!cartItems) {
-//             return
-//         } else {
-//             return cartItems
-//         }
-//     } catch (error) {
-//         throw error
-//     }
-// }
+//this seems to be working
 
-const attachProductInfoToCartItem = async (id) => {
+const attachProductInfoToCartItem = async (cartId) => {
     try {
         const { rows: cartItems } = await client.query(`
             SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, cart_item.quantity
@@ -65,7 +78,7 @@ const attachProductInfoToCartItem = async (id) => {
             INNER JOIN products
             ON products.id = cart_item."productId"
             WHERE cart_item."cartId" = $1;
-        `, [id])
+        `, [cartId])
 
         return cartItems
     } catch (error) {
@@ -74,42 +87,81 @@ const attachProductInfoToCartItem = async (id) => {
     
 }
 
-const attachProductInfoToCartItemAndToCart = async (carts) => {
-    const cartsToReturn = [...carts];
-    const binds = carts.map((_, index) => `$${index + 1}`).join(", ");
-    const cartIds = carts.map((cart) => cart.id);
+// edit cart item qantity - this seems to be working
 
-    if (!cartIds?.length) return;
-
+const updateCartItemQuantity = async (quantity, cartItemId) => {
     try {
-        const { rows: cartItems } = await client.query(`
-            SELECT cart_item.*, products.title, products.description, products.price, cart_item.quantity
-            FROM products
-            JOIN cart_item ON products.id = cart_item."productId"
-            WHERE cart_item."cartId" IN(${binds});
-        `, cartIds);
-
-        for (const cart of cartsToReturn) {
-            const itemsToAdd = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
-
-            cart.cart_items = itemsToAdd;
-        }
-
-        return cartsToReturn;
+        const {
+            rows: [updatedCartItem]
+        } = await client.query(
+            `
+            UPDATE cart_item
+            SET quantity = $1
+            WHERE id = $2
+            RETURNING *;
+            `, [quantity, cartItemId]
+        )
+        
+        return updatedCartItem;
     } catch (error) {
-        throw error;
+        
     }
-
 }
 
-// edit cart item 
+// delete cart item - this seems to be working
 
-// delete cart item 
+const deleteCartItem = async (cartItemId) => {
+    try {
+        const {
+            rows: [deletedCartItem]
+        } = await client.query(`
+            DELETE FROM cart_item
+            WHERE cart_item.id=$1
+            RETURNING *
+        `, [cartItemId]
+        );
+
+        return deletedCartItem;
+        
+    } catch (error) {
+        
+    }
+}
 
 module.exports = { 
     addItemToCart,
-    getCartItems,
-    //getCartItemsByCartId
+    getCartItemById,
     attachProductInfoToCartItem,
-    attachProductInfoToCartItemAndToCart
+    deleteCartItem, 
+    getAllCartItems,
+    updateCartItemQuantity
 }
+
+
+// const attachProductInfoToCartItemAndToCart = async (carts) => {
+//     const cartsToReturn = [...carts];
+//     const binds = carts.map((_, index) => `$${index + 1}`).join(", ");
+//     const cartIds = carts.map((cart) => cart.id);
+
+//     if (!cartIds?.length) return;
+
+//     try {
+//         const { rows: cartItems } = await client.query(`
+//             SELECT cart_item.*, products.title, products.description, products.price, cart_item.quantity
+//             FROM products
+//             JOIN cart_item ON products.id = cart_item."productId"
+//             WHERE cart_item."cartId" IN(${binds});
+//         `, cartIds);
+
+//         for (const cart of cartsToReturn) {
+//             const itemsToAdd = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
+
+//             cart.cart_items = itemsToAdd;
+//         }
+
+//         return cartsToReturn;
+//     } catch (error) {
+//         throw error;
+//     }
+
+// }

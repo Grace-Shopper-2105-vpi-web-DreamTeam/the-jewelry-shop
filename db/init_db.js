@@ -23,16 +23,15 @@ const {
   createCart,
   checkoutCart,
   getCartByCartId,
-  //getAllActiveCarts,
-  //addUserIdToCart,
   getCartByUserId
 } = require('./cart');
 
 const {
   addItemToCart,
-  getCartItems,
-  //getCartItemsById
-  attachProductInfoToCartItem
+  getCartItemById,
+  deleteCartItem,
+  getAllCartItems,
+  updateCartItemQuantity,
 } = require('./cart_item')
 
 const {
@@ -385,25 +384,46 @@ async function testDB() {
     // const products = await getAllProducts();
     // console.log("results:", products);
 
-    console.log("calling checkoutCart");
-    const checkedOutCart = await checkoutCart(2);
-    console.log("checkedOutCart", checkedOutCart);
+    // console.log("calling checkoutCart");
+    // const checkedOutCart = await checkoutCart(2);
+    // console.log("checkedOutCart", checkedOutCart);
 
-    console.log("calling getCartById")
-    const cart = await getCartByCartId(1);
-    console.log("cart is ", cart)
-
-    console.log("calling getCart by userId")
-    const userCart = await getCartByUserId(3);
-    console.log("usercart it", userCart);
+    // console.log("calling getCartById")
+    // const cart = await getCartByCartId(1);
+    // console.log("cart is ", cart)
 
     // console.log("calling getAllActiveCarts ")
     // const activeCarts = await getAllActiveCarts();
     // console.log("active carts are", activeCarts)
 
-    // console.log("calling getCartItems")
-    // const cartItems = await getCartItems();
-    // console.log("the cart items are", cartItems)
+    console.log("calling getCartItems")
+    const cartItem = await getCartItemById(1);
+    console.log("the cart item is", cartItem);
+
+    console.log("calling getCart by userId")
+    const userCart = await getCartByUserId(1);
+    console.log("usercart it", userCart);
+
+    // console.log("calling delete cart item");
+    // const deletedCartItemToReturn = await deleteCartItem(1);
+    // console.log("the deleted cart item is", deletedCartItemToReturn);
+
+    console.log("calling update cart item");
+    //takes two params - 1st: new quantity, 2nd: item id
+    const updatedCartItemToReturn = await updateCartItemQuantity(5, 1);
+    console.log("the updated cart item is", updatedCartItemToReturn);
+
+    // console.log("calling getAllCartItems")
+    // const getAllCartItemsToReturn = await getAllCartItems();
+    // console.log("all cart items are", getAllCartItemsToReturn);
+
+    console.log("calling getCart by userId")
+    const userCartAfterDelete = await getCartByUserId(1);
+    console.log("usercart it", userCartAfterDelete);
+
+    // console.log("Calling getProductById");
+    // const diamondEarrings = await getProductById(2);
+    // console.log("product id results:", diamondEarrings);
 
     // console.log("attach product to cart info")
     // const cartItemsWithProductInfo = await attachProductInfoToCartItem(1);
