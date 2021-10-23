@@ -20,6 +20,22 @@ const {
 } = require('./orderItems')
 
 const {
+  createCart,
+  checkoutCart,
+  getCartByCartId,
+  //getAllActiveCarts,
+  //addUserIdToCart,
+  getCartByUserId
+} = require('./cart');
+
+const {
+  addItemToCart,
+  getCartItems,
+  //getCartItemsById
+  attachProductInfoToCartItem
+} = require('./cart_item')
+
+const {
   createProduct, 
   getAllProducts,
   getAllActiveProducts, 
@@ -83,20 +99,20 @@ async function buildTables() {
     );
     `)
     //had to remove but there is an error... not sure what?    "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
+    //total DECIMAL(19, 4),
+    //quantity INTEGER
     await client.query(`
     CREATE TABLE cart(
       id SERIAL PRIMARY KEY,
       "userId" INTEGER REFERENCES users(id),
-      total DECIMAL(19, 4),
-      quantity INTEGER
+      "isActive" BOOLEAN DEFAULT true
     );
-    
     CREATE TABLE cart_item(
       id SERIAL PRIMARY KEY,
       "cartId" INTEGER REFERENCES cart(id),
       "productId" INTEGER REFERENCES products(id),
       quantity INTEGER,
-      price DECIMAL(19, 4) 
+      UNIQUE ("cartId", "productId")
     );
     CREATE TABLE order_item(
       id SERIAL PRIMARY KEY,
@@ -124,6 +140,7 @@ async function createInitialUsers() {
       {emailAddress: "griffb@gmail.com", username: 'griff', password: 'worstleagueplayer7'},
       {emailAddress: "jacksons@gmail.com", username: 'jackson', password: 'edm4evur'},
       {emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123', isAdmin: true},
+      {emailAddress: "admin1235@gmail.com", username: 'admin123', password: 'admin12345', isAdmin: true}
     ]
 
     const users = await Promise.all(usersToCreate.map(createUser));
@@ -163,12 +180,15 @@ async function createInitialCarts() {
   console.log('Starting to create carts...');
   try {
     const cartsToCreate = [
-      {userId: 1},
-      {userId: 2},
-      {userId: 3},
+      {userId: 1, isActive: true},
+      {userId: 2, isActive: true},
+      {userId: 3, isActive: true},
       {userId: 4},
-      {userId: 5},
-      {userId: 6}
+      {userId: 5, isActive: false},
+      {userId: 5, isActive: true},
+      {userId: 6, isActive: true},
+      {isActive: true}
+
     ]
     
     const carts = await Promise.all(cartsToCreate.map(createCart));
@@ -325,7 +345,7 @@ async function createInitialCartItems() {
       }
     ]
 
-    const cartItems = await Promise.all(cartItemsToCreate.map(addCartItemToCart));
+    const cartItems = await Promise.all(cartItemsToCreate.map(addItemToCart));
     console.log('cart items created: ', cartItems)
     console.log('Finished creating cart items!')
   } catch (error) {
@@ -342,10 +362,10 @@ async function rebuildDB() {
     await buildTables();
     await createInitialUsers();
     await createInitialProducts();
-    //await createInitialCarts();
+    await createInitialCarts();
     await createInitialOrders();
     await createInitialOrderItems();
-    //await createInitialCartItems();
+    await createInitialCartItems();
     console.log('RebuildDB function was successful!')
   } catch(error) {
     console.log('Error during rebuildDB')
@@ -357,13 +377,41 @@ async function testDB() {
   try {
     console.log("Starting to test database...");
 
-    console.log("Calling getAllUsers");
-    const users = await getAllUsers();
-    console.log("getAllUsers:", users);
+    // console.log("Calling getAllUsers");
+    // const users = await getAllUsers();
+    // console.log("getAllUsers:", users);
 
-    console.log("Calling getAllProducts");
-    const products = await getAllProducts();
-    console.log("results:", products);
+    // console.log("Calling getAllProducts");
+    // const products = await getAllProducts();
+    // console.log("results:", products);
+
+    console.log("calling checkoutCart");
+    const checkedOutCart = await checkoutCart(2);
+    console.log("checkedOutCart", checkedOutCart);
+
+    console.log("calling getCartById")
+    const cart = await getCartByCartId(1);
+    console.log("cart is ", cart)
+
+    console.log("calling getCart by userId")
+    const userCart = await getCartByUserId(3);
+    console.log("usercart it", userCart);
+
+    // console.log("calling getAllActiveCarts ")
+    // const activeCarts = await getAllActiveCarts();
+    // console.log("active carts are", activeCarts)
+
+    // console.log("calling getCartItems")
+    // const cartItems = await getCartItems();
+    // console.log("the cart items are", cartItems)
+
+    // console.log("attach product to cart info")
+    // const cartItemsWithProductInfo = await attachProductInfoToCartItem(1);
+    // console.log("the product info is", cartItemsWithProductInfo)
+
+    // console.log("calling addUserIdToCart")
+    // const cartWithUser = await addUserIdToCart(7, 7)
+    // console.log("updated cart is", cartWithUser)
 
     // console.log("Calling active Prodcuts");
     // const activeProductsResults = await getAllActiveProducts();

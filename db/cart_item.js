@@ -25,12 +25,24 @@ const addItemToCart = async ({cartId, productId, quantity}) => {
     }
 } 
 
+const getCartItems = async () => {
+    try {
+        const {
+            rows: cart_items
+        } = await client.query(`
+            SELECT * 
+            FROM cart_item
+        `)
+    } catch (error) {
+        
+    }
+}
 // const getCartItemsByCartId = async (id) => {
 //     try {
 //         const { rows: cartItems } = await client.query(`
 //             SELECT products.title, cart_item.quantity products.price, 
-//             FROM products
-//             INNER JOIN cart_item
+//             FROM cart_item
+//             INNER JOIN products
 //             ON cart_item."productId" = products.id
 //             WHERE cart_item."cartId" = $1;
 //         `, [id]);
@@ -45,27 +57,50 @@ const addItemToCart = async ({cartId, productId, quantity}) => {
 //     }
 // }
 
-// const attachProductInfoToCartItem = async () => {
-//     try {
-//         const { rows: products } = await client.query(`
-//             SELECT title, price
-//             FROM products
-//             WHERE "isActive" = true;
-//         `);
+const attachProductInfoToCartItem = async (id) => {
+    try {
+        const { rows: cartItems } = await client.query(`
+            SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, cart_item.quantity
+            FROM cart_item
+            INNER JOIN products
+            ON products.id = cart_item."productId"
+            WHERE cart_item."cartId" = $1;
+        `, [id])
 
-//         const { rows: cartItems } = await client.query(`
-//             SELECT * 
-//             FROM cart_item 
-//             WHERE "productId"
-//             IN( ${products.map(product => product.id).join(', ')});
-//         `);
-
-//         return cartItems
-//     } catch (error) {
-//         throw error;
-//     }
+        return cartItems
+    } catch (error) {
+        throw error;
+    }
     
-// }
+}
+
+const attachProductInfoToCartItemAndToCart = async (carts) => {
+    const cartsToReturn = [...carts];
+    const binds = carts.map((_, index) => `$${index + 1}`).join(", ");
+    const cartIds = carts.map((cart) => cart.id);
+
+    if (!cartIds?.length) return;
+
+    try {
+        const { rows: cartItems } = await client.query(`
+            SELECT cart_item.*, products.title, products.description, products.price, cart_item.quantity
+            FROM products
+            JOIN cart_item ON products.id = cart_item."productId"
+            WHERE cart_item."cartId" IN(${binds});
+        `, cartIds);
+
+        for (const cart of cartsToReturn) {
+            const itemsToAdd = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
+
+            cart.cart_items = itemsToAdd;
+        }
+
+        return cartsToReturn;
+    } catch (error) {
+        throw error;
+    }
+
+}
 
 // edit cart item 
 
@@ -73,6 +108,8 @@ const addItemToCart = async ({cartId, productId, quantity}) => {
 
 module.exports = { 
     addItemToCart,
+    getCartItems,
     //getCartItemsByCartId
-    //attachProductInfoToCartItem
+    attachProductInfoToCartItem,
+    attachProductInfoToCartItemAndToCart
 }

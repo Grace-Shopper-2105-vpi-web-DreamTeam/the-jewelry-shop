@@ -1,7 +1,11 @@
 const {client} = require("./index.js");
 
+const { 
+    attachProductInfoToCartItem,
+} = require("./cart_item")
 
-//this will create cart. on front end have cart created if guest user clicks to shop page & save cart id in local storage. if user logs in create cart then and save user id on log in. will not run if cart already exists. 
+
+//this seems to be working. create on log in. on front end, if not logged cart saved in local storage. Force log in before checking out. Create cart based on local storage then allow checkout. 
 const createCart = async ({ userId, isActive }) => {
 
     if(!isActive && isActive !== false ) {
@@ -27,23 +31,8 @@ const createCart = async ({ userId, isActive }) => {
     }
 }
 
-const getAllActiveCarts = async () => {
-    try {
-        const {
-            rows: activeCarts
-        } = await client.query(
-            `
-            SELECT * 
-            FROM cart
-            WHERE "isActive" = true
-            `
-        );
-        return activeCarts;
-    } catch (error) {
-        throw error;
-    }
-}
-const getCartById = async (id) => {
+//this seems to be working
+const getCartByCartId = async (cartId) => {
     try {
         const {
             rows: [cart]
@@ -52,107 +41,41 @@ const getCartById = async (id) => {
             FROM cart 
             WHERE id=$1
             AND "isActive" = true;
-        `, [id]
+        `, [cartId]
         );
 
         if(!cart) {
             return;
         }
-        return cart;
+        const cartItems = await attachProductInfoToCartItem(cartId);
+
+        cart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
+
+        return cart
+        //return attachProductInfoToCartItemAndToCart(cart);
     } catch (error) {
         throw error;
     }
 }
-// this will get the cart & all cart itmes (and in front end be what we use to display cart. Use attach cartitems to cart here)
-// const getCartByCartId = async (id) => {
-//     console.log(id)
-//     try {
-//         const { 
-//             rows: [cart] 
-//         } = await client.query(`
-//             SELECT cart.*, cart_item.id, cart_item."productId", cart_item.quantity
-//             FROM cart
-//             INNER JOIN cart_item
-//             ON cart_item."cartId" = cart.id
-//             WHERE cart.id = $1
-//         `, [id]
-//         );
 
-//         // SELECT title, cart_item.quantity, price, cart_item.quantity*price AS total
-//         //     FROM products
-//         //     INNER JOIN cart_item
-//         //     ON cart_item."productId" = products.id
-//         //     LEFT JOIN cart.id = cart_item."cartId"
-//         //     WHERE cart.id = $1
-//         // `, [id]
-        
-//         return cart;
-    
-//     } catch (error) {
-//         throw error;
-//     }
-// } 
-
-// if a user has an active cart, or the cart 
-const addUserIdToCart = async (userId, cartId) => {
-
-    console.log(userId)
-    try {
-        const checkForUser = await getCartByUserId(userId);
-
-        const checkForCart = await getCartById(cartId);
-
-        let cartExists = false;
-
-        if (checkForCart !== undefined) {
-            cartExists = checkForCart;
-        }
-
-        console.log("user is", checkForUser);
-
-        console.log("cart is", checkForCart);
-
-        console.log("cart exists is", cartExists)
-
-        if(checkForUser) {
-            return 
-        } else if (cartExists.userId !== null) {
-            return 
-        } else {
-            const {
-                rows: [updatedCart]
-            } = await client.query(`
-                UPDATE cart
-                SET "userId" = $1
-                WHERE id = $2
-                RETURNING *;
-                `, 
-                [userId, cartId])
-    
-            return updatedCart;
-        }
-    } catch (error) {
-        throw error;
-    }
-
-}
-
-// not sure if we will end up using this. 
-
-const getCartByUserId = async (id) => {
+// this seems to be working
+const getCartByUserId = async (userId) => {
     try {
         const {
             rows: [cart]
         } = await client.query(`
             SELECT * 
             FROM cart 
-            WHERE "userId"=${id}
+            WHERE "userId"=${userId}
             AND "isActive" = true;
         `);
 
-        // if(!cart) {
-        //     return;
-        // }
+        const thisCartId = cart.id
+
+        const cartItems = await attachProductInfoToCartItem(thisCartId);
+
+        cart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
+
         return cart;
     } catch (error) {
         throw error;
@@ -160,7 +83,7 @@ const getCartByUserId = async (id) => {
 }
 
 //will update cart status to checkedout = true. maybe change to isActive and change to false on checkout. on front end, on checkout will call this and create order. 
-const checkoutCart = async (id) => {
+const checkoutCart = async (cartId) => {
     try {
         const {
             rows: [ checkedoutCart ]
@@ -169,10 +92,15 @@ const checkoutCart = async (id) => {
             SET "isActive" = false
             WHERE id=$1
             RETURNING *
-        `, [id]
+        `, [cartId]
         );
-        
+
+        const cartItems = await attachProductInfoToCartItem(cartId);
+
+        checkedoutCart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = checkedoutCart.id)
+
         return checkedoutCart;
+        
     } catch (error) {
         throw error;
     }
@@ -181,10 +109,88 @@ const checkoutCart = async (id) => {
 
 module.exports = { 
     createCart, 
-    getAllActiveCarts,
-    getCartById,  
+    getCartByCartId,  
     getCartByUserId,
-    addUserIdToCart,
     checkoutCart, 
   
 }
+
+
+// dont think this is working...do we even need?
+// const getAllActiveCarts = async () => {
+//     try {
+//         const {
+//             rows: activeCarts
+//         } = await client.query(
+//             `
+//             SELECT * 
+//             FROM cart
+//             WHERE "isActive" = true
+//             `
+//         );
+
+//         // const cartItems = await attachProductInfoToCartItem();
+
+//         // console.log(" the cart items are", cartItems)
+
+//         // activeCarts.forEach((activeCart) => {
+//         //     activeCart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = activeCart.id)
+//         // })
+
+//         // return activeCarts
+
+//         return attachProductInfoToCartItemAndToCart(activeCarts);
+//     } catch (error) {
+//         throw error;
+//     }
+// }
+
+
+// if a user has an active cart, or the cart 
+// const addUserIdToCart = async (user_id, cart_id) => {
+
+//     console.log(userId)
+//     try {
+//         const checkForUser = await getCartByUserId(user_id);
+
+//         const checkForCart = await getCartById(cart_id);
+
+//         let cartExists = false;
+
+//         if (checkForCart !== undefined) {
+//             cartExists = checkForCart;
+//         }
+
+//         console.log("user is", checkForUser);
+
+//         console.log("cart is", checkForCart);
+
+//         console.log("cart exists is", cartExists)
+
+//         if(checkForUser) {
+//             return 
+//         } else if (cartExists.user_id !== null) {
+//             return 
+//         } else {
+//             const {
+//                 rows: [updatedCart]
+//             } = await client.query(`
+//                 UPDATE cart
+//                 SET "userId" = $1
+//                 WHERE id = $2
+//                 RETURNING *;
+//                 `, 
+//                 [user_id, cart_id])
+            
+//             // const cartItems = await attachProductInfoToCartItem(cart_id);
+
+//             // updatedCart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = updatedCart.id);
+
+//             // return updatedCart;
+//         }
+//     } catch (error) {
+//         throw error;
+//     }
+
+// }
+
