@@ -34,6 +34,8 @@ apiRouter.use(async (req, res, next) => {
 
 apiRouter.use("/products", require("./products"));
 apiRouter.use('/users', require('./users'));
+apiRouter.use("/cartItem", require("./cartitem"));
+apiRouter.use("/cart", require("./cart"));
 
 apiRouter.use((error, req, res, next) => {
     res.send(error);
