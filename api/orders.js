@@ -13,6 +13,7 @@ const {
     getAllOrders,
     createOrder,
     getOrderByUserId,
+    getOrdersByUserId,
     getOrderById
 } = require("../db/orders");
 
@@ -30,7 +31,7 @@ ordersRouter.get("/",requireLogin,requireAdmin, async (req, res, next) => {
     }
 })
 
-ordersRouter.get("/:orderId/order", requireLogin, async (req, res, next) => {
+ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const order = await getOrderById(orderId);
@@ -56,7 +57,11 @@ ordersRouter.get("/:orderId/order", requireLogin, async (req, res, next) => {
 ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const orders = await getOrderByUserId(userId);
+
+        //const orders = await getOrderByUserId(userId);
+
+        const orders = await getOrdersByUserId(userId);
+
 
         if (!orders) {
             next({
@@ -81,8 +86,8 @@ ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
 //Do we even need this if we are going to create the order on checkout?
 ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
- 
-    if (req.user.id !== +userId) {
+  
+   if (req.user.id !== +userId) {
         next({
             name: "Not authorized",
             message: `Logged in user does not match requested user ${userId}`
@@ -95,7 +100,7 @@ ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
             res.send(order);
         } else {
             next({
-                name: "Missing UserId Error",
+                name: "MissingUserIdError",
                 message: "You Must Be Logged In to Create An Order"
             })
         }
@@ -106,42 +111,45 @@ ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
 
 
 // Maybe not necessary, I was thinking maybe this should be done during the checkout phase in the cart.js checkoutCart db function
+ordersRouter.post('/:orderId/items', async (req, res, next) => {
+    const { productId, quantity } = req.body
+    const { orderId } = req.params
 
 
-// ordersRouter.post('/:orderId/items', requiredNotSent({ requiredParams: ['productId','quantity'] }), async (req, res, next) => {
-//     const { productId, quantity } = req.body
-//     const { orderId } = req.params
+    try {
+        const order = await getOrderById(orderId);
+        const items = await getOrderItemsByOrder(orderId);
+        
+        console.log("the order is", order);
 
-//     try {
-//         const order = await getOrderById(orderId);
-//         const items = await getOrderItemsByOrder(order);
-//         if (order) {
-//             const dupOrder = items.find(item => items.productId === productId);
-//             if (dupOrder) {
-//                 next({
-//                     name: "Item not added",
-//                     message: "This item is already associated with the order"
-//                 });
+        if (order) {
+            const dupOrder = items.find(item => item.productId === productId);
+            if (dupOrder) {
+                next({
+                    name: "Item not added",
+                    message: "This item is already associated with the order"
+                });
 
-//             } else {
-//                 const newOrder = await addOrderItemToOrder({
-//                     productId,
-//                     orderId,
-//                     quantity
+            } else {
                 
-//                 })
-//                 if (newOrder) {
-//                     res.send(newOrder);
-//                 } else {
-//                     next();
-//                 }
-//             }
-//         }
-//     } catch (err) {
-//         next(err);
-//     }
-// });
-
+                const newOrder = await addOrderItemToOrder({
+                    productId,
+                    orderId,
+                    quantity
+                
+                })
+                if (newOrder) {
+                    res.send(newOrder);
+                } else {
+                    next();
+                }
+            }
+        }
+        console.count()
+    } catch (err) {
+        next(err);
+    }
+});
 
 
 module.exports = ordersRouter;

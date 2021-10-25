@@ -65,6 +65,7 @@ cartRouter.post("/:userId", requireLogin, async (req, res, next) => {
         const cart = await createCart({ userId });
         if (cart) {
             res.send(cart);
+
         } else if (req.user.id !== +userId) {
             next({
                 name: "Not Authorized",
@@ -81,7 +82,9 @@ cartRouter.post("/:userId", requireLogin, async (req, res, next) => {
     }
 })
 
-cartRouter.delete("/:cartId", async (req, res, next) => {
+
+//make a check to confirm that the user getting the cart has the same id as the cart's user id
+cartRouter.delete("/:cartId", requireLogin, async (req, res, next) => {
   const { cartId } = req.params;
 
   try {
@@ -93,13 +96,18 @@ cartRouter.delete("/:cartId", async (req, res, next) => {
             message: `No Cart found by Id ${cartId}`
           }) 
        } else {
+
           const inactiveCart = await deleteCart(cartId);
+
+          //const inactiveCart = await checkoutCart(cartId);
+
           res.send(inactiveCart)
       }
   } catch (error) {
       next(error);
   }
 })
+
 
 //make a check to confirm that the user getting the cart has the same id as the cart's user id
 cartRouter.delete("/:userId", requireLogin, async (req, res, next) => {
@@ -126,8 +134,6 @@ cartRouter.delete("/:userId", requireLogin, async (req, res, next) => {
         next(error);
     }
   })
-
-
 
 
 module.exports = cartRouter;

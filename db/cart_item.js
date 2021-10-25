@@ -130,15 +130,13 @@ const deleteCartItem = async (cartItemId) => {
     }
 }
 
-
-
 module.exports = { 
     addItemToCart,
     getCartItemById,
     attachProductInfoToCartItem,
     deleteCartItem, 
     getAllCartItems,
-    updateCartItemQuantity,
+    updateCartItemQuantity
 }
 
 

@@ -93,6 +93,7 @@ const deleteCart = async (cartId) => {
             RETURNING *
         `, [cartId]
         );
+
         const cartItems = await attachProductInfoToCartItem(cartId);
 
         inactiveCart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = inactiveCart.id)
@@ -104,8 +105,6 @@ const deleteCart = async (cartId) => {
     }
 
 }
-
-//will update cart status to checkedout = true. maybe change to isActive and change to false on checkout. on front end, on checkout will call this and create order. 
 
 const checkoutCart = async (cartId) => {
 
@@ -136,8 +135,7 @@ module.exports = {
     getCartByCartId,  
     getCartByUserId,
     deleteCart,
-    checkoutCart, 
-  
+    checkoutCart 
 }
 
 
