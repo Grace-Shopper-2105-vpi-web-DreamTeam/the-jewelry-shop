@@ -82,11 +82,10 @@ const getCartByUserId = async (userId) => {
     }
 }
 
-//will update cart status to checkedout = true. maybe change to isActive and change to false on checkout. on front end, on checkout will call this and create order. 
-const checkoutCart = async (cartId) => {
+const deleteCart = async (cartId) => {
     try {
         const {
-            rows: [ checkedoutCart ]
+            rows: [ inactiveCart ]
         } = await client.query(`
             UPDATE cart
             SET "isActive" = false
@@ -97,9 +96,9 @@ const checkoutCart = async (cartId) => {
 
         const cartItems = await attachProductInfoToCartItem(cartId);
 
-        checkedoutCart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = checkedoutCart.id)
+        inactiveCart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = inactiveCart.id)
 
-        return checkedoutCart;
+        return inactiveCart;
         
     } catch (error) {
         throw error;
@@ -107,12 +106,36 @@ const checkoutCart = async (cartId) => {
 
 }
 
+const checkoutCart = async (cartId) => {
+
+   const inactiveCart = deleteCart(cartId);
+
+   // TODO: Create an order from the cart we just made inactive and fill the order_items table 
+   // 1. Create an order (takes in userId and cart total (which can be calculated from the above inactiveCart's products))
+   
+   const order = await createOrder({userId: req.user.id, total = 100});
+   
+   //not sure if we are doing total.
+   
+   // 2. Use this order Id and loop through each of the products in the inactive cart, and create a order_item for each of them
+
+   const newOrder = await addOrderItemToOrder({
+    productId,
+    orderId,
+    quantity
+
+})
+    // 3. After all the items are added to the order, we send back that final order   
+
+}
+
+
 module.exports = { 
     createCart, 
     getCartByCartId,  
     getCartByUserId,
-    checkoutCart, 
-  
+    deleteCart,
+    checkoutCart 
 }
 
 

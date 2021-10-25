@@ -12,6 +12,7 @@ const { getOrderItemsByOrder, addOrderItemToOrder } = require('../db/orderItems'
 const {
     getAllOrders,
     createOrder,
+    getOrderByUserId,
     getOrdersByUserId,
     getOrderById
 } = require("../db/orders");
@@ -38,7 +39,13 @@ ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res,
         if (!order) {
             next({
                 name: "OrderNotFound",
-                message: `Order found with Id ${orderId}`
+                message: `Order Not Found with Id ${orderId}`
+            })
+        }
+        if (req.user.id !== order.userId) {
+            next({
+                name: "Not authorized",
+                message: `The Order with Id ${orderId} is Not Associated With Your UserId}`
             })
         }
         res.send({ order })
@@ -50,12 +57,23 @@ ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res,
 ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
     try {
         const { userId } = req.params;
+
+        //const orders = await getOrderByUserId(userId);
+
         const orders = await getOrdersByUserId(userId);
+
 
         if (!orders) {
             next({
                 name: "OrderNotFound",
                 message: `Order found with Id ${userId}`
+            })
+        }
+
+        if (req.user.id !== +userId) {
+            next({
+                name: "Not authorized",
+                message: `Logged in user does not match requested user ${userId}`
             })
         }
 
@@ -65,8 +83,17 @@ ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
     }
 });
 
+//Do we even need this if we are going to create the order on checkout?
 ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
+  
+   if (req.user.id !== +userId) {
+        next({
+            name: "Not authorized",
+            message: `Logged in user does not match requested user ${userId}`
+        })
+    }
+
     try {
         const order = await createOrder({ userId });
         if (order) {
@@ -82,6 +109,8 @@ ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     }
 })
 
+
+// Maybe not necessary, I was thinking maybe this should be done during the checkout phase in the cart.js checkoutCart db function
 ordersRouter.post('/:orderId/items', async (req, res, next) => {
     const { productId, quantity } = req.body
     const { orderId } = req.params
@@ -121,7 +150,6 @@ ordersRouter.post('/:orderId/items', async (req, res, next) => {
         next(err);
     }
 });
-
 
 
 module.exports = ordersRouter;
