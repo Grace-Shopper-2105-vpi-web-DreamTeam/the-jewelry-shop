@@ -12,7 +12,6 @@ const { getOrderItemsByOrder, addOrderItemToOrder } = require('../db/orderItems'
 const {
     getAllOrders,
     createOrder,
-    getOrderByUserId,
     getOrdersByUserId,
     getOrderById
 } = require("../db/orders");
@@ -31,6 +30,7 @@ ordersRouter.get("/",requireLogin,requireAdmin, async (req, res, next) => {
     }
 })
 
+// i think this should be something only admins can do if we need this route at all...not sure. 
 ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res, next) => {
     try {
         const { orderId } = req.params;
@@ -45,7 +45,7 @@ ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res,
         if (req.user.id !== order.userId) {
             next({
                 name: "Not authorized",
-                message: `The Order with Id ${orderId} is Not Associated With Your UserId}`
+                message: `The Order with Id ${orderId} is Not Associated With Your UserId`
             })
         }
         res.send({ order })
@@ -57,8 +57,6 @@ ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res,
 ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
     try {
         const { userId } = req.params;
-
-        //const orders = await getOrderByUserId(userId);
 
         const orders = await getOrdersByUserId(userId);
 
@@ -86,6 +84,8 @@ ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
 //Do we even need this if we are going to create the order on checkout?
 ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
+
+    const { total } = req.body;
   
    if (req.user.id !== +userId) {
         next({
@@ -95,7 +95,7 @@ ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     }
 
     try {
-        const order = await createOrder({ userId });
+        const order = await createOrder({ userId, total });
         if (order) {
             res.send(order);
         } else {

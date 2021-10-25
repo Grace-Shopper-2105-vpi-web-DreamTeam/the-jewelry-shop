@@ -113,7 +113,7 @@ const checkoutCart = async (cartId) => {
    // TODO: Create an order from the cart we just made inactive and fill the order_items table 
    // 1. Create an order (takes in userId and cart total (which can be calculated from the above inactiveCart's products))
    
-   const order = await createOrder({userId: req.user.id, total = 100});
+   const order = await createOrder({userId: req.user.id, total: 100});
    
    //not sure if we are doing total.
    

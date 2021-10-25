@@ -204,15 +204,17 @@ async function createInitialOrders() {
   console.log('Starting to create orders...');
   try {
     const ordersToCreate = [
-      {userId: 1},
-      {userId: 2},
-      {userId: 1},
-      {userId: 3},
-      {userId: 5},
-      {userId: 4}
+      {userId: 1, total: 110.97},
+      {userId: 2, total: 8252.97},
+      {userId: 1, total: 11303.93},
+      {userId: 3, total: 59.98},
+      {userId: 5, total: 59.98},
+      {userId: 4, total: 389.97}
     ]
 
     const orders = await Promise.all(ordersToCreate.map(createOrder));
+    console.log('order items created: ', orders)
+    console.log('Finished creating orders!')
   } catch (error) {
     console.error('Error creating orders!');
     throw error;
@@ -272,6 +274,11 @@ async function createInitialOrderItems() {
         orderId: 5,
         productId: 3,
         quantity: 6
+      },
+      {
+        orderId: 6,
+        productId: 3,
+        quantity: 4
       }
     ]
 
@@ -382,7 +389,7 @@ async function testDB() {
     console.log("the orders are", allOrders);
 
     console.log("calling getOrdersByUserID");
-    const userOrder = await getOrdersByUserId(2);
+    const userOrder = await getOrdersByUserId(1);
     console.log("user 1's orders are", userOrder)
 
     console.log("calling createOrder");
@@ -390,13 +397,13 @@ async function testDB() {
     console.log("the new order is", newOrder);
 
     console.log("calling getOrderById");
-    const orderIdResult = await getOrderById(2);
+    const orderIdResult = await getOrderById(1);
     console.log("the order is", orderIdResult);
 
     console.log("calling get orderItemsByOrder");
     const orderItems = await getOrderItemsByOrder(2);
     console.log("the order items are", orderItems);
-    
+
     // console.log("Calling getAllUsers");
     // const users = await getAllUsers();
     // console.log("getAllUsers:", users);
