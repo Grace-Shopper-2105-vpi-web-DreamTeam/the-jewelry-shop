@@ -12,7 +12,7 @@ const { getOrderItemsByOrder, addOrderItemToOrder } = require('../db/orderItems'
 const {
     getAllOrders,
     createOrder,
-    getOrderByUserId,
+    getOrdersByUserId,
     getOrderById
 } = require("../db/orders");
 
@@ -30,7 +30,7 @@ ordersRouter.get("/",requireLogin,requireAdmin, async (req, res, next) => {
     }
 })
 
-ordersRouter.get("/:orderId/order", requireLogin, async (req, res, next) => {
+ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res, next) => {
     try {
         const { orderId } = req.params;
         const order = await getOrderById(orderId);
@@ -50,7 +50,7 @@ ordersRouter.get("/:orderId/order", requireLogin, async (req, res, next) => {
 ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
     try {
         const { userId } = req.params;
-        const orders = await getOrderByUserId(userId);
+        const orders = await getOrdersByUserId(userId);
 
         if (!orders) {
             next({
@@ -82,15 +82,19 @@ ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     }
 })
 
-ordersRouter.post('/:orderId/items', requiredNotSent({ requiredParams: ['productId','quantity'] }), async (req, res, next) => {
+ordersRouter.post('/:orderId/items', async (req, res, next) => {
     const { productId, quantity } = req.body
     const { orderId } = req.params
 
+
     try {
         const order = await getOrderById(orderId);
-        const items = await getOrderItemsByOrder(order);
+        const items = await getOrderItemsByOrder(orderId);
+        
+        console.log("the order is", order);
+
         if (order) {
-            const dupOrder = items.find(item => items.productId === productId);
+            const dupOrder = items.find(item => item.productId === productId);
             if (dupOrder) {
                 next({
                     name: "Item not added",
@@ -98,6 +102,7 @@ ordersRouter.post('/:orderId/items', requiredNotSent({ requiredParams: ['product
                 });
 
             } else {
+                
                 const newOrder = await addOrderItemToOrder({
                     productId,
                     orderId,
@@ -111,6 +116,7 @@ ordersRouter.post('/:orderId/items', requiredNotSent({ requiredParams: ['product
                 }
             }
         }
+        console.count()
     } catch (err) {
         next(err);
     }
