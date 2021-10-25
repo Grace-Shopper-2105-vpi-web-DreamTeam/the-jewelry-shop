@@ -1,5 +1,7 @@
 const { client } = require("./index")
 
+//need to attach order items to order via orderID
+
 async function getAllOrders() {
     try {
         const { rows: orders } = await client.query(`
@@ -13,13 +15,13 @@ async function getAllOrders() {
     }
 }
 
-async function createOrder({userId}) {
+async function createOrder({userId, total}) {
     try {
         const { rows: [order] } = await client.query(`
-            INSERT INTO orders("userId")
-            VALUES ($1)
+            INSERT INTO orders("userId", total)
+            VALUES ($1, $2)
             RETURNING *;
-        `, [userId])
+        `, [userId, total])
 
         return order;
     } catch (error) {
@@ -27,22 +29,36 @@ async function createOrder({userId}) {
     }
 }
 
-async function getOrderByUserId(id) {
+async function getOrdersByUserId(id) {
     try {
-        const {rows: [ order ] } = await client.query(`
-            SELECT id, "userId"
+        const {rows: orders } = await client.query(`
+            SELECT *
             FROM orders
-            WHERE id=${id}
+            WHERE "userId"=${id}
         `)
 
-        return order;
+        return orders;
     } catch (error) {
         throw error;
     }
 } 
 
+const getOrderById = async (id) => {
+    try {
+        const {rows: [order]} = await client.query(`
+            SELECT * 
+            FROM orders
+            WHERE id=$1;
+            `,[id]);
+        return order;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getAllOrders,
     createOrder,
-    getOrderByUserId
+    getOrdersByUserId,
+    getOrderById
 }

@@ -12,11 +12,13 @@ const {
 const {
   getAllOrders,
   createOrder,
-  getOrderByUserId
+  getOrdersByUserId,
+  getOrderById
 } = require('./orders');
 
 const {
-  addOrderItemToOrder
+  addOrderItemToOrder,
+   getOrderItemsByOrder
 } = require('./orderItems');
 
 const {
@@ -91,34 +93,35 @@ async function buildTables() {
 
     //image BYTEA(max) NOT NULL
     await client.query(`
-    CREATE TABLE orders(
-      id SERIAL PRIMARY KEY, 
-      "userId" INTEGER REFERENCES users(id),
-      total DECIMAL(19, 4)
-    );
-    `)
-    //had to remove but there is an error... not sure what?    "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
-    //total DECIMAL(19, 4),
-    //quantity INTEGER
-    await client.query(`
-    CREATE TABLE cart(
-      id SERIAL PRIMARY KEY,
-      "userId" INTEGER REFERENCES users(id),
-      "isActive" BOOLEAN DEFAULT true
-    );
-    CREATE TABLE cart_item(
-      id SERIAL PRIMARY KEY,
-      "cartId" INTEGER REFERENCES cart(id),
-      "productId" INTEGER REFERENCES products(id),
-      quantity INTEGER,
-      UNIQUE ("cartId", "productId")
-    );
-    CREATE TABLE order_item(
-      id SERIAL PRIMARY KEY,
-      "orderId" INTEGER REFERENCES orders(id),
-      "productId" INTEGER REFERENCES products(id),
-      quantity INTEGER
-    )
+      CREATE TABLE orders(
+        id SERIAL PRIMARY KEY, 
+        "userId" INTEGER REFERENCES users(id),
+        total DECIMAL(19, 4)
+      );
+      `)
+      //had to remove but there is an error... not sure what?    "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
+      //total DECIMAL(19, 4),
+      //quantity INTEGER
+      await client.query(`
+      CREATE TABLE cart(
+        id SERIAL PRIMARY KEY,
+        "userId" INTEGER REFERENCES users(id),
+        "isActive" BOOLEAN DEFAULT true
+      );
+      CREATE TABLE cart_item(
+        id SERIAL PRIMARY KEY,
+        "cartId" INTEGER REFERENCES cart(id),
+        "productId" INTEGER REFERENCES products(id),
+        quantity INTEGER,
+        UNIQUE ("cartId", "productId")
+      );
+      CREATE TABLE order_item(
+        id SERIAL PRIMARY KEY,
+        "orderId" INTEGER REFERENCES orders(id),
+        "productId" INTEGER REFERENCES products(id),
+        quantity INTEGER,
+        UNIQUE ("orderId", "productId")
+      );
     `);
 
     console.log('Finished constructing tables!');
@@ -374,6 +377,26 @@ async function testDB() {
   try {
     console.log("Starting to test database...");
 
+    console.log("calling getAllOrders");
+    const allOrders = await getAllOrders();
+    console.log("the orders are", allOrders);
+
+    console.log("calling getOrdersByUserID");
+    const userOrder = await getOrdersByUserId(2);
+    console.log("user 1's orders are", userOrder)
+
+    console.log("calling createOrder");
+    const newOrder = await createOrder({userId: 3});
+    console.log("the new order is", newOrder);
+
+    console.log("calling getOrderById");
+    const orderIdResult = await getOrderById(2);
+    console.log("the order is", orderIdResult);
+
+    console.log("calling get orderItemsByOrder");
+    const orderItems = await getOrderItemsByOrder(2);
+    console.log("the order items are", orderItems);
+    
     // console.log("Calling getAllUsers");
     // const users = await getAllUsers();
     // console.log("getAllUsers:", users);
@@ -401,31 +424,30 @@ async function testDB() {
     // console.log("calling getAllActiveCarts ")
     // const activeCarts = await getAllActiveCarts();
     // console.log("active carts are", activeCarts)
-    console.log("calling getAllCartItems")
-    const getAllCartItemsToReturn = await getAllCartItems();
-    console.log("all cart items are", getAllCartItemsToReturn);
+    // console.log("calling getAllCartItems")
+    // const getAllCartItemsToReturn = await getAllCartItems();
+    // console.log("all cart items are", getAllCartItemsToReturn);
 
-    console.log("calling getCartItems")
-    const cartItem = await getCartItemById(1);
-    console.log("the cart item is", cartItem);
+    // console.log("calling getCartItems")
+    // const cartItem = await getCartItemById(1);
+    // console.log("the cart item is", cartItem);
 
-    console.log("calling getCart by userId")
-    const userCart = await getCartByUserId(1);
-    console.log("usercart it", userCart);
+    // console.log("calling getCart by userId")
+    // const userCart = await getCartByUserId(1);
+    // console.log("usercart it", userCart);
 
     // console.log("calling delete cart item");
     // const deletedCartItemToReturn = await deleteCartItem(1);
     // console.log("the deleted cart item is", deletedCartItemToReturn);
 
-    console.log("calling update cart item");
+    // console.log("calling update cart item");
     //takes two params - 1st: new quantity, 2nd: item id
-    const updatedCartItemToReturn = await updateCartItemQuantity(5, 1);
-    console.log("the updated cart item is", updatedCartItemToReturn);
+    // const updatedCartItemToReturn = await updateCartItemQuantity(5, 1);
+    // console.log("the updated cart item is", updatedCartItemToReturn);
 
-   
-    console.log("calling getCart by userId")
-    const userCartAfterDelete = await getCartByUserId(1);
-    console.log("usercart it", userCartAfterDelete);
+    // console.log("calling getCart by userId")
+    // const userCartAfterDelete = await getCartByUserId(1);
+    // console.log("usercart it", userCartAfterDelete);
 
     // console.log("Calling getProductById");
     // const diamondEarrings = await getProductById(2);

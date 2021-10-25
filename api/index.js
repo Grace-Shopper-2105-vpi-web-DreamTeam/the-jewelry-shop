@@ -31,7 +31,7 @@ apiRouter.use(async (req, res, next) => {
   }
 });
 
-
+apiRouter.use("/orders", require("./orders"));
 apiRouter.use("/products", require("./products"));
 apiRouter.use('/users', require('./users'));
 apiRouter.use("/cartItem", require("./cart_item"));
