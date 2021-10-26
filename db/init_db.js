@@ -87,6 +87,7 @@ async function buildTables() {
         category VARCHAR(255) NOT NULL,
         price DECIMAL(19, 4),
         inventory INTEGER,
+        image VARCHAR(255),
         "isActive" BOOLEAN DEFAULT true
       );
     `);
@@ -158,7 +159,7 @@ async function createInitialProducts() {
   console.log('Starting to create products...');
   try {
     const productsToCreate = [
-      {title: 'Rolex Submariner', description: 'black dial arabic numerals classic design', category: 'watches', price: '8252.97', inventory: 3},
+      {title: 'Rolex Submariner', description: 'black dial arabic numerals classic design', category: 'watches', price: '8252.97', inventory: 3, image: "../imgs/earrings1_resized.png"},
       {title: 'Medical ID Bracelet', description: 'Basic stainless steel bracelet with custom name and medical information', category: 'bracelets', price: '50.99', inventory: 5000},
       {title: '"B" Necklace', description: 'Stylish stainless steel necklace with a "B" pendant', category: 'necklaces', price: '129.99', inventory: 352},
       {title: 'Beaded Bracelet Set', description: 'Set of 5 different beaded bracelets', category: 'bracelets', price: '29.99', inventory: 26},
@@ -394,9 +395,9 @@ async function testDB() {
   try {
     console.log("Starting to test database...");
 
-    console.log("calling getAllOrders");
-    const allOrders = await getAllOrders();
-    console.log("the orders are", allOrders);
+    // console.log("calling getAllOrders");
+    // const allOrders = await getAllOrders();
+    // console.log("the orders are", allOrders);
 
     // console.log("calling getOrdersByUserID");
     // const userOrder = await getOrdersByUserId(1);
@@ -422,9 +423,9 @@ async function testDB() {
     // const cart = await getCartByCartId(1);
     // console.log("cart is ", cart)
 
-    console.log("calling checkoutCart");
-    const checkedOutCart = await checkoutCart(3);
-    console.log("checkedOutCart", checkedOutCart);
+    // console.log("calling checkoutCart");
+    // const checkedOutCart = await checkoutCart(3);
+    // console.log("checkedOutCart", checkedOutCart);
 
     // console.log("calling updateProduct");
     // const updateProductResult = await updateProduct(
