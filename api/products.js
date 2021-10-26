@@ -100,8 +100,6 @@ async (req, res, next) => {
   const {title, description, category, price, inventory, image, isActive} = req.body; 
   const updateFields = {}
 
-  console.log("isactive", isActive)
-
   if (title) {
       updateFields.title = title;
   }

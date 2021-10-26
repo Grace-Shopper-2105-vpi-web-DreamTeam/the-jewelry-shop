@@ -119,8 +119,6 @@ ordersRouter.post('/:orderId/items', async (req, res, next) => {
     try {
         const order = await getOrderById(orderId);
         const items = await getOrderItemsByOrder(orderId);
-        
-        console.log("the order is", order);
 
         if (order) {
             const dupOrder = items.find(item => item.productId === productId);

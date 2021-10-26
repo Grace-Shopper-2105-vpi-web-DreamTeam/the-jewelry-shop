@@ -44,8 +44,6 @@ const getAllCartItems = async () => {
 //this seems to be working
 const getCartItemById = async (cartItemId) => {
 
-    console.log(cartItemId)
-
     try {
         const {
         rows: [cart_item]
@@ -56,12 +54,6 @@ const getCartItemById = async (cartItemId) => {
             ON products.id = cart_item."productId"
             WHERE cart_item.id = $1
         `, [cartItemId]);
-
-        console.log("cart item", cart_item)
-
-        // if (!cart_item) {
-        //     return null;
-        // }
 
         return cart_item;
 

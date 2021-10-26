@@ -110,11 +110,8 @@ const getProductByCategory = async (category) => {
 
 const updateProduct = async (id, fields = {}) => {
 
-    console.log(fields)
-
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index +1}`).join(", ");
      
-    console.log("setString", setString)
     if(setString.length === 0 ) {
         return;
     }
@@ -143,6 +140,16 @@ const updateProduct = async (id, fields = {}) => {
 
 const deleteProduct = async (id) => {
     try {
+
+        await client.query(`
+            DELETE FROM cart_item
+            WHERE "productId" = $1;
+        `, [id]);
+
+        await client.query(`
+            DELETE FROM order_item
+            WHERE "productId" = $1;
+        `, [id]);
         const {
             rows: [deletedProdcut] 
         } = await client.query(

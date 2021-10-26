@@ -62,12 +62,10 @@ async function getUserById(userId) {
 }
 
 async function updateUserById( id, fields = {} ) {
-    console.log("id", id)
       const setString = Object.keys(fields).map(
         (key, index) => `"${ key }"=$${ index + 1 }`
       ).join(', ');
-    console.log("setString", setString)
-    console.log(Object.values(fields))
+
       if (setString.length === 0) {
         return;
       }

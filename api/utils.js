@@ -4,7 +4,6 @@ const {
   
   function requireLogin(req, res, next) {
 
-    console.log("the user is", req.user)
     if (!req.user) {
   
       res.status(401);
