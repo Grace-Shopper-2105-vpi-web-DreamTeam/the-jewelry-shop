@@ -110,10 +110,16 @@ const getProductByCategory = async (category) => {
 
 const updateProduct = async (id, fields = {}) => {
 
+    console.log(fields)
+
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index +1}`).join(", ");
+     
+    console.log("setString", setString)
     if(setString.length === 0 ) {
         return;
     }
+
+   
 
     try {
         const {

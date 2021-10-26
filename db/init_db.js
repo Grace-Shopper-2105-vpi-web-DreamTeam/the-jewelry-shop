@@ -423,21 +423,21 @@ async function testDB() {
     // console.log("cart is ", cart)
 
     console.log("calling checkoutCart");
-    const checkedOutCart = await checkoutCart(4);
+    const checkedOutCart = await checkoutCart(3);
     console.log("checkedOutCart", checkedOutCart);
 
-    console.log("calling updateProduct");
-    const updateProductResult = await updateProduct(
-      products[4].id, 
-      {
-        price: 30.00
-      }
-    );
-    console.log("the result of update", updateProductResult)
+    // console.log("calling updateProduct");
+    // const updateProductResult = await updateProduct(
+    //   products[4].id, 
+    //   {
+    //     price: 30.00
+    //   }
+    // );
+    // console.log("the result of update", updateProductResult)
 
-    console.log("calling getOrderById");
-    const orderIdResult = await getOrderById(7);
-    console.log("the order is", orderIdResult);
+    // console.log("calling getOrderById");
+    // const orderIdResult = await getOrderById(7);
+    // console.log("the order is", orderIdResult);
 
     // console.log("calling getAllActiveCarts ")
     // const activeCarts = await getAllActiveCarts();

@@ -7,7 +7,9 @@ const {
 
 const { createOrder, getOrderById } = require("./orders.js");
 
-const { addOrderItemToOrder } = require("./orderItems")
+const { addOrderItemToOrder } = require("./orderItems");
+
+const { getProductById, updateProduct } = require("./products")
 
 
 
@@ -119,8 +121,6 @@ const checkoutCart = async (cartId) => {
 
         const userId = inactiveCart.userId
 
-        
-
         const cartItemsToGetTotal = await attachProductInfoToCartItem(cartId);
 
         const total = cartItemsToGetTotal.reduce(function(sum, current) {
@@ -132,20 +132,54 @@ const checkoutCart = async (cartId) => {
         const orderId = newOrder.id;
 
         const cartItems = await getCartItemByCartId(cartId);
-        
+
         cartItems.forEach((cartItem) => {
             cartItem.orderId = orderId;
             delete cartItem.id;
             delete cartItem.cartId;
-        })
-
-       await Promise.all(cartItems.map(addOrderItemToOrder));
-
-       const newOrderWithItems = await getOrderById(orderId);
-
+        });
+        
+        await Promise.all(cartItems.map(addOrderItemToOrder));
+        
+        const newOrderWithItems = await getOrderById(orderId);
+        
+        await getInventoryChange(cartId);
+        
         return newOrderWithItems;
     } catch (error) {
         throw error;
+    }
+}
+
+    const getInventoryChange = async (cartId) => {
+
+        try {
+            const cartItems = await getCartItemByCartId(cartId);
+
+            const quantitiesToUpdateWithProductId = cartItems.filter((cartItem) => 
+                delete cartItem.orderId
+            )
+
+            const productIds = quantitiesToUpdateWithProductId.map((item) => item.productId)
+
+            const productsToUpdate = await Promise.all(productIds.map(getProductById));
+
+            for (let productId1 of productsToUpdate) {
+                for (let productId2 of quantitiesToUpdateWithProductId) {
+                    if(productId1.id === productId2.productId) {
+                        productId1.inventory = productId1.inventory - productId2.quantity
+                    }
+                }
+            }
+            
+            const updatedProducts = await Promise.all(productsToUpdate.map((product) => updateProduct(product.id, {inventory: product.inventory})));
+
+            return updatedProducts;
+            
+        } catch (error) {
+            throw error
+        }
+
     }
    
 
@@ -166,8 +200,6 @@ const checkoutCart = async (cartId) => {
 
 // })
     // 3. After all the items are added to the order, we send back that final order   
-
-}
 
 
 module.exports = { 
