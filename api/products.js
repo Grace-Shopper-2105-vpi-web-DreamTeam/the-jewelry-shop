@@ -97,7 +97,7 @@ productsRouter.post("/", requireAdmin, async (req, res, next) => {
 productsRouter.patch("/:productId", requireAdmin, requiredNotSent({requiredParams: ["title", "description", "category", "price", "inventory", "isActive"], atLeastOne: true}), 
 async (req, res, next) => {
   const { productId } = req.params;
-  const {title, description, category, price, inventory, isActive} = req.body; 
+  const {title, description, category, price, inventory, image, isActive} = req.body; 
   const updateFields = {}
 
   console.log("isactive", isActive)
@@ -120,6 +120,10 @@ async (req, res, next) => {
   
   if (inventory) {
         updateFields.inventory = inventory;
+  }
+
+  if (image) {
+      updateFields.image = image;
   }
   
   if (isActive || isActive === false) {
