@@ -9,6 +9,8 @@ const {
     checkoutCart,  
 } = require("../db/cart")
 
+
+
 const { requireLogin } = require("./utils");
 
 cartRouter.use((req, res, next) => {
@@ -60,8 +62,18 @@ cartRouter.get("/:userId/usercart", requireLogin, async (req, res, next) => {
 
 cartRouter.post("/:userId", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
-    
+
+    const cartToCheck = await getCartByUserId(userId);
+
+        if(cartToCheck) {
+            next({
+                name: "ActiveCartExistsError",
+                message: `An active cart already exists for this user`
+            })
+        }
+
     try {
+
         const cart = await createCart({ userId });
         if (cart) {
             res.send(cart);
@@ -84,7 +96,7 @@ cartRouter.post("/:userId", requireLogin, async (req, res, next) => {
 
 
 //make a check to confirm that the user getting the cart has the same id as the cart's user id
-cartRouter.delete("/:cartId", requireLogin, async (req, res, next) => {
+cartRouter.delete("/deactivatecart/:cartId", requireLogin, async (req, res, next) => {
   const { cartId } = req.params;
 
   try {
@@ -115,6 +127,8 @@ cartRouter.delete("/:userId", requireLogin, async (req, res, next) => {
   
     try {
         const cartToBeMadeInactive = await getCartByUserId(userId);
+
+        const cartId = cartToBeMadeInactive.id
   
         if(!cartToBeMadeInactive) {
             next({
@@ -127,7 +141,7 @@ cartRouter.delete("/:userId", requireLogin, async (req, res, next) => {
                 message: `You're Not Authorized to Make Changes to This Cart`
             })
         } else {
-            const inactiveCart = await checkoutCart(userId);
+            const inactiveCart = await checkoutCart(cartId);
             res.send(inactiveCart)
         }
     } catch (error) {

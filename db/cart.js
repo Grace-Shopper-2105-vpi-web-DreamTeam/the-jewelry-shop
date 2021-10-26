@@ -2,7 +2,13 @@ const {client} = require("./index.js");
 
 const { 
     attachProductInfoToCartItem,
-} = require("./cart_item")
+    getCartItemByCartId
+} = require("./cart_item");
+
+const { createOrder, getOrderById } = require("./orders.js");
+
+const { addOrderItemToOrder } = require("./orderItems")
+
 
 
 //this seems to be working. create on log in. on front end, if not logged cart saved in local storage. Force log in before checking out. Create cart based on local storage then allow checkout. 
@@ -37,7 +43,7 @@ const getCartByCartId = async (cartId) => {
         const {
             rows: [cart]
         } = await client.query(`
-            SELECT * 
+            SELECT *
             FROM cart 
             WHERE id=$1
             AND "isActive" = true;
@@ -108,23 +114,57 @@ const deleteCart = async (cartId) => {
 
 const checkoutCart = async (cartId) => {
 
-   const inactiveCart = deleteCart(cartId);
+    try{
+        const inactiveCart = await deleteCart(cartId);
 
+        const userId = inactiveCart.userId
+
+        
+
+        const cartItemsToGetTotal = await attachProductInfoToCartItem(cartId);
+
+        const total = cartItemsToGetTotal.reduce(function(sum, current) {
+            return sum + Number(current.total);
+          }, 0);
+
+        const newOrder = await createOrder({userId: userId, total: total})
+
+        const orderId = newOrder.id;
+
+        const cartItems = await getCartItemByCartId(cartId);
+        
+        cartItems.forEach((cartItem) => {
+            cartItem.orderId = orderId;
+            delete cartItem.id;
+            delete cartItem.cartId;
+        })
+
+       await Promise.all(cartItems.map(addOrderItemToOrder));
+
+       const newOrderWithItems = await getOrderById(orderId);
+
+        return newOrderWithItems;
+    } catch (error) {
+        throw error;
+    }
+   
+
+   
    // TODO: Create an order from the cart we just made inactive and fill the order_items table 
    // 1. Create an order (takes in userId and cart total (which can be calculated from the above inactiveCart's products))
    
-   const order = await createOrder({userId: req.user.id, total: 100});
+   //const order = await createOrder({userId: req.user.id, total: 100});
    
    //not sure if we are doing total.
    
    // 2. Use this order Id and loop through each of the products in the inactive cart, and create a order_item for each of them
 
-   const newOrder = await addOrderItemToOrder({
-    productId,
-    orderId,
-    quantity
+//   // const newOrder = await addOrderItemToOrder({
+//     productId,
+//     orderId,
+//     quantity
 
-})
+// })
     // 3. After all the items are added to the order, we send back that final order   
 
 }

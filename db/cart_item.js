@@ -70,12 +70,26 @@ const getCartItemById = async (cartItemId) => {
     }
 }
 
+const getCartItemByCartId = async (cartId) => {
+    try {
+        const { rows: cartItems } = await client.query(`
+            SELECT * 
+            FROM cart_item
+            WHERE cart_item."cartId" = $1;
+        `, [cartId]);
+
+        return cartItems;
+    } catch (error) {
+        throw (error)
+    }
+}
+
 //this seems to be working
 
 const attachProductInfoToCartItem = async (cartId) => {
     try {
         const { rows: cartItems } = await client.query(`
-            SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, cart_item.quantity
+            SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, cart_item.quantity*products.price as total
             FROM cart_item
             INNER JOIN products
             ON products.id = cart_item."productId"
@@ -133,6 +147,7 @@ const deleteCartItem = async (cartItemId) => {
 module.exports = { 
     addItemToCart,
     getCartItemById,
+    getCartItemByCartId,
     attachProductInfoToCartItem,
     deleteCartItem, 
     getAllCartItems,

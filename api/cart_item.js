@@ -5,7 +5,6 @@ const cartItemRouter = express.Router();
 const {
     addItemToCart,
     getCartItemById,
-    attachProductInfoToCartItem,
     deleteCartItem,
     getAllCartItems,
     updateCartItemQuantity

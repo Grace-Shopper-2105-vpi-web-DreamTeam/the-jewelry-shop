@@ -42,12 +42,12 @@ ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res,
                 message: `Order Not Found with Id ${orderId}`
             })
         }
-        if (req.user.id !== order.userId) {
-            next({
-                name: "Not authorized",
-                message: `The Order with Id ${orderId} is Not Associated With Your UserId`
-            })
-        }
+        // if (req.user.id !== order.userId) {
+        //     next({
+        //         name: "Not authorized",
+        //         message: `The Order with Id ${orderId} is Not Associated With Your UserId`
+        //     })
+        // }
         res.send({ order })
     } catch ({ name, message }) {
         next({ name, message })
