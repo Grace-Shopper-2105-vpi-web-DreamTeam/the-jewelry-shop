@@ -4,7 +4,7 @@ const {client} = require("./index.js");
 
 // create product (ADMIN)
 
-const createProduct = async ({title, description, category, price, inventory, isActive}) => {
+const createProduct = async ({title, description, category, price, inventory, image, isActive}) => {
 
     if(!isActive && isActive !== false ) {
         isActive = true;
@@ -15,12 +15,12 @@ const createProduct = async ({title, description, category, price, inventory, is
             rows: [product]
         } = await client.query(
             `
-            INSERT INTO products (title, description, category, price, inventory, "isActive")
-            VALUES ($1, $2, $3, $4, $5, $6)
+            INSERT INTO products (title, description, category, price, inventory, image, "isActive")
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             ON CONFLICT (title) DO NOTHING
             RETURNING *;
             `,
-            [title, description, category, price, inventory, isActive]
+            [title, description, category, price, inventory, image, isActive]
         );
         return product;
     } catch (error) {
@@ -111,9 +111,12 @@ const getProductByCategory = async (category) => {
 const updateProduct = async (id, fields = {}) => {
 
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index +1}`).join(", ");
+     
     if(setString.length === 0 ) {
         return;
     }
+
+   
 
     try {
         const {
@@ -137,6 +140,16 @@ const updateProduct = async (id, fields = {}) => {
 
 const deleteProduct = async (id) => {
     try {
+
+        await client.query(`
+            DELETE FROM cart_item
+            WHERE "productId" = $1;
+        `, [id]);
+
+        await client.query(`
+            DELETE FROM order_item
+            WHERE "productId" = $1;
+        `, [id]);
         const {
             rows: [deletedProdcut] 
         } = await client.query(
