@@ -23,7 +23,7 @@ export default function ProductCard({product}) {
         <CardMedia
           component="img"
           height="140"
-          image="https://picsum.photos/400/300"
+          image={image}
           alt={title}
         />
         <CardContent>
