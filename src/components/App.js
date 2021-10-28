@@ -10,7 +10,7 @@ import {
   Products
  } from "."
 
-const App = () => {
+export default function App() {
   // const [message, setMessage] = useState('');
 
   // useEffect(() => {
@@ -65,4 +65,3 @@ const App = () => {
   );
 }
 
-export default App;

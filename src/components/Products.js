@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { getAllProducts } from '../api';
 
-const Products = () => {
+export default function Products() {
     const [products, setProducts] = useState([]);
 
     useEffect(async () => {
@@ -63,5 +63,5 @@ const Products = () => {
     )
 }
 
-export default Products; 
+
 

@@ -14,7 +14,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 
-const CategoryBanner = () => {
+export default function CategoryBanner() {
   return (
         <ImageList sx={{ width: 1000, height: 250 }} cols={5} style={{justifyContent: "center"}}>
           {/* <ImageListItem key="Subheader" cols={2}>
@@ -115,4 +115,3 @@ const CategoryBanner = () => {
     )
 };
 
-export default CategoryBanner;
