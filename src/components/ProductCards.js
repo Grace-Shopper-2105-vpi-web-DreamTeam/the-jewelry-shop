@@ -17,12 +17,13 @@ export default function ProductCard({product}) {
     const { image, title, description, price, inventory} = product;
 
     const money = price * 1;
+    
 
     return (
         <Card varient="outlined" sx={{minHeight: 360}}>
         <CardMedia
           component="img"
-          height="140"
+          height="300"
           image={image}
           alt={title}
         />

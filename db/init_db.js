@@ -162,7 +162,7 @@ async function createInitialProducts() {
     const productsToCreate = [
       {title: 'Rolex Submariner', description: 'black dial arabic numerals classic design', category: 'watches', price: '8252.97', inventory: 3, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/rolexSub.png"},
       {title: 'Medical ID Bracelet', description: 'Basic stainless steel bracelet with custom name and medical information', category: 'bracelets', price: '50.99', inventory: 5000, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/medicalId.png"},
-      {title: '"B" Necklace', description: 'Stylish stainless steel necklace with a "B" pendant', category: 'necklaces', price: '129.99', inventory: 352, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/BNecklace+(300+x+300+px).png"},
+      {title: '"B" Necklace', description: 'Stylish stainless steel necklace with a "B" pendant', category: 'necklaces', price: '129.99', inventory: 352, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/BNecklace+(500+x+500+px).png"},
       {title: 'Beaded Bracelet Set', description: 'Set of 3 different beaded bracelets', category: 'bracelets', price: '29.99', inventory: 26, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/beadedSet.png"},
       {title: 'Diamond Earrings', description: 'Beautiful, simple set of diamond earrings', category: 'earrings', price: '999.99', inventory: 43, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/diamondEarrings.png"},
       {title: 'Diamond Drop Earrings', description: 'Delicate drop diamond earrings, limited edition', category: 'earrings', price: '1999.99', inventory: 23, isActive: false, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/diamondDropEarring.png"},
@@ -396,108 +396,108 @@ async function testDB() {
   try {
     console.log("Starting to test database...");
 
-    console.log("calling getAllOrders");
-    const allOrders = await getAllOrders();
-    console.log("the orders are", allOrders);
+    // console.log("calling getAllOrders");
+    // const allOrders = await getAllOrders();
+    // console.log("the orders are", allOrders);
 
-    console.log("calling getOrdersByUserID");
-    const userOrder = await getOrdersByUserId(1);
-    console.log("user 1's orders are", userOrder)
+    // console.log("calling getOrdersByUserID");
+    // const userOrder = await getOrdersByUserId(1);
+    // console.log("user 1's orders are", userOrder)
 
-    console.log("calling createOrder");
-    const newOrder = await createOrder({userId: 3});
-    console.log("the new order is", newOrder);
+    // console.log("calling createOrder");
+    // const newOrder = await createOrder({userId: 3});
+    // console.log("the new order is", newOrder);
 
-    console.log("calling get orderItemsByOrder");
-    const orderItems = await getOrderItemsByOrder(2);
-    console.log("the order items are", orderItems);
+    // console.log("calling get orderItemsByOrder");
+    // const orderItems = await getOrderItemsByOrder(2);
+    // console.log("the order items are", orderItems);
 
-    console.log("Calling getAllUsers");
-    const users = await getAllUsers();
-    console.log("getAllUsers:", users);
+    // console.log("Calling getAllUsers");
+    // const users = await getAllUsers();
+    // console.log("getAllUsers:", users);
 
-    console.log("Calling getAllProducts");
-    const products = await getAllProducts();
-    console.log("results:", products);
+    // console.log("Calling getAllProducts");
+    // const products = await getAllProducts();
+    // console.log("results:", products);
 
-    console.log("calling getCartById")
-    const cart = await getCartByCartId(1);
-    console.log("cart is ", cart)
+    // console.log("calling getCartById")
+    // const cart = await getCartByCartId(1);
+    // console.log("cart is ", cart)
 
-    console.log("calling checkoutCart");
-    const checkedOutCart = await checkoutCart(3);
-    console.log("checkedOutCart", checkedOutCart);
+    // console.log("calling checkoutCart");
+    // const checkedOutCart = await checkoutCart(3);
+    // console.log("checkedOutCart", checkedOutCart);
 
-    console.log("calling updateProduct");
-    const updateProductResult = await updateProduct(
-      products[4].id, 
-      {
-        image: "../imgs/earrings3_resized.png"
-      }
-    );
-    console.log("the result of update", updateProductResult)
+    // console.log("calling updateProduct");
+    // const updateProductResult = await updateProduct(
+    //   products[4].id, 
+    //   {
+    //     image: "../imgs/earrings3_resized.png"
+    //   }
+    // );
+    // console.log("the result of update", updateProductResult)
 
-    console.log("calling getOrderById");
-    const orderIdResult = await getOrderById(7);
-    console.log("the order is", orderIdResult);
+    // console.log("calling getOrderById");
+    // const orderIdResult = await getOrderById(7);
+    // console.log("the order is", orderIdResult);
 
-    console.log("calling getAllCartItems")
-    const getAllCartItemsToReturn = await getAllCartItems();
-    console.log("all cart items are", getAllCartItemsToReturn);
+    // console.log("calling getAllCartItems")
+    // const getAllCartItemsToReturn = await getAllCartItems();
+    // console.log("all cart items are", getAllCartItemsToReturn);
 
-    console.log("calling getCartItems")
-    const cartItem = await getCartItemById(1);
-    console.log("the cart item is", cartItem);
+    // console.log("calling getCartItems")
+    // const cartItem = await getCartItemById(1);
+    // console.log("the cart item is", cartItem);
 
-    console.log("calling getCart by userId")
-    const userCart = await getCartByUserId(1);
-    console.log("usercart it", userCart);
+    // console.log("calling getCart by userId")
+    // const userCart = await getCartByUserId(1);
+    // console.log("usercart it", userCart);
 
-    console.log("calling delete cart item");
-    const deletedCartItemToReturn = await deleteCartItem(1);
-    console.log("the deleted cart item is", deletedCartItemToReturn);
+    // console.log("calling delete cart item");
+    // const deletedCartItemToReturn = await deleteCartItem(1);
+    // console.log("the deleted cart item is", deletedCartItemToReturn);
 
-    console.log("calling update cart item");
-    //takes two params - 1st: new quantity, 2nd: item id
-    const updatedCartItemToReturn = await updateCartItemQuantity(5, 1);
-    console.log("the updated cart item is", updatedCartItemToReturn);
+    // console.log("calling update cart item");
+    // //takes two params - 1st: new quantity, 2nd: item id
+    // const updatedCartItemToReturn = await updateCartItemQuantity(5, 1);
+    // console.log("the updated cart item is", updatedCartItemToReturn);
 
-    console.log("calling getCart by userId")
-    const userCartAfterDelete = await getCartByUserId(1);
-    console.log("usercart it", userCartAfterDelete);
+    // console.log("calling getCart by userId")
+    // const userCartAfterDelete = await getCartByUserId(1);
+    // console.log("usercart it", userCartAfterDelete);
 
-    console.log("Calling getProductById");
-    const diamondEarrings = await getProductById(2);
-    console.log("product id results:", diamondEarrings);
+    // console.log("Calling getProductById");
+    // const diamondEarrings = await getProductById(2);
+    // console.log("product id results:", diamondEarrings);
 
-    console.log("attach product to cart info")
-    const cartItemsWithProductInfo = await attachProductInfoToCartItem(1);
-    console.log("the product info is", cartItemsWithProductInfo)
+    // console.log("attach product to cart info")
+    // const cartItemsWithProductInfo = await attachProductInfoToCartItem(1);
+    // console.log("the product info is", cartItemsWithProductInfo)
 
-    console.log("Calling active Prodcuts");
-    const activeProductsResults = await getAllActiveProducts();
-    console.log("active products", activeProductsResults);
+    // console.log("Calling active Prodcuts");
+    // const activeProductsResults = await getAllActiveProducts();
+    // console.log("active products", activeProductsResults);
 
-    console.log("Calling getProductById");
-    const thisProduct = await getProductById(5);
-    console.log("product id results:", thisProduct);
+    // console.log("Calling getProductById");
+    // const thisProduct = await getProductById(5);
+    // console.log("product id results:", thisProduct);
 
-    console.log("calling getProductByCategory");
-    const bracelets = await getProductByCategory("bracelets");
-    const earrings = await getProductByCategory("earrings")
-    console.log("results for bracelets", bracelets)
-    console.log("results for earrings", earrings)
+    // console.log("calling getProductByCategory");
+    // const bracelets = await getProductByCategory("bracelets");
+    // const earrings = await getProductByCategory("earrings")
+    // console.log("results for bracelets", bracelets)
+    // console.log("results for earrings", earrings)
 
-    console.log("calling deactivateProduct")
-    const deactivateProductResult = await deactivateProduct(products[1].id);
-    console.log("deactivated result", deactivateProductResult);
+    // console.log("calling deactivateProduct")
+    // const deactivateProductResult = await deactivateProduct(products[1].id);
+    // console.log("deactivated result", deactivateProductResult);
 
-    console.log("calling deleteProduct")
-    const deleteProductResult = await deleteProduct(products[3].id)
-    console.log("deleted product", deleteProductResult);
+    // console.log("calling deleteProduct")
+    // const deleteProductResult = await deleteProduct(products[3].id)
+    // console.log("deleted product", deleteProductResult);
 
-    const productsAfterDelete = await getAllProducts();
-    console.log("after delete", productsAfterDelete)
+    // const productsAfterDelete = await getAllProducts();
+    // console.log("after delete", productsAfterDelete)
 
     console.log("Finished database tests!");
   } catch (error) {
