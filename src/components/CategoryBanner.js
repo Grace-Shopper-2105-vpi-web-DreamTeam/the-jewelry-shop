@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// import ProductsByCategory from './ProductsByCategory';
+
 import watchCategory from "../imgs/watchCategory.jpg";
 import ringCategory from "../imgs/ringCategory.jpg";
 import braceletCategory from "../imgs/braceletCategory.jpg";
@@ -10,16 +12,13 @@ import necklaceCategory from "../imgs/necklaceCategory.png";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+
 
 export default function CategoryBanner() {
   return (
         <ImageList sx={{ width: 1000, height: 250 }} cols={5} style={{justifyContent: "center"}}>
-          {/* <ImageListItem key="Subheader" cols={2}>
-            <ListSubheader component="div">Shop by Category</ListSubheader>
-          </ImageListItem > */}
           <ImageListItem key="1" >
               <img
                 src={`${watchCategory}?w=248&fit=crop&auto=format`}
@@ -29,13 +28,13 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Watches"
-                //actionIcon={
-                //   <IconButton
-                //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                //   >
-                //     <InfoIcon />
-                //   </IconButton>
-                // }
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                }
               />
             </ImageListItem>
             <ImageListItem key="2" >
@@ -47,13 +46,13 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Rings"
-                //actionIcon={
-                //   <IconButton
-                //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                //   >
-                //     <InfoIcon />
-                //   </IconButton>
-                // }
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                }
               />
             </ImageListItem>
             <ImageListItem key="3 " >
@@ -65,13 +64,13 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Earrings"
-                //actionIcon={
-                //   <IconButton
-                //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                //   >
-                //     <InfoIcon />
-                //   </IconButton>
-                // }
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                }
               />
             </ImageListItem>
             <ImageListItem key="4">
@@ -83,13 +82,13 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Necklaces"
-                //actionIcon={
-                //   <IconButton
-                //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                //   >
-                //     <InfoIcon />
-                //   </IconButton>
-                // }
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                }
               />
             </ImageListItem>
             <ImageListItem key="5">
@@ -101,13 +100,13 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Bracelets"
-                //actionIcon={
-                //   <IconButton
-                //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                //   >
-                //     <InfoIcon />
-                //   </IconButton>
-                // }
+                actionIcon={
+                  <IconButton
+                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                  >
+                    <InfoIcon />
+                  </IconButton>
+                }
               />
             </ImageListItem>
             
