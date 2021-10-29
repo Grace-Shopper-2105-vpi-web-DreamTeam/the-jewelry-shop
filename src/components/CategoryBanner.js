@@ -14,7 +14,7 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 
 
@@ -27,10 +27,10 @@ export default function CategoryBanner({category, setCategory}) {
         history.push(path)
     }
 
-    useEffect(() => {
-        console.log(category);
-        routeChange();
-    }, [category]);
+    // useEffect(() => {
+    //     console.log(category);
+    //    // setCategory(category);
+    // }, [category]);
 
   return (
         <ImageList sx={{ width: 1000, height: 250 }} cols={5} style={{justifyContent: "center"}}>
@@ -44,9 +44,17 @@ export default function CategoryBanner({category, setCategory}) {
            
                 <ImageListItemBar
                     title="Watches"
-                    onClick={() => {
-                        setCategory("watches");
-                    }}
+                    actionIcon={
+                        <IconButton 
+                            onClick={() => {
+                                setCategory("watches");
+                            }}
+                        >
+                            <Link to={`/jewelry/${category}`}> 
+                            <ArrowForwardIosIcon />
+                            </Link> 
+                        </IconButton>
+                      }
                 />
         
             </ImageListItem>
@@ -59,11 +67,17 @@ export default function CategoryBanner({category, setCategory}) {
               />
               <ImageListItemBar
                 title="Rings"
-                onClick={() => {
-                    setCategory("rings")
-                    console.log("the category is", category)
-                    routeChange();
-                }}
+                actionIcon={
+                    <IconButton 
+                        onClick={() => {
+                            setCategory("rings");
+                        }}
+                    >
+                        <Link to={`/jewelry/${category}`}> 
+                        <ArrowForwardIosIcon />
+                        </Link> 
+                    </IconButton>
+                  }
               />
             </ImageListItem>
             <ImageListItem key="3 " >
@@ -75,11 +89,17 @@ export default function CategoryBanner({category, setCategory}) {
               />
               <ImageListItemBar
                 title="Earrings"
-                onClick={() => {
-                    setCategory("earrings")
-                    console.log("the category is", category)
-                    routeChange();
-                }}
+                actionIcon={
+                    <IconButton 
+                        onClick={() => {
+                            setCategory("earrings");
+                        }}
+                    >
+                        <Link to={`/jewelry/${category}`}> 
+                        <ArrowForwardIosIcon />
+                        </Link> 
+                    </IconButton>
+                  }
               />
             </ImageListItem>
             <ImageListItem key="4">
@@ -91,11 +111,17 @@ export default function CategoryBanner({category, setCategory}) {
               />
               <ImageListItemBar
                 title="Necklaces"
-                onClick={() => {
-                    setCategory("necklaces")
-                    console.log("the category is", category)
-                    routeChange();
-                }}
+                actionIcon={
+                    <IconButton 
+                        onClick={() => {
+                            setCategory("necklaces");
+                        }}
+                    >
+                        <Link to={`/jewelry/${category}`}> 
+                        <ArrowForwardIosIcon />
+                        </Link> 
+                    </IconButton>
+                  }
               />
             </ImageListItem>
             <ImageListItem key="5">
@@ -107,14 +133,19 @@ export default function CategoryBanner({category, setCategory}) {
               />
               <ImageListItemBar
                 title="Bracelets"
-                onClick={() => {
-                    setCategory("bracelets")
-                    console.log("the category is", category)
-                    routeChange();
-                }}
+                actionIcon={
+                    <IconButton 
+                        onClick={() => {
+                            setCategory("bracelets");
+                        }}
+                    >
+                        <Link to={`/jewelry/${category}`}> 
+                        <ArrowForwardIosIcon />
+                        </Link> 
+                    </IconButton>
+                  }
               />
             </ImageListItem>
-            
         </ImageList>
     )
 };

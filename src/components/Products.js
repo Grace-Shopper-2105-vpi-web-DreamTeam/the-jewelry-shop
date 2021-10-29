@@ -10,13 +10,12 @@ import { getAllProducts } from '../api';
 export default function Products({category, setCategory}) {
     const [products, setProducts] = useState([]);
 
-    useEffect(async () => {
-        try {
-            const results = await getAllProducts()
-            setProducts(results)
-        } catch (error) {
-            console.error(error);
+    useEffect(() => {
+        const getResult = async () => {
+             const results = await getAllProducts()
+             setProducts(results)
         }
+        getResult();
     }, []);
 
     console.log("the products are", products);

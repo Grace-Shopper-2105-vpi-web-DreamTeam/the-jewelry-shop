@@ -6,7 +6,7 @@ export default function Testing({category}) {
         <div>
             <Link to="/jewelry"> Products Page </Link>
             <br />
-            <Link to="jewelry/:category"> Products By Category Page </Link>
+            <Link to="/jewelry/:category"> Products By Category Page </Link>
         </div>
     )
 }
