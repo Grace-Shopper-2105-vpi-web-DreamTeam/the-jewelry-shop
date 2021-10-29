@@ -1,14 +1,4 @@
 import axios from 'axios';
-//import { response } from 'express';
-
-// export async function getSomething() {
-//   try {
-//     const { data } = await axios.get('/api');
-//     return data;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 
 export const getAllProducts = async () => {
   return axios({
