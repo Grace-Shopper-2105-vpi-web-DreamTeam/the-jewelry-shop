@@ -7,11 +7,13 @@ import {
 
 import { 
   NotFound,
-  Products
+  Products,
+  ProductByCategory,
+  Testing
  } from "."
 
 export default function App() {
-  // const [message, setMessage] = useState('');
+  const [category, setCategory] = useState('');
 
   // useEffect(() => {
   //   getSomething()
@@ -25,37 +27,42 @@ export default function App() {
 
   return (
     <div className="App">
-      <Products />
-      {/* <h1>Hello, World!</h1> */}
-      {/* //</div>h2>{ message }</h2> */}
-    
-    <Router>
+    <Router> 
+      <Testing 
+        category={category}
+      />
         {/* <Navbar> </Navbar> */}
         <Switch>
-          <Route>
+          {/* <Route> */}
             {/*<Register />*/}
-          </Route>
-          <Route>
+          {/* </Route>
+          <Route> */}
             {/*<Login />*/}
-          </Route>
-          <Route>
+          {/* </Route>
+          <Route> */}
            {/* <UserProfile />*/}
-          </Route>
-          <Route>
+          {/* </Route>
+          <Route> */}
             {/*<AdminProfile />*/}
+          {/* </Route> */}
+          <Route exact path="/jewelry" component={Products}>
+            <Products 
+              category={category}
+              setCategory={setCategory}
+            />
           </Route>
-          <Route path="/products">
-            <Products />
+          <Route path="/jewelry/:category" component={ProductByCategory}>
+            <ProductByCategory 
+              category={category}
+              setCategory={setCategory}
+            />
           </Route>
-          <Route>
-            {/*<ProductsByCategory />*/}
-          </Route>
-          <Route>
+          {/* <Route> */}
             {/*<Orders />*/}
-          </Route>
-          <Route>
+          {/* </Route>
+          <Route> */}
             {/*<Cart />*/}
-          </Route>
+          {/* </Route> */}
           <Route path="*">
             <NotFound />
           </Route>

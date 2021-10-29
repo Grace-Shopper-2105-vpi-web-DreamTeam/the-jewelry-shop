@@ -1,7 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useEffect} from "react";
+import { Link, useHistory } from "react-router-dom";
 
-// import ProductsByCategory from './ProductsByCategory';
+
+import { default as ProductByCategory } from './ProductsByCategory';
 
 import watchCategory from "../imgs/watchCategory.jpg";
 import ringCategory from "../imgs/ringCategory.jpg";
@@ -16,7 +17,21 @@ import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
 
 
-export default function CategoryBanner() {
+
+export default function CategoryBanner({category, setCategory}) {
+
+    const history = useHistory()
+
+    const routeChange = () => {
+        let path = `jewelry/${category}`;
+        history.push(path)
+    }
+
+    useEffect(() => {
+        console.log(category);
+        routeChange();
+    }, [category]);
+
   return (
         <ImageList sx={{ width: 1000, height: 250 }} cols={5} style={{justifyContent: "center"}}>
           <ImageListItem key="1" >
@@ -26,16 +41,14 @@ export default function CategoryBanner() {
                 alt="click to shop watches"
                 loading="lazy"
               />
-              <ImageListItemBar
-                title="Watches"
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  >
-                    <InfoIcon />
-                  </IconButton>
-                }
-              />
+           
+                <ImageListItemBar
+                    title="Watches"
+                    onClick={() => {
+                        setCategory("watches");
+                    }}
+                />
+        
             </ImageListItem>
             <ImageListItem key="2" >
               <img
@@ -46,13 +59,11 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Rings"
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  >
-                    <InfoIcon />
-                  </IconButton>
-                }
+                onClick={() => {
+                    setCategory("rings")
+                    console.log("the category is", category)
+                    routeChange();
+                }}
               />
             </ImageListItem>
             <ImageListItem key="3 " >
@@ -64,13 +75,11 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Earrings"
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  >
-                    <InfoIcon />
-                  </IconButton>
-                }
+                onClick={() => {
+                    setCategory("earrings")
+                    console.log("the category is", category)
+                    routeChange();
+                }}
               />
             </ImageListItem>
             <ImageListItem key="4">
@@ -82,13 +91,11 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Necklaces"
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  >
-                    <InfoIcon />
-                  </IconButton>
-                }
+                onClick={() => {
+                    setCategory("necklaces")
+                    console.log("the category is", category)
+                    routeChange();
+                }}
               />
             </ImageListItem>
             <ImageListItem key="5">
@@ -100,13 +107,11 @@ export default function CategoryBanner() {
               />
               <ImageListItemBar
                 title="Bracelets"
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                  >
-                    <InfoIcon />
-                  </IconButton>
-                }
+                onClick={() => {
+                    setCategory("bracelets")
+                    console.log("the category is", category)
+                    routeChange();
+                }}
               />
             </ImageListItem>
             

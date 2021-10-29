@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { getAllProducts } from '../api';
 
-export default function Products() {
+export default function Products({category, setCategory}) {
     const [products, setProducts] = useState([]);
 
     useEffect(async () => {
@@ -23,7 +23,10 @@ export default function Products() {
     return (
         <Container>
             <h2>Products Page in the works </h2> 
-            <CategoryBanner /> 
+            <CategoryBanner 
+                category={category}
+                setCategory={setCategory}
+            /> 
             {/* panel with clickable images of categories go here */}
             <h1
                 style={{

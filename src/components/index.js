@@ -3,3 +3,5 @@
 export { default as App } from './App';
 export { default as NotFound } from './PageNotFound'
 export  {default as Products } from './Products'
+export {default as ProductByCategory} from './ProductsByCategory'
+export {default as Testing } from './testing'

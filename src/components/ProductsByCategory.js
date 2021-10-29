@@ -7,5 +7,4 @@ export default function ProductsByCategory() {
             Shop by category
         </div>
     )
-
 }
