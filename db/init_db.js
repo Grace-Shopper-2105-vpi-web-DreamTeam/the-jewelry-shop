@@ -161,7 +161,7 @@ async function createInitialProducts() {
   try {
     const productsToCreate = [
       {title: 'Rolex Submariner', description: 'black dial arabic numerals classic design', category: 'watches', price: '8252.97', inventory: 3, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/rolex3.png"},
-      {title: 'Medical ID Bracelet', description: 'Steel bracelet with name and medical information', category: 'bracelets', price: '50.99', inventory: 5000, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/medical2.png"},
+      {title: 'Medical ID Bracelet', description: 'Steel bracelet with name and medical information', category: 'bracelets', price: '50.99', inventory: 5000, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/medical3.png"},
       {title: '"B" Necklace', description: 'Stylish stainless steel necklace with a "B" pendant', category: 'necklaces', price: '129.99', inventory: 352, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/BNecklace+(500+x+500+px).png"},
       {title: 'Beaded Bracelet Set', description: 'Set of 3 different beaded bracelets', category: 'bracelets', price: '29.99', inventory: 26, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/beaded2.png"},
       {title: 'Diamond Earrings', description: 'Beautiful, simple set of diamond earrings', category: 'earrings', price: '999.99', inventory: 43, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/diamondEarring2.png"},
