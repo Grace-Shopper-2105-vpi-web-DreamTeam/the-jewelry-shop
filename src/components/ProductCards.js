@@ -20,7 +20,7 @@ export default function ProductCard({product}) {
     
 
     return (
-        <Card varient="outlined" sx={{minHeight: 360}}>
+        <Card varient="outlined" sx={{minHeight: 360}} >
         <CardMedia
           component="img"
           height="300"

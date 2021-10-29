@@ -1,8 +1,5 @@
 import React, {useEffect} from "react";
-import { Link, useHistory } from "react-router-dom";
-
-
-import { default as ProductByCategory } from './ProductsByCategory';
+import { Link} from "react-router-dom";
 
 import watchCategory from "../imgs/watchCategory.jpg";
 import ringCategory from "../imgs/ringCategory.jpg";
@@ -20,17 +17,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 export default function CategoryBanner({category, setCategory}) {
 
-    const history = useHistory()
-
-    const routeChange = () => {
-        let path = `jewelry/${category}`;
-        history.push(path)
-    }
-
-    // useEffect(() => {
-    //     console.log(category);
-    //    // setCategory(category);
-    // }, [category]);
+    useEffect(() => {
+        localStorage.setItem("category", JSON.stringify(category));   
+    }, [category]);
 
   return (
         <ImageList sx={{ width: 1000, height: 250 }} cols={5} style={{justifyContent: "center"}}>
@@ -50,7 +39,7 @@ export default function CategoryBanner({category, setCategory}) {
                                 setCategory("watches");
                             }}
                         >
-                            <Link to={`/jewelry/${category}`}> 
+                            <Link to="/jewelry/watches"> 
                             <ArrowForwardIosIcon />
                             </Link> 
                         </IconButton>
@@ -73,7 +62,7 @@ export default function CategoryBanner({category, setCategory}) {
                             setCategory("rings");
                         }}
                     >
-                        <Link to={`/jewelry/${category}`}> 
+                        <Link to="/jewelry/rings"> 
                         <ArrowForwardIosIcon />
                         </Link> 
                     </IconButton>
@@ -95,7 +84,7 @@ export default function CategoryBanner({category, setCategory}) {
                             setCategory("earrings");
                         }}
                     >
-                        <Link to={`/jewelry/${category}`}> 
+                        <Link to="/jewelry/earrings"> 
                         <ArrowForwardIosIcon />
                         </Link> 
                     </IconButton>
@@ -117,7 +106,7 @@ export default function CategoryBanner({category, setCategory}) {
                             setCategory("necklaces");
                         }}
                     >
-                        <Link to={`/jewelry/${category}`}> 
+                        <Link to="/jewelry/necklaces"> 
                         <ArrowForwardIosIcon />
                         </Link> 
                     </IconButton>
@@ -139,7 +128,7 @@ export default function CategoryBanner({category, setCategory}) {
                             setCategory("bracelets");
                         }}
                     >
-                        <Link to={`/jewelry/${category}`}> 
+                        <Link to="/jewelry/bracelets"> 
                         <ArrowForwardIosIcon />
                         </Link> 
                     </IconButton>
