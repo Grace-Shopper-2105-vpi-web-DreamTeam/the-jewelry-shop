@@ -18,7 +18,6 @@ export default function Products({category, setCategory}) {
         getResult();
     }, []);
 
-    console.log("the products are", products);
     return (
         <Container>
             <h2>Products Page in the works </h2> 
