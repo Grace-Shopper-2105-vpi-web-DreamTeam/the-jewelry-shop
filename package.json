@@ -37,7 +37,8 @@
     "react-scripts": "^4.0.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "eslint-loader": "^4.0.2",
+    "nodemon": "^2.0.14"
   },
   "proxy": "http://localhost:5000",
   "browserslist": {

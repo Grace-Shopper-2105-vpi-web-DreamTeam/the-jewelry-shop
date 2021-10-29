@@ -428,14 +428,15 @@ async function testDB() {
     // const checkedOutCart = await checkoutCart(3);
     // console.log("checkedOutCart", checkedOutCart);
 
-    // console.log("calling updateProduct");
-    // const updateProductResult = await updateProduct(
-    //   products[4].id, 
-    //   {
-    //     image: "../imgs/earrings3_resized.png"
-    //   }
-    // );
-    // console.log("the result of update", updateProductResult)
+
+    // // console.log("calling updateProduct");
+    // // const updateProductResult = await updateProduct(
+    // //   products[4].id, 
+    // //   {
+    // //     image: "../imgs/earrings3_resized.png"
+    // //   }
+    // // );
+    // // console.log("the result of update", updateProductResult)
 
     // console.log("calling getOrderById");
     // const orderIdResult = await getOrderById(7);
