@@ -41,7 +41,6 @@ usersRouter.delete("/admin/:userId", requireAdmin, async (req, res, next) => {
             const destoryUser = await deleteUser(userId)
             res.send(destoryUser);
         } else {
-            res.status(401)
             next({
                 name: "UserDoesNotExistsError",
                 message: "A user by that username does not exists",
@@ -67,13 +66,12 @@ usersRouter.patch("/admin/:userId", requireLogin, async (req, res, next) => {
 
     try {
         const user = await getUserById(userId);
-        
+
         if (user) {
-            const newAdmin = await  updateUserToAdminById(userId)
-           
+            const newAdmin = await updateUserToAdminById(userId)
+
             res.send(newAdmin);
         } else {
-            res.status(401)
             next({
                 name: "UserDoesNotExistsError",
                 message: "A user by that username does not exists",
@@ -105,15 +103,15 @@ usersRouter.patch('/:userId', requireLogin, async (req, res, next) => {
         const { emailAddress, username } = req.body;
         const updateFields = {};
         if (emailAddress) {
-            
+
             updateFields.emailAddress = emailAddress;
-            await updateUserById(userId,updateFields);
+            await updateUserById(userId, updateFields);
             delete updateFields.emailAddress
         }
         if (username) {
-            
+
             updateFields.username = username;
-            await updateUserById(userId,updateFields);
+            await updateUserById(userId, updateFields);
             delete updateFields.username
         }
         const remadeUser = await getUserById(userId);
@@ -129,26 +127,26 @@ usersRouter.post("/register", async (req, res, next) => {
 
     try {
         const user = await getUserByUsername(username);
-     
+
         if (user) {
-            res.status(401)
+           
             next({
                 name: "UserExistsError",
                 message: "A user by that username already exists",
             });
         }
-       
+
         const userEmail = await getUserByEmailAddress(emailAddress);
-        
+
         if (userEmail) {
             next({
                 name: "EmailExistsError",
                 message: "A user with this email already exists",
             });
         }
-      
+
         if (password.length < 8) {
-            res.status(401)
+        
             next({
                 name: "PasswordLengthError",
                 message: "Password must be 8 or more characters",
@@ -183,7 +181,6 @@ usersRouter.post("/login", async (req, res, next) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        res.status(401)
         next({
             name: "MissingCredentialsError",
             message: "Please supply both a username and password",
@@ -191,6 +188,12 @@ usersRouter.post("/login", async (req, res, next) => {
     }
     try {
         const user = await getUserByUsername(username);
+        if (!user) {
+            next({
+                name: "UserDoesNotExist",
+                message: "Username or password is incorrect"
+            })
+        }
         const hashedPassword = user.password;
         const passwordsMatch = await bcrypt.compare(password, hashedPassword);
         if (user && passwordsMatch) {
@@ -208,14 +211,14 @@ usersRouter.post("/login", async (req, res, next) => {
                 token: token,
             });
         } else {
-            res.status(401)
             next({
                 name: "IncorrectCredentialsError",
                 message: "Username or password is incorrect",
             });
         }
-    } catch ({ name, message }) {
-        next({ name, message });
+    } catch (error) {
+        console.log("error", error)
+        next(error);
     }
 });
 
