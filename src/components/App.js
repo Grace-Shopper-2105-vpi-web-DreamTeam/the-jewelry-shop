@@ -7,7 +7,8 @@ import {
   ProductByCategory,
   Testing,
   Login,
-  Register
+  Register,
+  Header
 } from "."
 
 export default function App() {
@@ -27,11 +28,11 @@ export default function App() {
 
   return (
     <div className="App">
+      <nav><Header/></nav>
       <Router>
         <Testing
           category={category}
         />
-        {/* <Navbar> </Navbar> */}
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register 
