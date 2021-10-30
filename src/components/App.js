@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "../style.css"
+
+import {
+  useHistory
+} from "react-router-dom"
 
 import { 
   NotFound,
@@ -11,7 +16,8 @@ import {
   Header
 } from "."
 
-export default function App() {
+export default function App(props) {
+  let history = useHistory();
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
@@ -25,14 +31,23 @@ export default function App() {
   //       setMessage(error.message);
   //     });
   // });
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
+    setAuthenticated(false);
+    setToken("")
+  }
 
   return (
     <div className="App">
-      <nav><Header/></nav>
+      
       <Router>
-        <Testing
+      <Header
+      handleLogout = {handleLogout}
+      authenticated = {authenticated}/>
+        {/* <Testing
           category={category}
-        />
+        /> */}
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register 
@@ -51,6 +66,12 @@ export default function App() {
           {/* <Route>
             <AdminProfile />
           </Route> */}
+           <Route exact path="/" component={Products}>
+            <Products
+              category={category}
+              setCategory={setCategory}
+            />
+          </Route>
           <Route exact path="/jewelry" component={Products}>
             <Products
               category={category}
