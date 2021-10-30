@@ -7,7 +7,6 @@ export const getAllProducts = async () => {
   }).then((response) => response.data)
 }
 
-
 export const login = async (username, password) => {
   return axios({
     method: "POST",
