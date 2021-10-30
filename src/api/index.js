@@ -7,6 +7,13 @@ export const getAllProducts = async () => {
   }).then((response) => response.data)
 }
 
+export const getProductsByCategory = async (category) => {
+  return axios({
+    method: "GET",
+    url: `/api/products/category/${category}`
+  }).then((response) => response.data)
+}
+
 export const login = async (username, password) => {
   return axios({
     method: "POST",
@@ -49,3 +56,7 @@ export const register = async (username, password, emailAddress) => {
 //     return error;
 //   }
 // }
+  
+
+
+
