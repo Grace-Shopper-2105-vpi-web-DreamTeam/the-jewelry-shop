@@ -70,7 +70,7 @@ const Register = ({ setAuthenticated, setToken }) => {
                 sm={4}
                 md={7}
                 sx={{
-                    backgroundImage: 'url(https://thejewelryshop.s3.us-east-2.amazonaws.com/Logo/Loops%26StringsLogo2.png)',
+                    backgroundImage: 'url(https://thejewelryshop.s3.us-east-2.amazonaws.com/Logo/Loops%26StringsLogo3.png)',
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
