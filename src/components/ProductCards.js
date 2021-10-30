@@ -13,11 +13,23 @@ import { IconButton } from "@mui/material";
 
 export default function ProductCard({product}) {
     const [counter, setCoutner] = useState(0);
+    const [quantity, setQuantity] = useState(0);
+    const [productId, setProductId] = useState(0);
 
-    const { image, title, description, price, inventory} = product;
+    const { image, title, description, price, inventory, id} = product;
 
     const money = price * 1;
-    
+
+    const addToCart = async  (e) => {
+      e.preventDefault();
+      let cart = {
+        productId: prodcutId,
+        quantity: quantity
+      };
+      localStorage.setItem("cart", JSON.stringify(cart))
+
+       
+    }
 
     return (
         <Card varient="outlined" sx={{minHeight: 360}} >
@@ -39,7 +51,7 @@ export default function ProductCard({product}) {
           </Typography>
         </CardContent>
         <CardActions>
-            {<Button disabled>{counter}</Button>}
+            {<Button disabled >{counter}</Button>}
                 <div 
                     style={{
                         display: "flex",
@@ -48,15 +60,38 @@ export default function ProductCard({product}) {
                         flexDirection: "column"
                     }}
                 >   
-                    {<IconButton size="small" disabled={counter >= inventory || counter >= 10} onClick={()=> {setCoutner(counter+1)}}>
+                    {<IconButton 
+                      size="small" 
+                      disabled={counter >= inventory || counter >= 10} 
+                      onClick={
+                        ()=> {
+                          setCoutner(counter+1)
+                          setQuantity(counter+1)
+                          console.log("the id is", id)
+                        }
+                      } >
                         <ArrowDropUpIcon />
                     </IconButton>}
-                    {<IconButton size="small" disabled={counter <= 0} onClick={() => {setCoutner(counter - 1)}}>
+                    {<IconButton 
+                      size="small" 
+                      disabled={counter <= 0} 
+                      onClick={
+                        () => {
+                          setCoutner(counter - 1)
+                          setQuantity(counter-1)
+                          console.log("the id is", id)
+                        }
+                      }>
                         <ArrowDropDownIcon />
                     </IconButton>}
                     
                 </div>
-          <Button size="small">Add to Cart</Button>
+          <Button 
+            size="small"
+            onClick={(e) => console.log("the id is", id)}
+          >
+            Add to Cart
+          </Button>
         </CardActions>
       </Card>
     );
