@@ -33,12 +33,12 @@ export default function App() {
         />
         {/* <Navbar> </Navbar> */}
         <Switch>
-          <Route exact path='/register'>
+          <Route exact path="/register" component={Register}>
             <Register 
             setAuthenticated={setAuthenticated}
             setToken={setToken}/>
           </Route>
-          <Route exact path="/login">
+          <Route exact path="/login" component={Login}>
             <Login
               setAuthenticated={setAuthenticated}
               setToken={setToken}
