@@ -4,6 +4,7 @@ import  Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { IconButton, MenuItem } from '@material-ui/core'
+import { styled, alpha } from '@mui/material.styles'
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
