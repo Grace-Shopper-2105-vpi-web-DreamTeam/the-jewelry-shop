@@ -23,7 +23,7 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Register = ({ setAuthenticated, setToken }) => {
+const Register = ({ setAuthenticated, setToken, cart }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -56,7 +56,11 @@ const Register = ({ setAuthenticated, setToken }) => {
     }
   }
 
-  if (formSubmittedSuccessfully) {
+  if (formSubmittedSuccessfully && cart) {
+    return <Redirect to="/cart" />
+  } 
+  
+  if (formSubmittedSuccessfully && !cart) {
     return <Redirect to="/" />
   }
 

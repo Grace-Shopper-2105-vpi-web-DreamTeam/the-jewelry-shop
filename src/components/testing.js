@@ -11,6 +11,8 @@ export default function Testing({category}) {
             <Link to="/login"> Login </Link>
             <br />
             <Link to="/register"> Register </Link>
+            <br />
+            <Link to="/cart"> Cart </Link>
         </div>
     )
 }

@@ -7,13 +7,15 @@ import {
   ProductByCategory,
   Testing,
   Login,
-  Register
+  Register,
+  Cart
 } from "."
 
 export default function App() {
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
+  const cart = JSON.parse(localStorage.getItem('cart'));
 
   // useEffect(() => {
   //   getSomething()
@@ -35,13 +37,16 @@ export default function App() {
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register 
-            setAuthenticated={setAuthenticated}
-            setToken={setToken}/>
+              setAuthenticated={setAuthenticated}
+              setToken={setToken}
+              cart={cart}
+            />
           </Route>
           <Route exact path="/login" component={Login}>
             <Login
               setAuthenticated={setAuthenticated}
               setToken={setToken}
+              cart={cart}
             />
           </Route>
           {/* <Route>
@@ -64,10 +69,12 @@ export default function App() {
           </Route>
           {/* <Route> */}
           {/*<Orders />*/}
-          {/* </Route>
-          <Route> */}
-          {/*<Cart />*/}
           {/* </Route> */}
+          <Route exact path="/cart">
+          <Cart 
+            token={token}
+          />
+          </Route>
           <Route path="*">
             <NotFound />
           </Route>

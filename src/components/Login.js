@@ -27,12 +27,12 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Login = ({ setAuthenticated, setToken }) => {
+const Login = ({ setAuthenticated, setToken, cart }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
-
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -53,7 +53,11 @@ const Login = ({ setAuthenticated, setToken }) => {
             console.log(error)
         }
     }
-    if (formSubmittedSuccessfully) {
+    if (formSubmittedSuccessfully && cart) {
+        return <Redirect to="/cart" />
+      } 
+    
+    if (formSubmittedSuccessfully && !cart) {
         return <Redirect to="/" />
     }
     

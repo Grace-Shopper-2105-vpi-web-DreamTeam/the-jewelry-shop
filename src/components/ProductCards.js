@@ -12,24 +12,48 @@ import { IconButton } from "@mui/material";
 
 
 export default function ProductCard({product}) {
-    const [counter, setCoutner] = useState(0);
+    const [counter, setCounter] = useState(0);
     const [quantity, setQuantity] = useState(0);
-    const [productId, setProductId] = useState(0);
+    //const [productId, setProductId] = useState(0);
 
     const { image, title, description, price, inventory, id} = product;
 
     const money = price * 1;
 
-    const addToCart = async  (e) => {
-      e.preventDefault();
-      let cart = {
-        productId: prodcutId,
-        quantity: quantity
-      };
-      localStorage.setItem("cart", JSON.stringify(cart))
-
-       
+    const reset = () => {
+      setCounter(0);
+      setQuantity(0); 
     }
+
+    const addToCart = (e, productId, title, price, image, inventory, quantity) => {
+      e.preventDefault();
+      let cartObj = JSON.parse(localStorage.getItem('cart')) || []
+      if(!cartObj) {
+        cartObj[productId] = {
+            productId: productId,
+            title: title,
+            price: price,
+            image: image,
+            inventory: inventory,
+            quantity: quantity
+        };
+        localStorage.setItem("cart", JSON.stringify(cart));
+        reset();
+      } else {
+        let newItems = {
+          productId: productId,
+          title: title,
+          price: price,
+          image: image,
+          inventory: inventory,
+          quantity: quantity
+        };
+        cartObj[productId] = newItems;
+      
+        localStorage.setItem("cart", JSON.stringify(cartObj));
+        reset();
+      }  
+    };
 
     return (
         <Card varient="outlined" sx={{minHeight: 360}} >
@@ -65,9 +89,8 @@ export default function ProductCard({product}) {
                       disabled={counter >= inventory || counter >= 10} 
                       onClick={
                         ()=> {
-                          setCoutner(counter+1)
-                          setQuantity(counter+1)
-                          console.log("the id is", id)
+                          setCounter(counter+1);
+                          setQuantity(counter+1);
                         }
                       } >
                         <ArrowDropUpIcon />
@@ -77,9 +100,8 @@ export default function ProductCard({product}) {
                       disabled={counter <= 0} 
                       onClick={
                         () => {
-                          setCoutner(counter - 1)
+                          setCounter(counter - 1)
                           setQuantity(counter-1)
-                          console.log("the id is", id)
                         }
                       }>
                         <ArrowDropDownIcon />
@@ -87,8 +109,9 @@ export default function ProductCard({product}) {
                     
                 </div>
           <Button 
+            disabled={counter === 0}
             size="small"
-            onClick={(e) => console.log("the id is", id)}
+            onClick={(e) => addToCart(e, id, title, price, image, inventory, quantity)}
           >
             Add to Cart
           </Button>
