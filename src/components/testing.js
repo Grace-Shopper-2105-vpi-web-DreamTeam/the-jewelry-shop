@@ -7,6 +7,10 @@ export default function Testing({category}) {
             <Link to="/jewelry"> Products Page </Link>
             <br />
             <Link to="/jewelry/:category"> Products By Category Page </Link>
+            <br />
+            <Link to="/login"> Login </Link>
+            <br />
+            <Link to="/register"> Register </Link>
         </div>
     )
 }
