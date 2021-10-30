@@ -5,11 +5,15 @@ import {
   NotFound,
   Products,
   ProductByCategory,
-  Testing
- } from "."
+  Testing,
+  Login,
+  Register
+} from "."
 
 export default function App() {
   const [category, setCategory] = useState('');
+  const [authenticated, setAuthenticated] = useState(false);
+  const [token, setToken] = useState('');
 
   // useEffect(() => {
   //   getSomething()
@@ -23,47 +27,52 @@ export default function App() {
 
   return (
     <div className="App">
-    <Router> 
-      <Testing 
-        category={category}
-      />
+      <Router>
+        <Testing
+          category={category}
+        />
         {/* <Navbar> </Navbar> */}
         <Switch>
-          {/* <Route> */}
-            {/*<Register />*/}
-          {/* </Route>
-          <Route> */}
-            {/*<Login />*/}
-          {/* </Route>
-          <Route> */}
-           {/* <UserProfile />*/}
-          {/* </Route>
-          <Route> */}
-            {/*<AdminProfile />*/}
-          {/* </Route> */}
+          <Route exact path='/register'>
+            <Register 
+            setAuthenticated={setAuthenticated}
+            setToken={setToken}/>
+          </Route>
+          <Route exact path="/login">
+            <Login
+              setAuthenticated={setAuthenticated}
+              setToken={setToken}
+            />
+          </Route>
+          {/* <Route>
+           <UserProfile />
+          </Route> */}
+          {/* <Route>
+            <AdminProfile />
+          </Route> */}
           <Route exact path="/jewelry" component={Products}>
-            <Products 
+            <Products
               category={category}
               setCategory={setCategory}
             />
           </Route>
           <Route path="/jewelry/:category" component={ProductByCategory}>
-            <ProductByCategory 
+            <ProductByCategory
               category={category}
               setCategory={setCategory}
             />
           </Route>
           {/* <Route> */}
-            {/*<Orders />*/}
+          {/*<Orders />*/}
           {/* </Route>
           <Route> */}
-            {/*<Cart />*/}
+          {/*<Cart />*/}
           {/* </Route> */}
           <Route path="*">
             <NotFound />
           </Route>
         </Switch>
-    </Router>
+      </Router>
     </div>
   );
 }
