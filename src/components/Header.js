@@ -15,6 +15,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
+import ButtonAppBarCollapse from "./ButtonAppBarCollapse";
 
 import Link from '@mui/material/Link';
 
@@ -131,35 +132,36 @@ export default function PrimarySearchAppBar({ handleLogout, authenticated }) {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
+            <ButtonAppBarCollapse>
             <MenuItem
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ display: { xs: 'none', sm: 'block' } }}
+                sx={{ display: { xs: 'block', sm: 'block' } }}
             >
-                <Link style={{ textDecoration: "none", color: 'black'}} href="/login"> Login/Register</Link>
+                <Link style={{ textDecoration: "none", color: 'black' }} href="/login"> Login/Register</Link>
             </MenuItem>
             <MenuItem
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ display: { xs: 'none', sm: 'block' } }}
+                sx={{ display: { xs: 'block', sm: 'block' } }}
             >
-                <Link style={{ textDecoration: "none", color: 'black'}} href="#"> My Account</Link>
+                <Link style={{ textDecoration: "none", color: 'black' }} href="#"> My Account</Link>
             </MenuItem>
             <MenuItem
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ display: { xs: 'none', sm: 'block' } }}
+                sx={{ display: { xs: 'block', sm: 'block' } }}
             >
-                <Link style={{ textDecoration: "none", color: 'black'}} href="#"> Admin</Link>
+                <Link style={{ textDecoration: "none", color: 'black' }} href="#"> Admin</Link>
             </MenuItem>
             <MenuItem
                 variant="h6"
                 noWrap
                 component="div"
-                sx={{ display: { xs: 'none', sm: 'block' } }}
+                sx={{ display: { xs: 'block', sm: 'block' } }}
             >
                 <p onClick={headerLogout} style={{ textDecoration: "none", color: 'black' }} > Logout</p>
             </MenuItem>
@@ -172,10 +174,12 @@ export default function PrimarySearchAppBar({ handleLogout, authenticated }) {
                     <ShoppingCartIcon />
                 </Badge>
             </IconButton>
+            </ButtonAppBarCollapse>
+
         </Menu>
     );
 
-    
+
     if (redirect) {
         history.push("/login")
     }
