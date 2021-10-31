@@ -8,7 +8,8 @@ import {
   Testing,
   Login,
   Register,
-  Navbar
+  Navbar,
+  Logout
 } from "."
 
 export default function App() {
@@ -29,6 +30,9 @@ export default function App() {
   return (
     <div className="App">
       <Router>
+        <Logout
+        setAuthenticated={setAuthenticated}
+        setToken ={setToken}/>
         <Navbar/>
         {/* <Testing
           category={category}

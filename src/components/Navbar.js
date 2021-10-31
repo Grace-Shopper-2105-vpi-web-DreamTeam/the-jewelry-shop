@@ -13,6 +13,9 @@ import Link from '@mui/material/Link';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import { withRouter } from 'react-router-dom';
+import { 
+    Logout
+  } from "."
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -33,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     }
   }));
 
-const Navbar = props => {
+const Navbar = (props,{ setAuthenticated, setToken }) => {
 const {history} = props;
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -61,6 +64,15 @@ const handleCartClick = () => {
   const handleLogoClick = () => {
     history.push("/")
 };
+
+
+  
+    const handleLogout = () => {
+    <Logout
+    setAuthenticated={setAuthenticated}
+    setToken ={setToken}/>
+    }
+  
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -95,7 +107,7 @@ const handleCartClick = () => {
                 <MenuItem onClick={() => handleMenuClick('/')}>Home</MenuItem>
                 <MenuItem onClick={() => handleMenuClick('/login')}>Login/Register</MenuItem>
                 <MenuItem onClick={() => handleMenuClick('/admin')}>Admin</MenuItem>
-                <MenuItem onClick={() => handleMenuClick('/#')}>Logout</MenuItem>
+                <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
                 <MenuItem onClick={() => handleMenuClick('/account')}><AccountCircle/>My Account</MenuItem>
                 <MenuItem onClick={() => handleMenuClick('/cart')}><ShoppingCartIcon/>Shopping Cart</MenuItem>
               </Menu>
