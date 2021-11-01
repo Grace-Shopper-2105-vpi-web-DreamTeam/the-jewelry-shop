@@ -16,6 +16,7 @@ export default function App() {
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
+  const [admin, setAdmin]=useState(false)
 
   // useEffect(() => {
   //   getSomething()
@@ -30,10 +31,12 @@ export default function App() {
   return (
     <div className="App">
       <Router>
-        <Logout
-        setAuthenticated={setAuthenticated}
-        setToken ={setToken}/>
-        <Navbar/>
+        <Navbar
+        authenticated={authenticated}
+        setAuthenticated= {setAuthenticated}
+        setToken={setToken}
+        admin={admin}
+        />
         {/* <Testing
           category={category}
         /> */}

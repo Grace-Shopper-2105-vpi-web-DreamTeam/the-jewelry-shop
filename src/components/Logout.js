@@ -14,7 +14,7 @@ const Logout = ({ setAuthenticated, setToken }) => {
     history.push("/Login");
   }
 
-  return <button className="btn-primary" onClick={handleClick}>Logout</button>
+  return <a onClick={handleClick}>Logout</a>
    
 
 
