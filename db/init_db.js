@@ -166,6 +166,7 @@ async function createInitialProducts() {
       {title: 'Beaded Bracelet Set', description: 'Set of 3 different beaded bracelets', category: 'bracelets', price: '29.99', inventory: 26, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/beaded2.png"},
       {title: 'Diamond Earrings', description: 'Beautiful, simple set of diamond earrings', category: 'earrings', price: '999.99', inventory: 43, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/diamondEarring2.png"},
       {title: 'Diamond Drop Earrings', description: 'Delicate drop diamond earrings, limited edition', category: 'earrings', price: '1999.99', inventory: 23, isActive: false, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/dropEarrings.png"},
+      {title: 'Blue Fringe Earrings', description: 'Cute,14K Gold', category: 'earrings', price: '29.99', inventory: 56, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Earrings/earrings1.png"},
     ]
 
     //const watch = await createProduct({title: 'Medical ID Bracelet', description: 'Basic stainless steel bracelet with custom name and medical information', category: 'bracelets', price: '50.99', inventory: 5000})
