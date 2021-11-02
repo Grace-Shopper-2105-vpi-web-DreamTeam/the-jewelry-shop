@@ -5,7 +5,7 @@ const {
   client
 } = require('./index');
 const {
-  createUser, 
+  createUser,
   getAllUsers
 } = require('./users');
 
@@ -18,7 +18,7 @@ const {
 
 const {
   addOrderItemToOrder,
-   getOrderItemsByOrder
+  getOrderItemsByOrder
 } = require('./orderItems');
 
 const {
@@ -38,11 +38,11 @@ const {
 } = require('./cart_item')
 
 const {
-  createProduct, 
+  createProduct,
   getAllProducts,
-  getAllActiveProducts, 
-  getProductById, 
-  getProductByCategory, 
+  getAllActiveProducts,
+  getProductById,
+  getProductByCategory,
   updateProduct,
   deleteProduct,
   deactivateProduct
@@ -50,7 +50,7 @@ const {
 
 async function dropTables() {
   try {
-      // drop tables in correct order
+    // drop tables in correct order
     console.log('Dropping all tables...');
     await client.query(`
     DROP TABLE IF EXISTS order_item;
@@ -60,7 +60,7 @@ async function dropTables() {
     DROP TABLE IF EXISTS products;
     DROP TABLE IF EXISTS users;
     `);
-    
+
     console.log('Finished dropping tables!');
   } catch (error) {
     console.log('error dropping tables!');
@@ -101,10 +101,10 @@ async function buildTables() {
         total DECIMAL(19, 4)
       );
       `)
-      //had to remove but there is an error... not sure what?    "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
-      //total DECIMAL(19, 4),
-      //quantity INTEGER
-      await client.query(`
+    //had to remove but there is an error... not sure what?    "isCheckedOut" BOOLEAN DEFAULT false REFERENCES orders(id)
+    //total DECIMAL(19, 4),
+    //quantity INTEGER
+    await client.query(`
       CREATE TABLE cart(
         id SERIAL PRIMARY KEY,
         "userId" INTEGER REFERENCES users(id),
@@ -138,12 +138,12 @@ async function createInitialUsers() {
   console.log('Starting to create users...');
   try {
     const usersToCreate = [
-      {emailAddress: "greg123@gmail.com", username: 'greg', password: 'greg123' },
-      {emailAddress: "albert123@gmail.com", username: 'albert', password: 'bertie99'},
-      {emailAddress: "glamgal123@gmail.com", username: 'glamgal', password: 'glamgal123'},
-      {emailAddress: "griffb@gmail.com", username: 'griff', password: 'worstleagueplayer7'},
-      {emailAddress: "jacksons@gmail.com", username: 'jackson', password: 'edm4evur'},
-      {emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123', isAdmin: true},
+      { emailAddress: "greg123@gmail.com", username: 'greg', password: 'greg123' },
+      { emailAddress: "albert123@gmail.com", username: 'albert', password: 'bertie99' },
+      { emailAddress: "glamgal123@gmail.com", username: 'glamgal', password: 'glamgal123' },
+      { emailAddress: "griffb@gmail.com", username: 'griff', password: 'worstleagueplayer7' },
+      { emailAddress: "jacksons@gmail.com", username: 'jackson', password: 'edm4evur' },
+      { emailAddress: "admin123@gmail.com", username: 'admin1', password: 'admin123', isAdmin: true },
     ]
 
     const users = await Promise.all(usersToCreate.map(createUser));
@@ -224,10 +224,29 @@ async function createInitialProducts() {
       { title: 'Smaller Pocket Watch', description: 'Another Gold Pocket Watch but Smaller', category: 'watches', price: '126.99', inventory: 75, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Watches/watch16.png" },
       { title: 'Square Watch!', description: 'Square!', category: 'watches', price: '279.99', inventory: 8, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Watches/watch17.png" },
       { title: 'Silver Rose Gold Watch', description: 'Silver and Rose Gold Intertwined', category: 'watches', price: '203.99', inventory: 16, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Watches/watch18.png" },
-      {title: 'Silver and Black Watch', description: 'Silver with Black Face, no numbers', category: 'watches', price: '177.99', inventory: 58, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Watches/watch19.png"},
-      {title: 'Simple Black and Silver Watch', description: 'It’s a watch!', category: 'watches', price: '158.99', inventory: 22, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Watches/watch20.png"},
-      {title: 'Wedding Ring Set', description: 'Rings for Your Wedding', category: 'rings', price: '1580.99', inventory: 67, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring1.png"},
-     
+      { title: 'Silver and Black Watch', description: 'Silver with Black Face, no numbers', category: 'watches', price: '177.99', inventory: 58, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Watches/watch19.png" },
+      { title: 'Simple Black and Silver Watch', description: 'It’s a watch!', category: 'watches', price: '158.99', inventory: 22, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Watches/watch20.png" },
+      { title: 'Wedding Ring Set', description: 'Yellow Gold, Diamond', category: 'rings', price: '1580.99', inventory: 67, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring1.png" },
+      { title: 'Round Cut Diamond Ring', description: '1CT, Silver', category: 'rings', price: '1250.00', inventory: 48, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring2.png" },
+      { title: 'Mens Wedding Ring', description: 'Silver & Gold', category: 'rings', price: '250.00', inventory: 58, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring3.png" },
+      { title: 'Gold Fashion Ring', description: 'Yellow Gold Plated', category: 'rings', price: '50.00', inventory: 80, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring4.png" },
+      { title: '5 Carat Ruby Ring', description: 'Oval Cut, Diamond Accents', category: 'rings', price: '596.00', inventory: 80, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring5.png" },
+      { title: 'Fashion Circle Ring', description: 'Silver Metal, Cubic Zirconia', category: 'rings', price: '30.00', inventory: 34, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring7.png" },
+      { title: 'Accordion Gold Ring', description: 'Fashion, Gold Metal', category: 'rings', price: '26.00', inventory: 46, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring6.png" },
+      { title: 'Fashion Jewel Ring', description: 'Gold Metal, Cubic Zirconia', category: 'rings', price: '50.00', inventory: 96, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring8.png" },
+      { title: 'Diamond Solitaire Ring ', description: '.75CT, Silver', category: 'rings', price: '987.70', inventory: 32, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring9.png" },
+      { title: 'Twin Heart Ring', description: 'Fashion, Silver Metal', category: 'rings', price: '56.00', inventory: 33, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring10.png" },
+      { title: 'Tiger Eye Ring', description: 'Fashion, Silver Metal', category: 'rings', price: '43.99', inventory: 99, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring11.png" },
+      { title: 'Vintage Aquamarine Ring', description: '14K Gold', category: 'rings', price: '249.90', inventory: 22, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring12.png" },
+      { title: 'Ruby Solitaire Ring', description: '.5CT, 14K', category: 'rings', price: '359.99', inventory: 48, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring13.png" },
+      { title: 'Gold Fashion Ring', description: 'Gold Metal', category: 'rings', price: '29.99', inventory: 78, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring14.png" },
+      { title: 'Tourmaline Ring', description: '10k White Gold', category: 'rings', price: '299.99', inventory: 87, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring15.png" },
+      { title: 'Gold Knot Ring', description: 'Gold Plated', category: 'rings', price: '79.99', inventory: 48, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring16.png" },
+      { title: 'Silver Bead Ring', description: 'Sterling Silver', category: 'rings', price: '35.99', inventory: 74, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring17.png" },
+      { title: 'Silver Wire Ring', description: 'Sterling Silver', category: 'rings', price: '29.76', inventory: 23, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring18.png" },
+      { title: 'Jade Square Ring', description: 'Silver, Diamond Accents', category: 'rings', price: '159.99', inventory: 98, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring19.png" },
+      { title: 'Emerald and Diamond Ring', description: 'White Gold, Diamond Accent', category: 'rings', price: '199.99', inventory: 48, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring20.png" },
+
 
     ]
 
@@ -246,16 +265,16 @@ async function createInitialCarts() {
   console.log('Starting to create carts...');
   try {
     const cartsToCreate = [
-      {userId: 1, isActive: true},
-      {userId: 2, isActive: true},
-      {userId: 3, isActive: true},
-      {userId: 4},
-      {userId: 5, isActive: false},
-      {userId: 5, isActive: true},
-      {userId: 6, isActive: true},
-      {isActive: true}
+      { userId: 1, isActive: true },
+      { userId: 2, isActive: true },
+      { userId: 3, isActive: true },
+      { userId: 4 },
+      { userId: 5, isActive: false },
+      { userId: 5, isActive: true },
+      { userId: 6, isActive: true },
+      { isActive: true }
     ]
-    
+
     const carts = await Promise.all(cartsToCreate.map(createCart));
     console.log('Carts created: ', carts);
     console.log('Finished creating carts!')
@@ -269,12 +288,12 @@ async function createInitialOrders() {
   console.log('Starting to create orders...');
   try {
     const ordersToCreate = [
-      {userId: 1, total: 110.97},
-      {userId: 2, total: 8252.97},
-      {userId: 1, total: 11303.93},
-      {userId: 3, total: 59.98},
-      {userId: 5, total: 59.98},
-      {userId: 4, total: 389.97}
+      { userId: 1, total: 110.97 },
+      { userId: 2, total: 8252.97 },
+      { userId: 1, total: 11303.93 },
+      { userId: 3, total: 59.98 },
+      { userId: 5, total: 59.98 },
+      { userId: 4, total: 389.97 }
     ]
 
     const orders = await Promise.all(ordersToCreate.map(createOrder));
@@ -296,8 +315,8 @@ async function createInitialOrderItems() {
         quantity: 2
       },
       {
-        orderId: 1, 
-        productId: 2, 
+        orderId: 1,
+        productId: 2,
         quantity: 1
       },
       {
@@ -307,7 +326,7 @@ async function createInitialOrderItems() {
       },
       {
         orderId: 2,
-        productId: 1, 
+        productId: 1,
         quantity: 1
       },
       {
@@ -316,8 +335,8 @@ async function createInitialOrderItems() {
         quantity: 1
       },
       {
-        orderId: 3, 
-        productId: 1, 
+        orderId: 3,
+        productId: 1,
         quantity: 1
       },
       {
@@ -331,8 +350,8 @@ async function createInitialOrderItems() {
         quantity: 2
       },
       {
-        orderId: 5, 
-        productId: 2, 
+        orderId: 5,
+        productId: 2,
         quantity: 7
       },
       {
@@ -347,14 +366,14 @@ async function createInitialOrderItems() {
       }
     ]
 
-  const orderItems = await Promise.all(orderItemsToCreate.map(addOrderItemToOrder));
-  console.log('order items created: ', orderItems)
-  console.log('Finished creating order items!')
+    const orderItems = await Promise.all(orderItemsToCreate.map(addOrderItemToOrder));
+    console.log('order items created: ', orderItems)
+    console.log('Finished creating order items!')
   } catch (error) {
     console.error('Error creating order items!')
     throw error;
   }
-} 
+}
 
 async function createInitialCartItems() {
   console.log('Starting to create cart items...');
@@ -372,26 +391,26 @@ async function createInitialCartItems() {
       },
       {
         cartId: 1,
-        productId: 5, 
+        productId: 5,
         quantity: 2
       },
       {
-        cartId: 2, 
+        cartId: 2,
         productId: 1,
         quantity: 2
       },
       {
         cartId: 3,
-        productId: 5, 
+        productId: 5,
         quantity: 1
       },
       {
-        cartId: 3, 
+        cartId: 3,
         productId: 4,
         quantity: 2
       },
       {
-        cartId: 3, 
+        cartId: 3,
         productId: 1,
         quantity: 1
       },
@@ -401,8 +420,8 @@ async function createInitialCartItems() {
         quantity: 10
       },
       {
-        cartId: 5, 
-        productId: 2, 
+        cartId: 5,
+        productId: 2,
         quantity: 1
       },
       {
@@ -449,10 +468,10 @@ async function rebuildDB() {
     await createInitialOrderItems();
     await createInitialCartItems();
     console.log('RebuildDB function was successful!')
-  } catch(error) {
+  } catch (error) {
     console.log('Error during rebuildDB')
     throw error;
-  } 
+  }
 }
 
 async function testDB() {
