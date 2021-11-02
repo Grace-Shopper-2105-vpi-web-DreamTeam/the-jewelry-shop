@@ -37,9 +37,9 @@ export default function App() {
         setToken={setToken}
         admin={admin}
         />
-        {/* <Testing
+        <Testing
           category={category}
-        /> */}
+        />
         
         <Switch>
           <Route exact path="/register" component={Register}>
