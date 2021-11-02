@@ -246,6 +246,27 @@ async function createInitialProducts() {
       { title: 'Silver Wire Ring', description: 'Sterling Silver', category: 'rings', price: '29.76', inventory: 23, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring18.png" },
       { title: 'Jade Square Ring', description: 'Silver, Diamond Accents', category: 'rings', price: '159.99', inventory: 98, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring19.png" },
       { title: 'Emerald and Diamond Ring', description: 'White Gold, Diamond Accent', category: 'rings', price: '199.99', inventory: 48, isActive: true, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Rings/ring20.png" },
+      {title: 'Gold Jewel Necklace', description: 'Detailed Necklace with Multicolored Jewels', category: 'necklaces', price: '19.99', inventory: 52, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace1.png"},
+ {title: 'Blue Daisy Necklace', description: 'Cute Blue Flowers with Gold Chain', category: 'necklaces', price: '14.99', inventory: 32, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace2.png"},
+ {title: 'Beaded Necklace', description: 'Colorful Beads with Charm', category: 'necklaces', price: '17.99', inventory: 35, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace3.png"},
+ {title: 'Black and Purple Necklace', description: 'Black and Purple Beads on Silver Chain', category: 'necklaces', price: '24.99', inventory: 24, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace4.png"},
+ {title: 'Beach Necklace', description: 'Blue Beads with Beach Charms', category: 'necklaces', price: '21.99', inventory: 36, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace5.png"},
+ {title: 'Blue Beaded Necklace', description: 'Light and Dark Blue Beads with Cute Silver Charms', category: 'necklaces', price: '18.99', inventory: 70, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace6.png"},
+ {title: 'Gold Necklace', description: 'Gold Chain with Jewel in Center', category: 'necklaces', price: '20.99', inventory: 66, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace7.png"},
+ {title: 'Jewel Necklace', description: '3 Chain Necklace with Multicolored Jewels', category: 'necklaces', price: '25.99', inventory: 26, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace8.png"},
+ {title: 'Black and White Necklace', description: 'Black and White Necklace with Intertwining Jewel', category: 'necklaces', price: '27.99', inventory: 43, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace9.png"},
+ {title: 'Heart Necklace', description: 'Cute Gold Chain with Heart Charm', category: 'necklaces', price: '9.99', inventory: 45, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace10.png"},
+ {title: 'Purple Jewel Necklace', description: 'Silver Chain with Purple Jewel Center', category: 'necklaces', price: '29.99', inventory: 35, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace11.png"},
+ {title: 'Purple Lady Necklace', description: 'Purple Jewel with Gold Lady Design', category: 'necklaces', price: '26.99', inventory: 42, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace12.png"},
+ {title: 'Silver Heart Necklace', description: 'Silver Chain, Cute Heart Charm', category: 'necklaces', price: '23.99', inventory: 47, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace13.png"},
+ {title: 'Gold Flower Necklace', description: 'Gold with Cute Flower Charm', category: 'necklaces', price: '19.99', inventory: 22, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace14.png"},
+ {title: 'Multicolored Bead Necklaces', description: 'Two Multi-Colored Necklaces', category: 'necklaces', price: '39.99', inventory: 42, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace15.png"},
+ {title: 'Pearl Necklace', description: 'Fashionable Pearl Necklace', category: 'necklaces', price: '30.99', inventory: 21, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace16.png"},
+ {title: 'Flower Pearl Necklace', description: 'Gold Chain with Large Flower Pearl Center', category: 'necklaces', price: '32.99', inventory: 46, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace17.png"},
+ {title: 'Gold and Silver Necklace', description: 'Three Chain Necklace with Large Bead', category: 'necklaces', price: '39.99', inventory: 33, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace18.png"},
+ {title: 'Black Jewel Necklace', description: 'Silver Chain with Black Jewel Center', category: 'necklaces', price: '29.99', inventory: 56, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace19.png"},
+ {title: 'Fancy Necklace', description: 'Elegant Gold and Silver', category: 'necklaces', price: '43.99', inventory: 58, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace20.png"},
+
 
 
     ]
