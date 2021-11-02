@@ -265,10 +265,7 @@ async function createInitialProducts() {
  {title: 'Flower Pearl Necklace', description: 'Gold Chain with Large Flower Pearl Center', category: 'necklaces', price: '32.99', inventory: 46, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace17.png"},
  {title: 'Gold and Silver Necklace', description: 'Three Chain Necklace with Large Bead', category: 'necklaces', price: '39.99', inventory: 33, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace18.png"},
  {title: 'Black Jewel Necklace', description: 'Silver Chain with Black Jewel Center', category: 'necklaces', price: '29.99', inventory: 56, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace19.png"},
- {title: 'Fancy Necklace', description: 'Elegant Gold and Silver', category: 'necklaces', price: '43.99', inventory: 58, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace20.png"},
-
-
-
+ {title: 'Fancy Necklace', description: 'Elegant Gold and Silver', category: 'necklaces', price: '43.99', inventory: 58, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/Necklaces/necklace20.png"}
     ]
 
     //const watch = await createProduct({title: 'Medical ID Bracelet', description: 'Basic stainless steel bracelet with custom name and medical information', category: 'bracelets', price: '50.99', inventory: 5000})

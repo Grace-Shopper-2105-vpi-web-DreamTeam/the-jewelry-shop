@@ -7,13 +7,16 @@ import {
   ProductByCategory,
   Testing,
   Login,
-  Register
+  Register,
+  Navbar,
+  Logout
 } from "."
 
 export default function App() {
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
+  const [admin, setAdmin]=useState(false)
 
   // useEffect(() => {
   //   getSomething()
@@ -28,10 +31,16 @@ export default function App() {
   return (
     <div className="App">
       <Router>
-        <Testing
-          category={category}
+        <Navbar
+        authenticated={authenticated}
+        setAuthenticated= {setAuthenticated}
+        setToken={setToken}
+        admin={admin}
         />
-        {/* <Navbar> </Navbar> */}
+        {/* <Testing
+          category={category}
+        /> */}
+        
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register 
