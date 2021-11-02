@@ -102,7 +102,7 @@ async function updateUserToAdminById(userId) {
 async function getUserByUsername(username) {
   try {
     const { rows: [user] } = await client.query(`
-            SELECT id, username, password
+            SELECT id, username, password, "emailAddress", "isAdmin"
             FROM users
             WHERE username = $1;
         `, [username]);
