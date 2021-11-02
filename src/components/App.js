@@ -26,20 +26,23 @@ export default function App() {
   const [userOrders, setUserOrders] = useState([]);
 
   useEffect(() => {
+    console.log('USERINFO', userInfo)
     const localStorageToken = localStorage.getItem('token')
     if (localStorageToken) {
       setToken(localStorageToken)
       setAuthenticated(true)
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
+      //setAdmin(userInfo.user.isAdmin)
+
       const fetchUserInfo = async () => {
         const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
         if (response) {
-          console.log("UserOrders",response)
+          console.log("UserOrders", response)
           setUserOrders(response)
         }
       }
       fetchUserInfo();
-    }else{
+    } else {
       setUserOrders([])
     }
   }, [token])
@@ -82,10 +85,10 @@ export default function App() {
             />
           </Route>
           <Route exact path="/account" component={UserProfile}>
-           <UserProfile 
-           userOrders = {userOrders}
-           userInfo = {userInfo}
-           />
+            <UserProfile
+              userOrders={userOrders}
+              userInfo={userInfo}
+            />
           </Route>
           {/* <Route>
             <AdminProfile />

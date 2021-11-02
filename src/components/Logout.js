@@ -12,7 +12,7 @@ const Logout = ({ setAuthenticated, setToken, setUserInfo }) => {
     localStorage.removeItem('userDetails');
     setAuthenticated(false);
     setToken("");
-    setUserInfo({});
+    // setUserInfo({});
     history.push("/Login");
   }
 
