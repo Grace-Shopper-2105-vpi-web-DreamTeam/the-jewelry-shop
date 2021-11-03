@@ -37,6 +37,18 @@ export const register = async (username, password, emailAddress) => {
   }).then((response) => response.data)
 };
 
+export const getUserOrders = async (userDetails) => {
+  console.log('userDetails',userDetails)
+  return axios({
+    method: "GET",
+    url: `/api/orders/${userDetails.user.id}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+  }
+  }).then((response) => response.data)
+}
+
 // export async function login(username, password) {
 //   try {
 //     const body = {username, password}

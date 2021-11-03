@@ -27,7 +27,7 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Login = ({ setAuthenticated, setToken }) => {
+const Login = ({ setAuthenticated, setToken, setUserInfo }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -40,9 +40,11 @@ const Login = ({ setAuthenticated, setToken }) => {
             console.log("USER RESPONSE", data)
             if (data.token) {
                 const token = data.token
+                setUserInfo(data)
                 setToken(data.token)
                 localStorage.setItem('token', token)
                 localStorage.setItem('username', username)
+                localStorage.setItem('userDetails', JSON.stringify(data))
                 setFormSubmittedSuccessfully(true);
                 setAuthenticated(true);
             } else {

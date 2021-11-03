@@ -3,14 +3,16 @@ import {
   useHistory
 } from "react-router-dom"
 
-const Logout = ({ setAuthenticated, setToken }) => {
+const Logout = ({ setAuthenticated, setToken, setUserInfo }) => {
   let history = useHistory();
 
   const handleClick = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
+    localStorage.removeItem('userDetails');
     setAuthenticated(false);
-    setToken("")
+    setToken("");
+    // setUserInfo({});
     history.push("/Login");
   }
 

@@ -63,8 +63,8 @@ ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
 
         if (!orders) {
             next({
-                name: "OrderNotFound",
-                message: `Order found with Id ${userId}`
+                name: "OrdersNotFound",
+                message: `No orders found for user with userId ${userId}`
             })
         }
 
@@ -75,7 +75,7 @@ ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
             })
         }
 
-        res.send({ orders })
+        res.send( orders )
     } catch ({ name, message }) {
         next({ name, message })
     }
