@@ -13,9 +13,9 @@ import {
   UserProfile
 } from "."
 
-import {
-  getUserOrders
-} from "../api"
+// import {
+//   getUserOrders
+// } from "../api"
 
 export default function App() {
   const [category, setCategory] = useState('');
@@ -34,14 +34,14 @@ export default function App() {
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
       //setAdmin(userInfo.user.isAdmin)
 
-      const fetchUserInfo = async () => {
-        const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
-        if (response) {
-          console.log("UserOrders", response)
-          setUserOrders(response)
-        }
-      }
-      fetchUserInfo();
+      // const fetchUserInfo = async () => {
+      //   const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
+      //   if (response) {
+      //     console.log("UserOrders", response)
+      //     setUserOrders(response)
+      //   }
+      // }
+      // fetchUserInfo();
     } else {
       setUserOrders([])
     }
