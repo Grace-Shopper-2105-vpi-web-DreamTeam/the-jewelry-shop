@@ -13,15 +13,15 @@ import {
   UserProfile
 } from "."
 
-// import {
-//   getUserOrders
-// } from "../api"
+import {
+  getUserOrders
+} from "../api"
 
 export default function App() {
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
-  const [admin, setAdmin] = useState(false)
+  const [admin, setAdmin] = useState(true)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
 
@@ -31,16 +31,16 @@ export default function App() {
       setToken(localStorageToken)
       setAuthenticated(true)
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
-      //setAdmin(userInfo.user.isAdmin)
+      // setAdmin(userInfo.user.isAdmin)
 
-      // const fetchUserInfo = async () => {
-      //   const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
-      //   if (response) {
-      //     console.log("UserOrders", response)
-      //     setUserOrders(response)
-      //   }
-      // }
-      // fetchUserInfo();
+      const fetchUserInfo = async () => {
+        const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
+        if (response) {
+          console.log("UserOrders", response)
+          setUserOrders(response)
+        }
+      }
+      fetchUserInfo();
     } else {
       setUserOrders([])
     }
