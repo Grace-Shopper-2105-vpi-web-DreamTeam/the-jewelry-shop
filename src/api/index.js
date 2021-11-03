@@ -51,6 +51,30 @@ export const getUserOrders = async (userDetails) => {
   }).then((response) => response.data)
 }
 
+export const getAllUsers = async (userDetails) => {
+  console.log('userDetailsAllUsers',userDetails)
+  return axios({
+    method: "GET",
+    url: `${url}/api/users/admin`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+  }
+  }).then((response) => response.data)
+}
+
+export const getAllOrders = async (userDetails) => {
+  console.log('userDetailsAllOrders',userDetails)
+  return axios({
+    method: "GET",
+    url: `${url}/api/orders`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+  }
+  }).then((response) => response.data)
+}
+
 // export async function login(username, password) {
 //   try {
 //     const body = {username, password}

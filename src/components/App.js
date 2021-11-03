@@ -10,7 +10,8 @@ import {
   Register,
   Navbar,
   Logout,
-  UserProfile
+  UserProfile,
+  AdminProfile
 } from "."
 
 import {
@@ -31,7 +32,9 @@ export default function App() {
       setToken(localStorageToken)
       setAuthenticated(true)
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
-      // setAdmin(userInfo.user.isAdmin)
+      console.log("UserInfo!!!!!!!!!",userInfo)
+//       setAdmin(userInfo.user.isAdmin)
+// console.log("ISADMIN",admin)
 
       const fetchUserInfo = async () => {
         const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
@@ -41,9 +44,7 @@ export default function App() {
         }
       }
       fetchUserInfo();
-    } else {
-      setUserOrders([])
-    }
+    } 
   }, [token])
 
 
@@ -89,9 +90,11 @@ export default function App() {
               userInfo={userInfo}
             />
           </Route>
-          {/* <Route>
-            <AdminProfile />
-          </Route> */}
+          <Route exact path = "/admin">
+            <AdminProfile 
+            admin ={admin}
+            />
+          </Route>
           <Route exact path="/jewelry" component={Products}>
             <Products
               category={category}

@@ -8,7 +8,7 @@ const UserProfile = ({ userOrders, userInfo }) => {
                 <Grid container>
                     <Grid item sm={12} lg={4}>{userInfo.user.username}</Grid>
                     <Grid item sm={12} lg={8}>
-                        {userOrders && userOrders.map(order => {
+                        {userOrders.length && userOrders.map(order => {
                             return (
                                 <div>
                                     <h3>Order # =  {order.id}</h3>
