@@ -5,9 +5,9 @@ import { default as CategoryBanner } from "./CategoryBanner"
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { getAllProducts } from '../api';
+import { getAllProducts, createCart, getCart } from '../api';
 
-export default function Products({category, setCategory}) {
+export default function Products({category, setCategory, setUserCart}) {
     const [products, setProducts] = useState([]);
 
     console.log("the products are", products)
@@ -18,6 +18,7 @@ export default function Products({category, setCategory}) {
              setProducts(results)
         }
         getResult();
+
     }, []);
 
     return (
@@ -55,6 +56,7 @@ export default function Products({category, setCategory}) {
                         >
                             <ProductCard
                                 product={product}
+                                setUserCart={setUserCart}
                             />
                         </Grid>
                     ))}

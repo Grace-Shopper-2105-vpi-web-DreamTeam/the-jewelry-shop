@@ -18,24 +18,32 @@ export default function Cart({setCartItems}) {
     const myToken = localStorage.getItem('token');
 
     function getCart() {
-        let temp = [];
-        for (let i of cart ) {
-            i && temp.push(i);
+        if(cart && cart.length > 0 ) {
+            let temp = [];
+            for (let i of cart ) {
+                i && temp.push(i);
+            }
+            cart = temp;
         }
-        cart = temp;
+        
         return cart;
     }
         
     const cartToDisplay = getCart();
 
     function getTotal () {
-        const total = cart.map(function(num) {
-            return num.quantity * num.price;
-            })
-        const totalTotal = total.reduce(function(sum, num){
-            return sum + num;
-        }, 0)
-        return totalTotal.toFixed(2);
+        if(cartToDisplay && cartToDisplay.length > 0 ) {
+
+            const total = cartToDisplay.map(function(num) {
+                return num.quantity * num.price;
+                })
+            const totalTotal = total.reduce(function(sum, num){
+                return sum + num;
+            }, 0)
+            return totalTotal.toFixed(2);
+        } else {
+            return 0
+        }
     }
 
     const grandTotal = getTotal();
@@ -69,7 +77,7 @@ export default function Cart({setCartItems}) {
                 </Typography>
             </Box>
             < >
-                {cartToDisplay.length > 0 ? 
+                {cartToDisplay && cartToDisplay.length > 0 ? 
                     < >
                         <Grid container spacing={1}>
                             {cartToDisplay.map((item) => (

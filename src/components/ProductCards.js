@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import { createCart, getCart } from '../api';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,10 +13,14 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 
 
-export default function ProductCard({product}) {
+export default function ProductCard({product, setUserCart}) {
     const [counter, setCoutner] = useState(0);
     const [quantity, setQuantity] = useState(0);
     //const [productId, setProductId] = useState(0);
+
+    const cartId = localStorage.getItem('cartId');
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
+    const token = localStorage.getItem('token');
 
     const { image, title, description, price, inventory, id} = product;
 
@@ -25,34 +31,65 @@ export default function ProductCard({product}) {
       setQuantity(0); 
     }
 
-    const addToCart = (e, productId, title, price, image, inventory, quantity) => {
+    const setCart = async (userId, token) => {
+      try {
+          const getExistingCart = await getCart(userId, token);
+
+          const createUserCart = await createCart(userId, token);
+
+          if(getExistingCart && !createUserCart.id) {
+              const cartId = getExistingCart.cart.id;
+              console.log(cartId)
+              localStorage.setItem("cartId", cartId);
+              console.log("cart exists", getExistingCart)
+          } else {
+              const cartId = createUserCart.cart.id;
+              console.log(cardId)
+              localStorage.setItem("cartId", cartId);
+              console.log("cart created", createUserCart)
+          }
+      } catch (error) {
+          console.error(error)
+      }
+  }
+
+    const addToCart = async (e, productId, title, price, image, inventory, quantity) => {
       e.preventDefault();
-      let cartObj = JSON.parse(localStorage.getItem('cart')) || []
-      if(!cartObj) {
-        cartObj[productId] = {
-            productId: productId,
-            title: title,
-            price: price,
-            image: image,
-            inventory: inventory,
-            quantity: quantity
-        };
-        localStorage.setItem("cart", JSON.stringify(cart));
-        reset();
-      } else {
-        let newItems = {
-          productId: productId,
-          title: title,
-          price: price,
-          image: image,
-          inventory: inventory,
-          quantity: quantity
-        };
-        cartObj[productId] = newItems;
+
+      console.count()
       
-        localStorage.setItem("cart", JSON.stringify(cartObj));
-        reset();
-      }  
+      if (token && !cartId || cartId === undefined) {
+        console.count()
+          const myUserId = userDetails.user.id
+          console.count()
+          setCart(myUserId, token)
+      }
+        let cartObj = JSON.parse(localStorage.getItem('cart')) || []
+          if(!cartObj) {
+            cartObj[productId] = {
+                productId: productId,
+                title: title,
+                price: price,
+                image: image,
+                inventory: inventory,
+                quantity: quantity
+            };
+            localStorage.setItem("cart", JSON.stringify(cart));
+            reset();
+          } else {
+            let newItems = {
+              productId: productId,
+              title: title,
+              price: price,
+              image: image,
+              inventory: inventory,
+              quantity: quantity
+            };
+            cartObj[productId] = newItems;
+          
+            localStorage.setItem("cart", JSON.stringify(cartObj));
+            reset();
+          }  
     };
 
 

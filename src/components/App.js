@@ -98,6 +98,7 @@ export default function App() {
             <Products
               category={category}
               setCategory={setCategory}
+              setUserCart={setUserCart}
             />
           </Route>
           <Route path="/jewelry/:category" component={ProductByCategory}>

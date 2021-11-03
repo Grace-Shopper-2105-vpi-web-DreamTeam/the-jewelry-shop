@@ -22,8 +22,9 @@ export default function Checkout({cartItems, setCartItems}) {
     
     useEffect(() => {
         const getResult = async () => {
-             const results = await getCart(cartId)
+             const results = await getCart(userId, myToken)
              setCheckoutCart(results)
+             console.log(results)
              const itemsTocheckout = results.cart.cartItems
              setCartItems(itemsTocheckout)
         }
@@ -59,25 +60,6 @@ export default function Checkout({cartItems, setCartItems}) {
 
     }
 
-    // const prepCheckout = async () => {
-    //     const cartId = JSON.parse(localStorage.getItem('cartId'));
-    //     cartToDisplay.map((cartItem) => {
-    //         cartItem.cart_id = cartId,
-    //         delete cartItem.image;
-    //         delete cartItem.inventory;
-    //         delete cartItem.price;
-    //         delete cartItem.title;
-    //     });
-    //     console.log("cart items to create", cartToDisplay)
-    //     const cartItemsCreated = await Promise.all(cartToDisplay.map(createCartItems))
-    //     console.log("cart Items are", cartItemsCreated)
-    //     setCartItems(cartItemsCreated)
-    //     //go to checkout page 
-    //     //turn cart into order 
-    // }
-
-
-
   return (
     <>
     <Box sx={{ p: 2, border: '1px dashed grey', textAlign: "center" }}>
@@ -100,9 +82,12 @@ export default function Checkout({cartItems, setCartItems}) {
                 <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
 
                     {myToken ? 
-                        <Button onClick={(e) => {checkout(e)}} > Place Order </Button>
+                        <>
+                            <Button onClick={(e) => {checkout(e)}} > Place Order </Button>
+                            <Link to="/cart"> <Button > Go Back </Button></Link>
+                        </>
                         :
-                        <Link to="./login"> Please Login or Register to Checkout </Link>
+                        <Link to="/login"> Please Login or Register to Checkout </Link>
                     }
                 </div>
             </ >

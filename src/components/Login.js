@@ -35,14 +35,14 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) =
             const getExistingCart = await getCart(userId, token);
             const createUserCart = await createCart(userId, token);
 
-            if(getExistingCart && !createUserCart) {
+            if(getExistingCart && !createUserCart.id) {
                 setUserCart(getExistingCart);
-                const cartId = getExistingCart.id;
+                const cartId = getExistingCart.cart.id;
                 localStorage.setItem("cartId", cartId);
                 console.log("cart exists", getExistingCart)
             } else {
                 setUserCart(createUserCart);
-                const cartId = createUserCart.id;
+                const cartId = createUserCart.cart.id;
                 localStorage.setItem("cartId", cartId);
                 console.log("cart created", createUserCart)
             }
