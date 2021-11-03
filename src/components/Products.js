@@ -22,12 +22,10 @@ export default function Products({category, setCategory}) {
 
     return (
         <Container>
-            <h2>Products Page in the works </h2> 
             <CategoryBanner 
                 category={category}
                 setCategory={setCategory}
             /> 
-            {/* panel with clickable images of categories go here */}
             <h1
                 style={{
                     marginBottom: "10px",

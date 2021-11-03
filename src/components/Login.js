@@ -30,10 +30,10 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) =
     const [error, setError] = useState('');
     const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
-    const setCart = async (userId) => {
+    const setCart = async (userId, token) => {
         try {
-            const getExistingCart = await getCart(userId);
-            const createUserCart = await createCart(userId);
+            const getExistingCart = await getCart(userId, token);
+            const createUserCart = await createCart(userId, token);
 
             if(getExistingCart && !createUserCart) {
                 setUserCart(getExistingCart);
@@ -66,7 +66,7 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) =
                 localStorage.setItem('userDetails', JSON.stringify(data))
                 setFormSubmittedSuccessfully(true);
                 setAuthenticated(true);
-                setCart(userId)
+                setCart(userId, token)
             } else {
                 setError(data.message)
             }

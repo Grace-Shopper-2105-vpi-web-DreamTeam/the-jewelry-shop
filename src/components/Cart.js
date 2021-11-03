@@ -35,14 +35,15 @@ export default function Cart({setCartItems}) {
         const totalTotal = total.reduce(function(sum, num){
             return sum + num;
         }, 0)
-        return totalTotal;
+        return totalTotal.toFixed(2);
     }
 
     const grandTotal = getTotal();
 
     console.log("before prep", cartToDisplay)
 
-    const prepCheckout = async () => {
+    const prepCheckout = async (e) => {
+        e.preventDefault();
         const cartId = JSON.parse(localStorage.getItem('cartId'));
         cartToDisplay.map((cartItem) => {
             cartItem.cart_id = cartId,
@@ -55,7 +56,7 @@ export default function Cart({setCartItems}) {
         const cartItemsCreated = await Promise.all(cartToDisplay.map(createCartItems))
         console.log("cart Items are", cartItemsCreated)
         setCartItems(cartItemsCreated)
-        //go to checkout page 
+        window.location.href = "/checkout";
         //turn cart into order 
     }
 
@@ -68,7 +69,7 @@ export default function Cart({setCartItems}) {
                 </Typography>
             </Box>
             < >
-                {cart ? 
+                {cartToDisplay.length > 0 ? 
                     < >
                         <Grid container spacing={1}>
                             {cartToDisplay.map((item) => (
@@ -76,15 +77,15 @@ export default function Cart({setCartItems}) {
                             ))}
                         </Grid>
                         <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px"}}> 
-                            Grand Total: ${grandTotal} 
+                            Grand Total: {`$${grandTotal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`} 
                         </div>
                         <br />
                         <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
 
                             {myToken ? 
-                                <Link to="./checkout" > <Button onClick={() => {prepCheckout()}} > Continue to Checkout </Button> </Link>
+                                <Button disabled={cartToDisplay.length <=0 } onClick={(e) => {prepCheckout(e)}} > Continue to Checkout </Button>
                                 :
-                                <Link to="./login"> Please Login or Register to Checkout </Link>
+                                <Link to="/login"> Please Login or Register to Checkout </Link>
                             }
                         </div>
                     </ >

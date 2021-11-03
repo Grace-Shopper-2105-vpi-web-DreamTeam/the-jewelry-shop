@@ -51,10 +51,14 @@ export const getUserOrders = async (userDetails) => {
   }).then((response) => response.data)
 }
 
-export const getCart = async (userId) => {
+export const getCart = async (userId, token) => {
   return axios({
     method: "GET",
-    url: `${url}/api/cart/${userId}/cart`
+    url: `${url}/api/cart/${userId}/usercart`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
   }).then((response) => response.data)
 }
 
