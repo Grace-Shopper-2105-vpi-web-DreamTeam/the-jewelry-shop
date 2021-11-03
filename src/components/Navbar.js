@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const Navbar = ({ authenticated, setAuthenticated, setToken, admin }) => {
+const Navbar = ({ authenticated, setAuthenticated, setToken, userInfo }) => {
     let history = useHistory();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -82,7 +82,7 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin }) => {
                         <MenuItem onClick={() => handleMenuClick('/')}>Home</MenuItem>
                         {!authenticated ? (
                             <MenuItem onClick={() => handleMenuClick('/login')}>Login/Register</MenuItem>) : null}
-                        {admin ? (
+                        {userInfo.user && userInfo.user.isAdmin ? (
                             <MenuItem onClick={() => handleMenuClick('/admin')}>Admin</MenuItem>) : null}
                         {authenticated ? (
                             <MenuItem >

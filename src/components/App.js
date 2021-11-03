@@ -22,7 +22,7 @@ export default function App() {
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
-  const [admin, setAdmin] = useState(true)
+  const [admin, setAdmin] = useState(false)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
 
@@ -65,7 +65,7 @@ export default function App() {
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
           setToken={setToken}
-          admin={admin}
+          userInfo={userInfo}
         />
         <Testing
           category={category}

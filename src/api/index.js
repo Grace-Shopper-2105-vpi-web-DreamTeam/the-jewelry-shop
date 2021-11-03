@@ -40,7 +40,6 @@ export const register = async (username, password, emailAddress) => {
 };
 
 export const getUserOrders = async (userDetails) => {
-  console.log('userDetails',userDetails)
   return axios({
     method: "GET",
     url: `${url}/api/orders/${userDetails.user.id}`,
@@ -73,6 +72,20 @@ export const getAllOrders = async (userDetails) => {
       'Authorization': `Bearer ${userDetails.token}`
   }
   }).then((response) => response.data)
+}
+
+export const updateUserAdmin = async (userId, userDetails) => {
+  console.log('userDetailsAllOrders',userDetails)
+  console.log('userIdUPDATEADMIN', userId)
+  return axios({
+    method: "PATCH",
+    url: `${url}/api/users/admin/${userId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+  }
+  }).then((response) => {console.log('RESPONSE', response); return response.data })
+  
 }
 
 // export async function login(username, password) {
