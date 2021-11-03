@@ -40,6 +40,7 @@ const getAllProducts = async () => {
             FROM products;
             `
         );
+        
         return products;
     } catch (error) {
         throw error;
