@@ -38,13 +38,14 @@ const Register = ({ setAuthenticated, setToken }) => {
         return 
     }
     try {
-      const data = await register(username, password,email);
+      const data = await register(username, password, email);
       console.log ("USER RESPONSE", data)
       if (data.token) {
         const token = data.token
         setToken(data.token)
         localStorage.setItem('token', token)
         localStorage.setItem('username', username)
+        localStorage.setItem('userDetails', JSON.stringify(data))
         setFormSubmittedSuccessfully(true);
         setAuthenticated(true);
       } else {
