@@ -3,7 +3,7 @@ import {
     //   Link,
     Redirect
 } from "react-router-dom"
-import { login, createCart } from '../api';
+import { login, createCart, getCart } from '../api';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -21,9 +21,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
-
-
-
 
 const theme = createTheme();
 

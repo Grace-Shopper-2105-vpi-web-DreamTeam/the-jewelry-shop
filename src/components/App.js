@@ -12,7 +12,8 @@ import {
   Logout,
   UserProfile,
   Cart, 
-  Checkout
+  Checkout, 
+  OrderPlaced
 } from "."
 
 
@@ -115,8 +116,12 @@ export default function App() {
           </Route>
           <Route exact path="/checkout">
             <Checkout
+              setCartItems={setCartItems}
               cartItems={cartItems}
             />
+          </Route>
+          <Route exact path="/ordersuccess">
+            <OrderPlaced />
           </Route>
           <Route path="*">
             <NotFound />

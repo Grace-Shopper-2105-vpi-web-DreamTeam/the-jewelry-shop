@@ -57,7 +57,6 @@ export default function Cart({setCartItems}) {
         setCartItems(cartItemsCreated)
         //go to checkout page 
         //turn cart into order 
-        
     }
 
 

@@ -80,6 +80,16 @@ export const createCartItems = async ({productId, quantity, cart_id}) => {
   }).then((response) => response.data)
 }
 
+export const cartToCheckout = async (userId, token) => {
+  return axios({
+    method:"DELETE",
+    url: `${url}/api/cart/${userId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((response) => response.data)
+}
 
 // export async function login(username, password) {
 //   try {
