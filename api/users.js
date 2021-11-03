@@ -123,7 +123,7 @@ usersRouter.patch('/:userId', requireLogin, async (req, res, next) => {
 });
 
 usersRouter.post("/register", async (req, res, next) => {
-    const { username, emailAddress, password } = req.body;
+    const { username, emailAddress, password, isAdmin } = req.body;
 
     try {
         const user = await getUserByUsername(username);
@@ -152,13 +152,14 @@ usersRouter.post("/register", async (req, res, next) => {
                 message: "Password must be 8 or more characters",
             });
         } else {
-            const user = await createUser({ username, emailAddress, password });
+            const user = await createUser({ username, emailAddress, password, isAdmin });
 
             const token = jwt.sign(
                 {
                     id: user.id,
                     username: user.username,
                     emailAddress: user.emailAddress
+
 
                 },
                 process.env.JWT_SECRET,
