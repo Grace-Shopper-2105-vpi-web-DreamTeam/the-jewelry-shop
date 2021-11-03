@@ -74,21 +74,23 @@ const getCartByUserId = async (userId) => {
         } = await client.query(`
             SELECT * 
             FROM cart 
-            WHERE "userId"=${userId}
-            AND "isActive" = true;
-        `);
+            WHERE "userId"=$1
+            AND "isActive" = true
+        `, [userId]);
 
-        const thisCartId = cart.id
-
-        const cartItems = await attachProductInfoToCartItem(thisCartId);
-
-        cart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
-
+        if (cart) {
+           const thisCartId = cart.id;
+           const cartItems = await attachProductInfoToCartItem(thisCartId);
+           cart.cartItems = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
+        }
+       
         return cart;
+        
     } catch (error) {
         throw error;
     }
 }
+
 
 const deleteCart = async (cartId) => {
     try {

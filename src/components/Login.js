@@ -27,19 +27,41 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Login = ({ setAuthenticated, setToken, setUserInfo }) => {
+const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
+    const setCart = async (userId) => {
+        try {
+            const getExistingCart = await getCart(userId);
+            const createUserCart = await createCart(userId);
+
+            if(getExistingCart && !createUserCart) {
+                setUserCart(getExistingCart);
+                const cartId = getExistingCart.id;
+                localStorage.setItem("cartId", cartId);
+                console.log("cart exists", getExistingCart)
+            } else {
+                setUserCart(createUserCart);
+                const cartId = createUserCart.id;
+                localStorage.setItem("cartId", cartId);
+                console.log("cart created", createUserCart)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const data = await login(username, password);
             console.log("USER RESPONSE", data)
             if (data.token) {
-                const token = data.token
+                const token = data.token;
+                const userId = data.user.id;
                 setUserInfo(data)
                 setToken(data.token)
                 localStorage.setItem('token', token)
@@ -47,6 +69,7 @@ const Login = ({ setAuthenticated, setToken, setUserInfo }) => {
                 localStorage.setItem('userDetails', JSON.stringify(data))
                 setFormSubmittedSuccessfully(true);
                 setAuthenticated(true);
+                setCart(userId)
             } else {
                 setError(data.message)
             }
