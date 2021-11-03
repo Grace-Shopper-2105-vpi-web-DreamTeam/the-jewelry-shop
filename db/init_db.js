@@ -160,6 +160,7 @@ async function createInitialProducts() {
   console.log('Starting to create products...');
   try {
     const productsToCreate = [
+
       { title: 'Rolex Submariner', description: 'black dial arabic numerals classic design', category: 'watches', price: '8252.97', inventory: 3, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/rolex3.png" },
       { title: 'Medical ID Bracelet', description: 'Steel bracelet with name and medical information', category: 'bracelets', price: '50.99', inventory: 5000, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/frontPage/medical3.png" },
       { title: '"B" Necklace', description: 'Stylish stainless steel necklace with a "B" pendant', category: 'necklaces', price: '129.99', inventory: 352, image: "https://thejewelryshop.s3.us-east-2.amazonaws.com/BNecklace+(500+x+500+px).png" },
@@ -288,7 +289,6 @@ async function createInitialCarts() {
       { userId: 3, isActive: true },
       { userId: 4 },
       { userId: 5, isActive: false },
-      { userId: 5, isActive: true },
       { userId: 6, isActive: true },
       { isActive: true }
     ]

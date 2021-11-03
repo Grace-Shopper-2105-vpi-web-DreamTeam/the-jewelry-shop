@@ -26,13 +26,12 @@ export default function App() {
   const [userOrders, setUserOrders] = useState([]);
 
   useEffect(() => {
-    console.log('USERINFO', userInfo)
     const localStorageToken = localStorage.getItem('token')
     if (localStorageToken) {
       setToken(localStorageToken)
       setAuthenticated(true)
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
-      //setAdmin(userInfo.user.isAdmin)
+      setAdmin(userInfo.user.isAdmin)
 
       // const fetchUserInfo = async () => {
       //   const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))

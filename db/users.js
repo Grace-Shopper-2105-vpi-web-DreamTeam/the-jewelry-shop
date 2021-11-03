@@ -8,6 +8,10 @@ const createUser = async ({ username, emailAddress, password, isAdmin }) => {
 
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
+    if(isAdmin === null || isAdmin === undefined){
+      isAdmin = false;
+    }
+    console.log("isAdmin",isAdmin)
     const {
       rows: [user]
     } = await client.query(
