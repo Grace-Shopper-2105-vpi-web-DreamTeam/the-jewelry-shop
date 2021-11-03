@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 
 import CartItem from "./CartItems";
+import Checkout from "."
 
 import { createCart, createCartItems } from '../api';
 
@@ -10,12 +11,11 @@ import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Button from '@mui/material/Button';
 
-export default function Cart({token}) {
+export default function Cart({setCartItems}) {
     
     const userId = JSON.parse(localStorage.getItem('userId'));
     let cart = JSON.parse(localStorage.getItem('cart'));
     const myToken = localStorage.getItem('token');
-    
 
     function getCart() {
         let temp = [];
@@ -52,9 +52,12 @@ export default function Cart({token}) {
             delete cartItem.title;
         });
         console.log("cart items to create", cartToDisplay)
-        const cartItem = await createCartItems(2, 3, 8)
-        //const cartItems = await cartToDisplay.forEach((cartItem) => {createCartItems(cartItem.productId, cartItem.quantity, cartItem.cart_id)})
-        console.log("cart Items are", cartItem)
+        const cartItemsCreated = await Promise.all(cartToDisplay.map(createCartItems))
+        console.log("cart Items are", cartItemsCreated)
+        setCartItems(cartItemsCreated)
+        //go to checkout page 
+        //turn cart into order 
+        
     }
 
 
@@ -80,7 +83,7 @@ export default function Cart({token}) {
                         <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
 
                             {myToken ? 
-                                <Button onClick={() => {prepCheckout()}} > Continue to Checkout </Button>
+                                <Link to="./checkout" > <Button onClick={() => {prepCheckout()}} > Continue to Checkout </Button> </Link>
                                 :
                                 <Link to="./login"> Please Login or Register to Checkout </Link>
                             }

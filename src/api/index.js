@@ -62,20 +62,17 @@ export const createCart = async (userId, token) => {
   return axios({
     method: "POST", 
     url: `${url}/api/cart/${userId}`,
-    heaeders: {
+    headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     }
   }).then((response) => response.data)
 }
 
-export const createCartItems = async (productId, quantity, cartId) => {
-  console.log("the product id is", productId)
-  console.log("the quanitiyu is", quantity)
-  console.log("the cart id is", cartId)
+export const createCartItems = async ({productId, quantity, cart_id}) => {
   return axios({
     method: "POST", 
-    url: `${url}/api/cart/${cartId}/items`,
+    url: `${url}/api/cartitem/${cart_id}/items`,
     data: {
       productId,
       quantity

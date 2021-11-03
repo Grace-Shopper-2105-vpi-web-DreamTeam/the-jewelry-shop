@@ -11,8 +11,10 @@ import {
   Navbar,
   Logout,
   UserProfile,
-  Cart
+  Cart, 
+  Checkout
 } from "."
+
 
 // import {
 //   getUserOrders
@@ -26,6 +28,7 @@ export default function App() {
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
   const [userCart, setUserCart] = useState([]);
+  const [cartItems, setCartItems] = useState([])
   const cart = JSON.parse(localStorage.getItem('cart'));
 
 
@@ -106,9 +109,14 @@ export default function App() {
           {/*<Orders />*/}
           {/* </Route> */}
            <Route exact path="/cart">
-          <Cart 
-            token={token}
-          />
+            <Cart 
+              setCartItems={setCartItems}
+            />
+          </Route>
+          <Route exact path="/checkout">
+            <Checkout
+              cartItems={cartItems}
+            />
           </Route>
           <Route path="*">
             <NotFound />
