@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Redirect
 } from "react-router-dom"
-import { register } from '../api';
+import { register, createCart } from '../api';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -23,7 +23,7 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Register = ({ setAuthenticated, setToken, setUserCart }) => {
+const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -31,9 +31,9 @@ const Register = ({ setAuthenticated, setToken, setUserCart }) => {
   const [error, setError] = useState('');
   const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
-  const setCart = async (userId) => {
+  const setCart = async (userId, token) => {
     try {
-        const createUserCart = await createCart(userId);
+        const createUserCart = await createCart(userId, token);
         if(createUserCart) {
             setUserCart(createUserCart);
             const cartId = createUserCart.id;
@@ -63,7 +63,7 @@ const Register = ({ setAuthenticated, setToken, setUserCart }) => {
         localStorage.setItem('userDetails', JSON.stringify(data))
         setFormSubmittedSuccessfully(true);
         setAuthenticated(true);
-        setCart(userId)
+        setCart(userId, token)
       } else {
         setError(data.message)
       }
@@ -73,7 +73,11 @@ const Register = ({ setAuthenticated, setToken, setUserCart }) => {
     }
   }
 
-  if (formSubmittedSuccessfully) {
+  if (formSubmittedSuccessfully && cart) {
+    return <Redirect to="/cart" />
+  } 
+  
+  if (formSubmittedSuccessfully && !cart) {
     return <Redirect to="/" />
   }
 

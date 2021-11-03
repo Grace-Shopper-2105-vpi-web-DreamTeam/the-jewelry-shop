@@ -3,7 +3,7 @@ import {
     //   Link,
     Redirect
 } from "react-router-dom"
-import { login } from '../api';
+import { login, createCart } from '../api';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -27,7 +27,7 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart }) => {
+const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -78,7 +78,12 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart }) => {
             console.log(error)
         }
     }
-    if (formSubmittedSuccessfully) {
+
+    if (formSubmittedSuccessfully && cart) {
+        return <Redirect to="/cart" />
+    } 
+      
+    if (formSubmittedSuccessfully && !cart) {
         return <Redirect to="/" />
     }
     

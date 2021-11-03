@@ -60,7 +60,8 @@ cartRouter.get("/:userId/usercart", requireLogin, async (req, res, next) => {
     }
 });
 
-cartRouter.post("/:userId", requireLogin, async (req, res, next) => {
+cartRouter.post("/:userId",  async (req, res, next) => {
+    // requireLogin,
     const { userId } = req.params;
 
     try {

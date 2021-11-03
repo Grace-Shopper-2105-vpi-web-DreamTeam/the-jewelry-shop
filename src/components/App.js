@@ -69,6 +69,7 @@ export default function App() {
               setAuthenticated={setAuthenticated}
               setToken={setToken}
               setUserCart={setUserCart} 
+              cart={cart}
               />
           </Route>
           <Route exact path="/login" component={Login}>
@@ -77,6 +78,7 @@ export default function App() {
               setToken={setToken}
               setUserInfo={setUserInfo}
               setUserCart={setUserCart}
+              cart={cart}
             />
           </Route>
           <Route exact path="/account" component={UserProfile}>

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 
-import CartItem from "./CartItem";
+import CartItem from "./CartItems";
 
 import { createCart, createCartItems } from '../api';
 
@@ -40,14 +40,23 @@ export default function Cart({token}) {
 
     const grandTotal = getTotal();
 
-    console.log("Cart to display", cartToDisplay)
+    console.log("before prep", cartToDisplay)
 
     const prepCheckout = async () => {
         const cartId = JSON.parse(localStorage.getItem('cartId'));
-        const cartItemsToCreate = cartToDisplay.map((cartItem) => (cartItem.cart_id = cartId ));
-        console.log("cart items to create", cartItemsToCreate)
-        //const cartItems = await Promise.all()
+        cartToDisplay.map((cartItem) => {
+            cartItem.cart_id = cartId,
+            delete cartItem.image;
+            delete cartItem.inventory;
+            delete cartItem.price;
+            delete cartItem.title;
+        });
+        console.log("cart items to create", cartToDisplay)
+        const cartItem = await createCartItems(2, 3, 8)
+        //const cartItems = await cartToDisplay.forEach((cartItem) => {createCartItems(cartItem.productId, cartItem.quantity, cartItem.cart_id)})
+        console.log("cart Items are", cartItem)
     }
+
 
     return (
         <>
