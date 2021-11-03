@@ -31,7 +31,7 @@ export default function App() {
       setToken(localStorageToken)
       setAuthenticated(true)
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
-      setAdmin(userInfo.user.isAdmin)
+      //setAdmin(userInfo.user.isAdmin)
 
       // const fetchUserInfo = async () => {
       //   const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
