@@ -1,23 +1,25 @@
 import axios from 'axios';
 
+const url = "https://frozen-lake-03331.herokuapp.com"
+
 export const getAllProducts = async () => {
   return axios({
     method: "GET",
-    url: "/api/products"
+    url: `${url}/api/products`
   }).then((response) => response.data)
 }
 
 export const getProductsByCategory = async (category) => {
   return axios({
     method: "GET",
-    url: `/api/products/category/${category}`
+    url: `${url}/api/products/category/${category}`
   }).then((response) => response.data)
 }
 
 export const login = async (username, password) => {
   return axios({
     method: "POST",
-    url: "api/users/login",
+    url: `${url}/api/users/login`,
     data: {
       username: username,
       password: password,
@@ -28,7 +30,7 @@ export const login = async (username, password) => {
 export const register = async (username, password, emailAddress) => {
   return axios({
     method: "POST",
-    url: "api/users/register",
+    url: `${url}/api/users/register`,
     data: {
       username: username,
       password: password,
@@ -41,13 +43,46 @@ export const getUserOrders = async (userDetails) => {
   console.log('userDetails',userDetails)
   return axios({
     method: "GET",
-    url: `/api/orders/${userDetails.user.id}`,
+    url: `${url}/api/orders/${userDetails.user.id}`,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${userDetails.token}`
   }
   }).then((response) => response.data)
 }
+
+export const getCart = async (userId) => {
+  return axios({
+    method: "GET",
+    url: `${url}/api/cart/${userId}/cart`
+  }).then((response) => response.data)
+}
+
+export const createCart = async (userId, token) => {
+  return axios({
+    method: "POST", 
+    url: `${url}/api/cart/${userId}`,
+    heaeders: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((response) => response.data)
+}
+
+export const createCartItems = async (productId, quantity, cartId) => {
+  console.log("the product id is", productId)
+  console.log("the quanitiyu is", quantity)
+  console.log("the cart id is", cartId)
+  return axios({
+    method: "POST", 
+    url: `${url}/api/cart/${cartId}/items`,
+    data: {
+      productId,
+      quantity
+    }
+  }).then((response) => response.data)
+}
+
 
 // export async function login(username, password) {
 //   try {

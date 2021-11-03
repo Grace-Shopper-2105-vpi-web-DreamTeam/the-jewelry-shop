@@ -10,12 +10,13 @@ import {
   Register,
   Navbar,
   Logout,
-  UserProfile
+  UserProfile,
+  Cart
 } from "."
 
-import {
-  getUserOrders
-} from "../api"
+// import {
+//   getUserOrders
+// } from "../api"
 
 export default function App() {
   const [category, setCategory] = useState('');
@@ -24,6 +25,9 @@ export default function App() {
   const [admin, setAdmin] = useState(false)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
+  const [userCart, setUserCart] = useState([]);
+  const cart = JSON.parse(localStorage.getItem('cart'));
+
 
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
@@ -31,31 +35,20 @@ export default function App() {
       setToken(localStorageToken)
       setAuthenticated(true)
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
-      setAdmin(userInfo.user.isAdmin)
+      //setAdmin(userInfo.user.isAdmin)
 
-      const fetchUserInfo = async () => {
-        const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
-        if (response) {
-          console.log("UserOrders", response)
-          setUserOrders(response)
-        }
-      }
-      fetchUserInfo();
+      // const fetchUserInfo = async () => {
+      //   const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
+      //   if (response) {
+      //     console.log("UserOrders", response)
+      //     setUserOrders(response)
+      //   }
+      // }
+      // fetchUserInfo();
     } else {
       setUserOrders([])
     }
   }, [token])
-
-
-  // useEffect(() => {
-  //   getSomething()
-  //     .then(response => {
-  //       setMessage(response.message);
-  //     })
-  //     .catch(error => {
-  //       setMessage(error.message);
-  //     });
-  // });
 
   return (
     <div className="App">
@@ -74,13 +67,18 @@ export default function App() {
           <Route exact path="/register" component={Register}>
             <Register
               setAuthenticated={setAuthenticated}
-              setToken={setToken} />
+              setToken={setToken}
+              setUserCart={setUserCart} 
+              cart={cart}
+              />
           </Route>
           <Route exact path="/login" component={Login}>
             <Login
               setAuthenticated={setAuthenticated}
               setToken={setToken}
               setUserInfo={setUserInfo}
+              setUserCart={setUserCart}
+              cart={cart}
             />
           </Route>
           <Route exact path="/account" component={UserProfile}>
@@ -106,10 +104,12 @@ export default function App() {
           </Route>
           {/* <Route> */}
           {/*<Orders />*/}
-          {/* </Route>
-          <Route> */}
-          {/*<Cart />*/}
           {/* </Route> */}
+           <Route exact path="/cart">
+          <Cart 
+            token={token}
+          />
+          </Route>
           <Route path="*">
             <NotFound />
           </Route>
