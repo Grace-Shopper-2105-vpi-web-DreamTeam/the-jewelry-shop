@@ -92,7 +92,7 @@ export default function App() {
           </Route>
           <Route exact path = "/admin">
             <AdminProfile 
-            admin ={admin}
+            userInfo={userInfo}
             />
           </Route>
           <Route exact path="/jewelry" component={Products}>

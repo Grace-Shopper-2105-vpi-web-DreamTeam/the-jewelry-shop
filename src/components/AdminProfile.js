@@ -9,7 +9,8 @@ import {
     updateUserAdmin
 } from "../api"
 import {
-    AdminUsers
+    AdminUsers,
+    AdminOrders
 } from "."
 
 import { styled } from '@mui/material/styles';
@@ -19,7 +20,7 @@ import Typography from '@mui/material/Typography';
 
 const images = [
     {
-        url: '',
+        url: 'https://thejewelryshop.s3.us-east-2.amazonaws.com/Icons/shoppers2.png',
         title: 'USERS',
         id: 'users',
         width: '30%',
@@ -31,7 +32,7 @@ const images = [
         width: '40%',
     },
     {
-        url: '',
+        url: 'https://thejewelryshop.s3.us-east-2.amazonaws.com/Icons/cartIcon.png',
         title: 'ORDERS',
         id: 'orders',
         width: '30%',
@@ -104,7 +105,7 @@ const ImageMarked = styled('span')(({ theme }) => ({
 
 
 
-const AdminProfile = ({ admin }) => {
+const AdminProfile = ({userInfo}) => {
     let history = useHistory();
     const [allUsers, setAllUsers] = useState([])
     const [allOrders, setAllOrders] = useState([])
@@ -129,17 +130,17 @@ const AdminProfile = ({ admin }) => {
         getAllData();
     }, [])
 
-    const handleClick = async (e) => {
-        const type = e.target.id
-        console.log("type", type)
-        if (type === 'orders') {
-            setShowSection({ ...showSection, orders: true, users: false, products: false })
-        } else if (type === 'users') {
-            setShowSection({ ...showSection, orders: false, users: true, products: false })
-        } else {
-            setShowSection({ ...showSection, orders: false, users: false, products: true })
-        }
-    }
+    // const handleClick = async (e) => {
+    //     const type = e.target.id
+    //     console.log("type", type)
+    //     if (type === 'orders') {
+    //         setShowSection({ ...showSection, orders: true, users: false, products: false })
+    //     } else if (type === 'users') {
+    //         setShowSection({ ...showSection, orders: false, users: true, products: false })
+    //     } else {
+    //         setShowSection({ ...showSection, orders: false, users: false, products: true })
+    //     }
+    // }
 
     const toggleAdminStatus = async (userId) => {
         const response = await updateUserAdmin(userId, JSON.parse(localStorage.getItem('userDetails')))
@@ -150,11 +151,6 @@ const AdminProfile = ({ admin }) => {
         }
     }
 
-
-
-
-
-
     return (
         <div>
             {/* < button id='users' onClick={handleClick} > All Users</button >
@@ -163,6 +159,11 @@ const AdminProfile = ({ admin }) => {
             {showSection.users && <AdminUsers
                 allUsers={allUsers}
                 toggleAdminStatus={toggleAdminStatus} />} */}
+             <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
+            <Typography variant="h4"> 
+                Welcome to the Admin DashBoard
+            </Typography>
+        </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
                 {images.map((image) => (
                     <ImageButton
@@ -210,6 +211,9 @@ const AdminProfile = ({ admin }) => {
             {showSection.users && <AdminUsers
             allUsers={allUsers}
             toggleAdminStatus={toggleAdminStatus} />}
+              {showSection.orders && <AdminOrders
+            allOrders={allOrders}
+            />}
 
         </div>
 
