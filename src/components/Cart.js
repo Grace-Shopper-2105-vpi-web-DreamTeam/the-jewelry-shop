@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 
 import CartItem from "./CartItems";
+import Checkout from "."
 
 import { createCart, createCartItems } from '../api';
 
@@ -10,39 +11,47 @@ import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Button from '@mui/material/Button';
 
-export default function Cart({token}) {
+export default function Cart({setCartItems}) {
     
     const userId = JSON.parse(localStorage.getItem('userId'));
     let cart = JSON.parse(localStorage.getItem('cart'));
     const myToken = localStorage.getItem('token');
-    
 
     function getCart() {
-        let temp = [];
-        for (let i of cart ) {
-            i && temp.push(i);
+        if(cart && cart.length > 0 ) {
+            let temp = [];
+            for (let i of cart ) {
+                i && temp.push(i);
+            }
+            cart = temp;
         }
-        cart = temp;
+        
         return cart;
     }
         
     const cartToDisplay = getCart();
 
     function getTotal () {
-        const total = cart.map(function(num) {
-            return num.quantity * num.price;
-            })
-        const totalTotal = total.reduce(function(sum, num){
-            return sum + num;
-        }, 0)
-        return totalTotal;
+        if(cartToDisplay && cartToDisplay.length > 0 ) {
+
+            const total = cartToDisplay.map(function(num) {
+                return num.quantity * num.price;
+                })
+            const totalTotal = total.reduce(function(sum, num){
+                return sum + num;
+            }, 0)
+            return totalTotal.toFixed(2);
+        } else {
+            return 0
+        }
     }
 
     const grandTotal = getTotal();
 
     console.log("before prep", cartToDisplay)
 
-    const prepCheckout = async () => {
+    const prepCheckout = async (e) => {
+        e.preventDefault();
         const cartId = JSON.parse(localStorage.getItem('cartId'));
         cartToDisplay.map((cartItem) => {
             cartItem.cart_id = cartId,
@@ -52,9 +61,11 @@ export default function Cart({token}) {
             delete cartItem.title;
         });
         console.log("cart items to create", cartToDisplay)
-        const cartItem = await createCartItems(2, 3, 8)
-        //const cartItems = await cartToDisplay.forEach((cartItem) => {createCartItems(cartItem.productId, cartItem.quantity, cartItem.cart_id)})
-        console.log("cart Items are", cartItem)
+        const cartItemsCreated = await Promise.all(cartToDisplay.map(createCartItems))
+        console.log("cart Items are", cartItemsCreated)
+        setCartItems(cartItemsCreated)
+        window.location.href = "/checkout";
+        //turn cart into order 
     }
 
 
@@ -66,7 +77,7 @@ export default function Cart({token}) {
                 </Typography>
             </Box>
             < >
-                {cart ? 
+                {cartToDisplay && cartToDisplay.length > 0 ? 
                     < >
                         <Grid container spacing={1}>
                             {cartToDisplay.map((item) => (
@@ -74,15 +85,15 @@ export default function Cart({token}) {
                             ))}
                         </Grid>
                         <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px"}}> 
-                            Grand Total: ${grandTotal} 
+                            Grand Total: {`$${grandTotal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`} 
                         </div>
                         <br />
                         <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
 
                             {myToken ? 
-                                <Button onClick={() => {prepCheckout()}} > Continue to Checkout </Button>
+                                <Button disabled={cartToDisplay.length <=0 } onClick={(e) => {prepCheckout(e)}} > Continue to Checkout </Button>
                                 :
-                                <Link to="./login"> Please Login or Register to Checkout </Link>
+                                <Link to="/login"> Please Login or Register to Checkout </Link>
                             }
                         </div>
                     </ >

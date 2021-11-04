@@ -5,9 +5,9 @@ import { default as CategoryBanner } from "./CategoryBanner"
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { getAllProducts } from '../api';
+import { getAllProducts, createCart, getCart } from '../api';
 
-export default function Products({category, setCategory}) {
+export default function Products({category, setCategory, setUserCart}) {
     const [products, setProducts] = useState([]);
 
     console.log("the products are", products)
@@ -18,16 +18,15 @@ export default function Products({category, setCategory}) {
              setProducts(results)
         }
         getResult();
+
     }, []);
 
     return (
         <Container>
-            <h2>Products Page in the works </h2> 
             <CategoryBanner 
                 category={category}
                 setCategory={setCategory}
             /> 
-            {/* panel with clickable images of categories go here */}
             <h1
                 style={{
                     marginBottom: "10px",
@@ -57,6 +56,7 @@ export default function Products({category, setCategory}) {
                         >
                             <ProductCard
                                 product={product}
+                                setUserCart={setUserCart}
                             />
                         </Grid>
                     ))}

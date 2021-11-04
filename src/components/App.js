@@ -11,8 +11,11 @@ import {
   Navbar,
   Logout,
   UserProfile,
-  Cart
+  Cart, 
+  Checkout, 
+  OrderPlaced
 } from "."
+
 
 // import {
 //   getUserOrders
@@ -26,6 +29,7 @@ export default function App() {
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
   const [userCart, setUserCart] = useState([]);
+  const [cartItems, setCartItems] = useState([])
   const cart = JSON.parse(localStorage.getItem('cart'));
 
 
@@ -94,6 +98,7 @@ export default function App() {
             <Products
               category={category}
               setCategory={setCategory}
+              setUserCart={setUserCart}
             />
           </Route>
           <Route path="/jewelry/:category" component={ProductByCategory}>
@@ -106,9 +111,18 @@ export default function App() {
           {/*<Orders />*/}
           {/* </Route> */}
            <Route exact path="/cart">
-          <Cart 
-            token={token}
-          />
+            <Cart 
+              setCartItems={setCartItems}
+            />
+          </Route>
+          <Route exact path="/checkout">
+            <Checkout
+              setCartItems={setCartItems}
+              cartItems={cartItems}
+            />
+          </Route>
+          <Route exact path="/ordersuccess">
+            <OrderPlaced />
           </Route>
           <Route path="*">
             <NotFound />

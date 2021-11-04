@@ -10,6 +10,8 @@ const Logout = ({ setAuthenticated, setToken, setUserInfo }) => {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
     localStorage.removeItem('userDetails');
+    localStorage.removeItem('cartId');
+    localStorage.removeItem('cart');
     setAuthenticated(false);
     setToken("");
     // setUserInfo({});

@@ -3,7 +3,7 @@ import {
     //   Link,
     Redirect
 } from "react-router-dom"
-import { login, createCart } from '../api';
+import { login, createCart, getCart } from '../api';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -22,9 +22,6 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
 
-
-
-
 const theme = createTheme();
 
 const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) => {
@@ -33,19 +30,19 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) =
     const [error, setError] = useState('');
     const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
-    const setCart = async (userId) => {
+    const setCart = async (userId, token) => {
         try {
-            const getExistingCart = await getCart(userId);
-            const createUserCart = await createCart(userId);
+            const getExistingCart = await getCart(userId, token);
+            const createUserCart = await createCart(userId, token);
 
-            if(getExistingCart && !createUserCart) {
+            if(getExistingCart && !createUserCart.id) {
                 setUserCart(getExistingCart);
-                const cartId = getExistingCart.id;
+                const cartId = getExistingCart.cart.id;
                 localStorage.setItem("cartId", cartId);
                 console.log("cart exists", getExistingCart)
             } else {
                 setUserCart(createUserCart);
-                const cartId = createUserCart.id;
+                const cartId = createUserCart.cart.id;
                 localStorage.setItem("cartId", cartId);
                 console.log("cart created", createUserCart)
             }
@@ -69,7 +66,7 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) =
                 localStorage.setItem('userDetails', JSON.stringify(data))
                 setFormSubmittedSuccessfully(true);
                 setAuthenticated(true);
-                setCart(userId)
+                setCart(userId, token)
             } else {
                 setError(data.message)
             }
