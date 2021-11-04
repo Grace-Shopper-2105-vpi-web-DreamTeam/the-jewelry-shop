@@ -18,7 +18,6 @@ import {
   getUserOrders
 } from "../api"
 
-
 export default function App() {
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
