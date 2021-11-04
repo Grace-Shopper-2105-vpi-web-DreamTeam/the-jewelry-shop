@@ -103,9 +103,7 @@ const ImageMarked = styled('span')(({ theme }) => ({
     transition: theme.transitions.create('opacity'),
 }));
 
-
-
-const AdminProfile = ({userInfo}) => {
+const AdminProfile = ({ userInfo }) => {
     let history = useHistory();
     const [allUsers, setAllUsers] = useState([])
     const [allOrders, setAllOrders] = useState([])
@@ -130,18 +128,6 @@ const AdminProfile = ({userInfo}) => {
         getAllData();
     }, [])
 
-    // const handleClick = async (e) => {
-    //     const type = e.target.id
-    //     console.log("type", type)
-    //     if (type === 'orders') {
-    //         setShowSection({ ...showSection, orders: true, users: false, products: false })
-    //     } else if (type === 'users') {
-    //         setShowSection({ ...showSection, orders: false, users: true, products: false })
-    //     } else {
-    //         setShowSection({ ...showSection, orders: false, users: false, products: true })
-    //     }
-    // }
-
     const toggleAdminStatus = async (userId) => {
         const response = await updateUserAdmin(userId, JSON.parse(localStorage.getItem('userDetails')))
         if (response) {
@@ -153,17 +139,11 @@ const AdminProfile = ({userInfo}) => {
 
     return (
         <div>
-            {/* < button id='users' onClick={handleClick} > All Users</button >
-            < button id='orders' onClick={handleClick} > All Orders</button >
-            < button id='products' onClick={handleClick} > All Products</button >
-            {showSection.users && <AdminUsers
-                allUsers={allUsers}
-                toggleAdminStatus={toggleAdminStatus} />} */}
-             <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
-            <Typography variant="h4"> 
-                Welcome to the Admin DashBoard
-            </Typography>
-        </Box>
+            <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
+                <Typography variant="h4">
+                    Welcome to the Admin DashBoard
+                </Typography>
+            </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
                 {images.map((image) => (
                     <ImageButton
@@ -185,8 +165,6 @@ const AdminProfile = ({userInfo}) => {
                             width: image.width,
                         }}
                     >
-                      
-
                         <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
                         <ImageBackdrop className="MuiImageBackdrop-root" />
                         <Image>
@@ -209,26 +187,15 @@ const AdminProfile = ({userInfo}) => {
                 ))}
             </Box>
             {showSection.users && <AdminUsers
-            allUsers={allUsers}
-            toggleAdminStatus={toggleAdminStatus} />}
-              {showSection.orders && <AdminOrders
-            allOrders={allOrders}
+                allUsers={allUsers}
+                toggleAdminStatus={toggleAdminStatus} />}
+            {showSection.orders && <AdminOrders
+                allOrders={allOrders}
             />}
 
         </div>
 
-
-
-
-
-
-
-
-
-
     )
-
 }
-
 
 export default AdminProfile;
