@@ -67,9 +67,9 @@ export default function App() {
           setToken={setToken}
           userInfo={userInfo}
         />
-        <Testing
-          category={category}
-        />
+    {/* <Testing
+      category={category}
+    /> */}
 
         <Switch>
           <Route exact path="/register" component={Register}>
