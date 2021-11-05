@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { createCart, getCart } from '../api';
+import { createCart, getCart, createCartItems } from '../api';
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -16,11 +16,12 @@ import { IconButton } from "@mui/material";
 export default function ProductCard({product, setUserCart}) {
     const [counter, setCoutner] = useState(0);
     const [quantity, setQuantity] = useState(0);
-    //const [productId, setProductId] = useState(0);
-
+  
     const cartId = localStorage.getItem('cartId');
     const userDetails = JSON.parse(localStorage.getItem('userDetails'));
     const token = localStorage.getItem('token');
+
+    
 
     const { image, title, description, price, inventory, id} = product;
 
@@ -55,15 +56,19 @@ export default function ProductCard({product, setUserCart}) {
 
     const addToCart = async (e, productId, title, price, image, inventory, quantity) => {
       e.preventDefault();
-
-      console.count()
       
       if (token && !cartId || cartId === undefined) {
-        console.count()
-          const myUserId = userDetails.user.id
-          console.count()
-          setCart(myUserId, token)
+          const myUserId = userDetails.user.id;
+          setCart(myUserId, token);
+          const cart_id = Number(cartId);
+          await createCartItems({productId, quantity, cart_id});
+          reset();
       }
+      if (token && cartId) {
+        const cart_id = Number(cartId);
+        await createCartItems({productId, quantity, cart_id});
+        reset();
+      } else {
         let cartObj = JSON.parse(localStorage.getItem('cart')) || []
           if(!cartObj) {
             cartObj[productId] = {
@@ -86,13 +91,12 @@ export default function ProductCard({product, setUserCart}) {
               quantity: quantity
             };
             cartObj[productId] = newItems;
-          
             localStorage.setItem("cart", JSON.stringify(cartObj));
             reset();
-          }  
+          } 
+      }  
     };
-
-
+    
     return (
         <Card varient="outlined" sx={{minHeight: 360}} >
         <CardMedia

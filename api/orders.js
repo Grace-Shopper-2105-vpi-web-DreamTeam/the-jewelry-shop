@@ -143,7 +143,7 @@ ordersRouter.post('/:orderId/items', async (req, res, next) => {
                 }
             }
         }
-        console.count()
+        
     } catch (err) {
         next(err);
     }

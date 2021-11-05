@@ -113,6 +113,7 @@ export default function App() {
            <Route exact path="/cart">
             <Cart 
               setCartItems={setCartItems}
+              cartItems={cartItems}
             />
           </Route>
           <Route exact path="/checkout">
