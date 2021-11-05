@@ -10,7 +10,8 @@ import {
 } from "../api"
 import {
     AdminUsers,
-    AdminOrders
+    AdminOrders,
+    AdminProducts
 } from "."
 
 import { styled } from '@mui/material/styles';
@@ -191,6 +192,9 @@ const AdminProfile = ({ userInfo }) => {
                 toggleAdminStatus={toggleAdminStatus} />}
             {showSection.orders && <AdminOrders
                 allOrders={allOrders}
+            />}
+            {showSection.products && <AdminProducts
+                 allProducts={allProducts}
             />}
 
         </div>
