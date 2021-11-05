@@ -9,7 +9,7 @@ const UserProfile = ({ userOrders, userInfo }) => {
         <div>
             {userInfo.user && (
                 <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
-                    <Typography  variant="h4">
+                    <Typography variant="h4">
                         Welcome to Your Account Profile, {userInfo.user.username}
                     </Typography>
                 </Box>
@@ -62,24 +62,26 @@ const UserProfile = ({ userOrders, userInfo }) => {
                     <Divider style={{ width: "90vw" }} />
                     <Divider style={{ width: "90vw" }} />
                     <Grid container spacing={2} style={{ paddingTop: "10px", paddingBottom: "10px" }} >
-                        <Grid item sm={12} lg={20}>
+                       <Grid item xs={12} sm container justify="center" alignItems="space-between">
                             {userOrders.length && userOrders.map(order => {
                                 return (
                                     <div>
-                                        <Grid item sm={12} lg={2}>Order # {order.id}</Grid>
+                                        <Grid style={{ display: "flex", justifyContent: "flex-start" }}
+                                            item sm={12} lg={4}>Order #: {order.id}</Grid>
+                                        <Grid style={{ display: "flex", justifyContent: "flex-end" }} item sm={12} lg={12}>Order Total =  ${order.total}</Grid>
                                         {order.order_items.map(item => {
                                             return (
                                                 <div>
-                                                    <Grid item sm={12} lg={12}><b>Item Ordered: </b>{item.title}</Grid>
-                                                    <Grid item sm={12} lg={12}>Item Descritpion: {item.description}</Grid>
-                                                    <Grid item sm={12} lg={12}>Item Quantity: {item.quantity}</Grid>
-                                                    <Grid item sm={12} lg={12}>Item Price: {item.price}</Grid>
+                                                    <Grid style={{ display: "flex", justifyContent: "center" , textAlign: "left"}} item sm={12} lg={8}><b>Item Ordered: </b>{item.title}</Grid>
+                                                    <Grid style={{ display: "flex", justifyContent: "center", textAlign: "left" }}item sm={12} lg={8}>Item Quantity: {item.quantity}</Grid>
+                                                    <Grid style={{ display: "flex", justifyContent: "center", textAlign: "left" }}item sm={12} lg={8}>Item Price: {item.price}</Grid>
 
                                                 </div>
                                             )
                                         }
                                         )}
-                                        <h3>Total =  ${order.total}</h3>
+                                        {/* <Grid style={{ display: "flex", justifyContent: "flex-end" }} item sm={12} lg={12}>Total =  ${order.total}</Grid> */}
+
                                         <br></br>
                                         <br></br>
                                         <br></br>
