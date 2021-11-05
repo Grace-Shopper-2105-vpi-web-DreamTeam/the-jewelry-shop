@@ -17,7 +17,7 @@ import {
 
 
 
-export default function AdminProductCard({ product, setAllProducts }) {
+export default function AdminProductCard({ product, setAllProducts, setProductEdit }) {
     const { image, title, description, price, inventory, id, category } = product;
 
     const money = price * 1;
@@ -29,6 +29,10 @@ export default function AdminProductCard({ product, setAllProducts }) {
             console.log("AllProducts", products)
             setAllProducts(products)
         }
+    }
+    const editClickHandlerProduct = (e, product) => {
+        setProductEdit(product)
+        history.push('/editproduct')
     }
     return (
         <Card varient="outlined" sx={{ minHeight: 360 }} >
@@ -60,7 +64,7 @@ export default function AdminProductCard({ product, setAllProducts }) {
             </CardContent>
             <CardActions>
                 <Stack direction="row" spacing={2}>
-                    <Button variant="contained" startIcon={<EditIcon />}>
+                    <Button onClick={(e) => {editClickHandlerProduct(e, product)}}variant="contained" startIcon={<EditIcon />}>
                         Edit
                     </Button>
                     <Button onClick={() => {adminDeleteProduct(product.id)}} variant="contained" startIcon={<DeleteIcon />}>

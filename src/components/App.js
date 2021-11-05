@@ -11,7 +11,8 @@ import {
   Navbar,
   Logout,
   UserProfile,
-  AdminProfile
+  AdminProfile,
+  NewProduct
 } from "."
 
 import {
@@ -25,6 +26,9 @@ export default function App() {
   const [admin, setAdmin] = useState(false)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
+  const [productEdit, setProductEdit] = useState([]);
+  const [allproducts, setAllProducts] = useState([]);
+ 
 
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
@@ -95,6 +99,11 @@ export default function App() {
             userInfo={userInfo}
             />
           </Route>
+          <Route exact path="/newproduct">
+            <NewProduct
+             setAllProducts={setAllProducts}
+              />
+            </Route>
           <Route exact path="/jewelry" component={Products}>
             <Products
               category={category}
