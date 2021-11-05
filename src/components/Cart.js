@@ -27,7 +27,7 @@ export default function Cart({setCartItems, cartItems}) {
     
     useEffect(() => {
         const getResult = async () => {
-            if (userDetails) {
+            if (userDetails && !cart) {
                 const userId = userDetails.user.id
                 const results = await getCart(userId, myToken)
                 if (results) {
@@ -95,9 +95,6 @@ export default function Cart({setCartItems, cartItems}) {
 
     const prepCheckout = async (e) => {
         e.preventDefault();
-        if (items) {
-
-        }
         const cartId = JSON.parse(localStorage.getItem('cartId'));
         LocalStorageToDisplay.map((cartItem) => {
             cartItem.cart_id = cartId,

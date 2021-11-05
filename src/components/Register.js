@@ -31,7 +31,7 @@ const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
   const [error, setError] = useState('');
   const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
-  const setCart = async (userId, token) => {
+  const createNewCart = async (userId, token) => {
     try {
         const createUserCart = await createCart(userId, token);
         if(createUserCart) {
@@ -63,7 +63,7 @@ const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
         localStorage.setItem('userDetails', JSON.stringify(data))
         setFormSubmittedSuccessfully(true);
         setAuthenticated(true);
-        setCart(userId, token)
+        createNewCart(userId, token)
       } else {
         setError(data.message)
       }

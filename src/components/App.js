@@ -16,6 +16,7 @@ import {
   OrderPlaced
 } from "."
 
+import { getCart, createCart } from "../api"
 
 // import {
 //   getUserOrders
@@ -32,7 +33,7 @@ export default function App() {
   const [cartItems, setCartItems] = useState([])
   const cart = JSON.parse(localStorage.getItem('cart'));
 
-
+  console.log("userCart", userCart)
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
     if (localStorageToken) {
@@ -52,7 +53,26 @@ export default function App() {
     } else {
       setUserOrders([])
     }
-  }, [token])
+  }, [token]);
+
+  const setCart = async (userId, token) => {
+    try {
+        const getExistingCart = await getCart(userId, token);
+
+        if(getExistingCart) {
+            const cartId = getExistingCart.cart.id;
+            console.log("existing cart", cartId)
+            localStorage.setItem("cartId", cartId);
+        } else { 
+            const createUserCart = await createCart(userId, token);
+            const cartId = createUserCart.cart.id;
+            console.log("new cart", cartId)
+            localStorage.setItem("cartId", cartId);
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}  
 
   return (
     <div className="App">
@@ -62,6 +82,7 @@ export default function App() {
           setAuthenticated={setAuthenticated}
           setToken={setToken}
           admin={admin}
+          setCart={setCart}
         />
         <Testing
           category={category}
@@ -82,6 +103,7 @@ export default function App() {
               setToken={setToken}
               setUserInfo={setUserInfo}
               setUserCart={setUserCart}
+              setCart={setCart}
               cart={cart}
             />
           </Route>
