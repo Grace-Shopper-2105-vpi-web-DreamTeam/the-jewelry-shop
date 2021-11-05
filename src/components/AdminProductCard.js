@@ -15,12 +15,18 @@ import {
    getAllProducts
 } from "../api"
 
+import {
+    useHistory,
+} from "react-router-dom"
+
 
 
 export default function AdminProductCard({ product, setAllProducts, setProductEdit }) {
     const { image, title, description, price, inventory, id, category } = product;
 
     const money = price * 1;
+
+    const history = useHistory();
 
     const adminDeleteProduct = async (productId) => {
         const response = await deleteProduct(productId, JSON.parse(localStorage.getItem('userDetails')))
@@ -30,10 +36,10 @@ export default function AdminProductCard({ product, setAllProducts, setProductEd
             setAllProducts(products)
         }
     }
-    const editClickHandlerProduct = (e, product) => {
-        setProductEdit(product)
-        history.push('/editproduct')
-    }
+    // const editClickHandlerProduct = (e, product) => {
+    //     setProductEdit(product)
+    //     history.push('/editproduct')
+    // }
     return (
         <Card varient="outlined" sx={{ minHeight: 360 }} >
             <CardMedia
@@ -64,7 +70,9 @@ export default function AdminProductCard({ product, setAllProducts, setProductEd
             </CardContent>
             <CardActions>
                 <Stack direction="row" spacing={2}>
-                    <Button onClick={(e) => {editClickHandlerProduct(e, product)}}variant="contained" startIcon={<EditIcon />}>
+
+                
+                    <Button onClick={() => history.push(`/editproduct/${product.id}`)}variant="contained" startIcon={<EditIcon />}>
                         Edit
                     </Button>
                     <Button onClick={() => {adminDeleteProduct(product.id)}} variant="contained" startIcon={<DeleteIcon />}>

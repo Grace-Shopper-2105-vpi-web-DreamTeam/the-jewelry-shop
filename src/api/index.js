@@ -124,6 +124,29 @@ export const createNewProduct = async (title, description, category, price, inve
   .then((response) => response.data);
 };
 
+export const updateProduct = async (productId, title, description, category, price, inventory, image, isActive, userDetails) => {
+  return axios({
+    method: "PATCH",
+    url: `${url}/api/products/${productId}`,
+    data: {
+      title: title,
+      description: description,
+      category: category,
+      price: price,
+      inventory: inventory,
+      image: image,
+      isActive: isActive
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`,
+    },
+  })
+  .catch((error) => {
+    throw error.response.data.error
+  })
+  .then((response) => response.data);
+};
 
 // export async function login(username, password) {
 //   try {
