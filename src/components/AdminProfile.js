@@ -195,6 +195,7 @@ const AdminProfile = ({ userInfo }) => {
             />}
             {showSection.products && <AdminProducts
                  allProducts={allProducts}
+                 setAllProducts={setAllProducts}
             />}
 
         </div>

@@ -5,7 +5,7 @@ import { default as AdminProductCard } from "./AdminProductCard";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
-const AdminProducts = ({allProducts}) => {
+const AdminProducts = ({allProducts, setAllProducts}) => {
 
     return (
         <Container>
@@ -16,7 +16,7 @@ const AdminProducts = ({allProducts}) => {
                     fontFamily: "sans-serif"
                 }}
                 >
-                    Shop All Jewelry
+                   Loops & Strings Current Inventory
                 </h1>
             <div
                 style={{
@@ -39,6 +39,7 @@ const AdminProducts = ({allProducts}) => {
                         >
                             <AdminProductCard
                                 product={product}
+                                setAllProducts={setAllProducts}
                             />
                         </Grid>
                     ))}

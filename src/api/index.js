@@ -88,6 +88,18 @@ export const updateUserAdmin = async (userId, userDetails) => {
   
 }
 
+export const deleteProduct = async (productId, userDetails) => {
+  return axios({
+    method: "DELETE",
+    url: `${url}/api/products/${productId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+  }
+  }).then((response) => response.data)
+  
+}
+
 // export async function login(username, password) {
 //   try {
 //     const body = {username, password}
