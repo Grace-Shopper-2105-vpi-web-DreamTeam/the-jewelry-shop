@@ -26,7 +26,6 @@ export default function ProductsByCategory({category, setCategory, setCart}) {
     if(productsCategory.length > 0) {
         return (
             <Container>
-                <h2>Products By Category Page in the works </h2> 
                 <CategoryBanner 
                     category={category}
                     setCategory={setCategory}
