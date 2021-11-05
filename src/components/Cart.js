@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import CartItem from "./CartItems";
 import UserCartItem from "./UserCartItems";
 
-import { createCartItems, getCart } from '../api';
+import { createCartItems, getCart, deleteCartItem } from '../api';
 
 import Box from '@mui/material/Box';
 import { Typography } from "@mui/material";
@@ -12,6 +12,8 @@ import Grid from "@mui/material/Grid";
 import Button from '@mui/material/Button';
 
 export default function Cart({setCartItems, cartItems}) {
+
+    const [itemDeleted, setItemDeleted] = useState(0);
     
     const userDetails = JSON.parse(localStorage.getItem('userDetails'));
     let cart = JSON.parse(localStorage.getItem('cart'));
@@ -36,8 +38,15 @@ export default function Cart({setCartItems, cartItems}) {
              
         }
         getResult();
-    }, []);
+    }, [itemDeleted]);
 
+    async function deleteItem(id) {
+        const result = await deleteCartItem(id);
+        if(result) {
+            console.log(result)
+            setItemDeleted(itemDeleted +1);
+        }
+    }
 
        console.log("cartItems", cartItems)
 
@@ -106,9 +115,7 @@ export default function Cart({setCartItems, cartItems}) {
 
      if (myToken && cartItems.length > 0) {
         return (
-           
             <> 
-            <div>Cart Items to go here</div>
                 <Box sx={{ p: 2, border: '1px dashed grey', textAlign: "center" }}>
                     <Typography variant="h2"> 
                         Shopping Cart
@@ -119,7 +126,7 @@ export default function Cart({setCartItems, cartItems}) {
                         < >
                             <Grid container spacing={1}>
                                 {cartItems.map((item) => (
-                                    <UserCartItem key={item.productId} item={item}/>
+                                    <UserCartItem key={item.productId} item={item} deleteItem={deleteItem} itemDeleted={itemDeleted} setItemDeleted={setItemDeleted}/>
                                 ))}
                             </Grid>
                             <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px"}}> 

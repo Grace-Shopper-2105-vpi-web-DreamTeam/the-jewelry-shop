@@ -1,6 +1,6 @@
 import React, { useState} from "react";
 
-import { updateCartItems } from "../api";
+import { updateCartItems, deleteCartItem } from "../api";
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -10,7 +10,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function UserCartItem({item}) {
+export default function UserCartItem({item, deleteItem, itemDeleted, setItemDeleted}) {
     const { cart_item_id, productId, title, image, price, inventory, total } = item;
 
     function getQuantity() {
@@ -28,16 +28,24 @@ export default function UserCartItem({item}) {
 
     // update cart item 
     const updateCartItem = async (quantity, cartItemId) => {
-        const updatedItem = await updateCartItems(quantity, cartItemId);
+        await updateCartItems(quantity, cartItemId);
         window.location.href = "/cart";
     };
 
-    const deleteCartItem = () => {
-        let index = prepCartObj();
-        cartObj.splice(index, 1)
-        localStorage.setItem("cart", JSON.stringify(cartObj));
-        window.location.href = "/cart";
-    };
+    // const deleteCartItem = async () => {
+    //     try {
+    //         const deletedItem = await deleteCartItem(cart_item_id);
+    //     if(deletedItem)
+    //     console.log(deletedItem)
+    //     } catch (error) {
+    //         console.error(error)
+    //     } 
+
+    //     // let index = prepCartObj();
+    //     // cartObj.splice(index, 1)
+    //     // localStorage.setItem("cart", JSON.stringify(cartObj));
+    //     // window.location.href = "/cart";
+    // };
 
     return (
         <Box style={{marginLeft: "50px", marginTop: "25px", textAlign: 'center'}}>
@@ -105,7 +113,7 @@ export default function UserCartItem({item}) {
                                 </Grid> 
                             </Grid>
                             <Grid item xs> 
-                                <IconButton onClick={() => {deleteCartItem()}} >
+                                <IconButton onClick={() => {deleteItem(cart_item_id)}} >
                                     <DeleteIcon fontSize="small"/>
                                 </ IconButton>
                             </Grid>

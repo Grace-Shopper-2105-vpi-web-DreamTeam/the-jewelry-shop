@@ -107,7 +107,12 @@ export const updateCartItems = async (quantity, cartItemId) => {
   }).then((response) => response.data)
 }
 
-
+export const deleteCartItem = async (cartItemId) => {
+  return axios({
+    method: "DELETE", 
+    url: `${url}/api/cartitem/${cartItemId}`
+  }).then((response) => response.data)
+}
 
 // export async function login(username, password) {
 //   try {
