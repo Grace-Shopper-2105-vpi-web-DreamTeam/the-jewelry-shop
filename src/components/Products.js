@@ -7,7 +7,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { getAllProducts, createCart, getCart } from '../api';
 
-export default function Products({category, setCategory, setUserCart}) {
+export default function Products({category, setCategory, setCart}) {
     const [products, setProducts] = useState([]);
 
     console.log("the products are", products)
@@ -56,7 +56,7 @@ export default function Products({category, setCategory, setUserCart}) {
                         >
                             <ProductCard
                                 product={product}
-                                setUserCart={setUserCart}
+                                setCart={setCart}
                             />
                         </Grid>
                     ))}

@@ -23,7 +23,7 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
+const Register = ({ setAuthenticated, setToken, cart }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -35,7 +35,6 @@ const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
     try {
         const createUserCart = await createCart(userId, token);
         if(createUserCart) {
-            setUserCart(createUserCart);
             const cartId = createUserCart.id;
             localStorage.setItem("cartId", cartId);
             console.log("cart created", createUserCart)

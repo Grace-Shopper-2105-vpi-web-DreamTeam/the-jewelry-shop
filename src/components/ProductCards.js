@@ -13,7 +13,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 
 
-export default function ProductCard({product, setUserCart}) {
+export default function ProductCard({product, setCart}) {
     const [counter, setCoutner] = useState(0);
     const [quantity, setQuantity] = useState(0);
   
@@ -31,28 +31,6 @@ export default function ProductCard({product, setUserCart}) {
       setCoutner(0);
       setQuantity(0); 
     }
-
-    const setCart = async (userId, token) => {
-      try {
-          const getExistingCart = await getCart(userId, token);
-
-          const createUserCart = await createCart(userId, token);
-
-          if(getExistingCart && !createUserCart.id) {
-              const cartId = getExistingCart.cart.id;
-              console.log(cartId)
-              localStorage.setItem("cartId", cartId);
-              console.log("cart exists", getExistingCart)
-          } else {
-              const cartId = createUserCart.cart.id;
-              console.log(cardId)
-              localStorage.setItem("cartId", cartId);
-              console.log("cart created", createUserCart)
-          }
-      } catch (error) {
-          console.error(error)
-      }
-  }
 
     const addToCart = async (e, productId, title, price, image, inventory, quantity) => {
       e.preventDefault();

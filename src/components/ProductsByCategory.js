@@ -9,7 +9,7 @@ import { getProductsByCategory } from '../api';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
-export default function ProductsByCategory({category, setCategory}) {
+export default function ProductsByCategory({category, setCategory, setCart}) {
 
     const [productsCategory, setProductsCategory ] = useState([]);
 
@@ -60,6 +60,7 @@ export default function ProductsByCategory({category, setCategory}) {
                             >
                                 <ProductCard
                                     product={product}
+                                    setCart={setCart}
                                 />
                             </Grid>
                         ))}

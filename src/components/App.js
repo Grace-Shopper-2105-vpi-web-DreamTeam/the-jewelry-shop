@@ -29,11 +29,9 @@ export default function App() {
   const [admin, setAdmin] = useState(false)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
-  const [userCart, setUserCart] = useState([]);
   const [cartItems, setCartItems] = useState([])
   const cart = JSON.parse(localStorage.getItem('cart'));
 
-  console.log("userCart", userCart)
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
     if (localStorageToken) {
@@ -93,7 +91,6 @@ export default function App() {
             <Register
               setAuthenticated={setAuthenticated}
               setToken={setToken}
-              setUserCart={setUserCart} 
               cart={cart}
               />
           </Route>
@@ -102,7 +99,6 @@ export default function App() {
               setAuthenticated={setAuthenticated}
               setToken={setToken}
               setUserInfo={setUserInfo}
-              setUserCart={setUserCart}
               setCart={setCart}
               cart={cart}
             />
@@ -120,13 +116,14 @@ export default function App() {
             <Products
               category={category}
               setCategory={setCategory}
-              setUserCart={setUserCart}
+              setCart={setCart}
             />
           </Route>
           <Route path="/jewelry/:category" component={ProductByCategory}>
             <ProductByCategory
               category={category}
               setCategory={setCategory}
+              setCart={setCart}
             />
           </Route>
           {/* <Route> */}

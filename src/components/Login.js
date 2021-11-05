@@ -24,7 +24,7 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart, setCart }) => {
+const Login = ({ setAuthenticated, setToken, setUserInfo, cart, setCart }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
