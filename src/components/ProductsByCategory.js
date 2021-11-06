@@ -23,6 +23,12 @@ export default function ProductsByCategory({category, setCategory, setCart}) {
         getProductbyCategoryResults();
     }, [category]);
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    const pageCategory = capitalizeFirstLetter(category)
+
     if(productsCategory.length > 0) {
         return (
             <Container>
@@ -32,12 +38,14 @@ export default function ProductsByCategory({category, setCategory, setCart}) {
                 /> 
                 <h1
                     style={{
+                        marginTop: "10px",
                         marginBottom: "10px",
-                        fontFamily: "sans-serif"
+                        fontFamily: "sans-serif",
+                        textAlign: "center"
                     }}
-                    >
-                    {`Shop by ${category}`}
-                    </h1>
+                >
+                    {`Shop by ${pageCategory}`}
+                </h1>
                 <div
                     style={{
                     display: "flex",

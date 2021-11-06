@@ -57,7 +57,7 @@ export default function App() {
     try {
         const getExistingCart = await getCart(userId, token);
 
-        if(getExistingCart.id) {
+        if(!getExistingCart.message) {
             const cartId = getExistingCart.cart.id;
             localStorage.setItem("cartId", cartId);
         } else { 
@@ -80,10 +80,9 @@ export default function App() {
           admin={admin}
           setCart={setCart}
         />
-        <Testing
+        {/* <Testing
           category={category}
-        />
-
+        /> */}
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register

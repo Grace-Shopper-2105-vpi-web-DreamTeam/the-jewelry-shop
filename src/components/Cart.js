@@ -134,12 +134,12 @@ export default function Cart({setCartItems, cartItems}) {
                                     <UserCartItem key={item.productId} item={item} deleteItem={deleteItem} itemDeleted={itemDeleted} setItemDeleted={setItemDeleted}/>
                                 ))}
                             </Grid>
-                            <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px"}}> 
+                            <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px", fontFamily: "sans-serif"}}> 
                                 Grand Total: {`$${grandTotalWithUser.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`} 
                             </div>
                             <br />
                             <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
-                               <Link to="/checkout"> <Button disabled={cartItems.length <=0 } > Continue to Checkout </Button> </Link>
+                               <Link style={{textDecoration: "none"}} to="/checkout"> <Button style={{color: "Navy"}} disabled={cartItems.length <=0 } > Continue to Checkout </Button> </Link>
                             </div>
                         </ >
                     :
@@ -165,21 +165,29 @@ export default function Cart({setCartItems, cartItems}) {
                                     <CartItem key={item.productId} item={item}/>
                                 ))}
                             </Grid>
-                            <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px"}}> 
+                            <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px", fontFamily: "sans-serif"}}> 
                                 Grand Total: {`$${grandTotal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`} 
                             </div>
                             <br />
                             <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
 
                                 {myToken ? 
-                                    <Button disabled={LocalStorageToDisplay.length <=0 } onClick={(e) => {prepCheckout(e)}} > Continue to Checkout </Button>
+                                    <Button style={{color: "Navy"}} disabled={LocalStorageToDisplay.length <=0 } onClick={(e) => {prepCheckout(e)}} > Continue to Checkout </Button>
                                     :
-                                    <Link to="/login"> Please Login or Register to Checkout </Link>
+                                    <Link style={{textDecoration: "none", color: "Navy"}} to="/login"> Please Login or Register to Checkout </Link>
                                 }
                             </div>
                         </ >
                     :
-                    <p> No Cart Items Yet, checkout our jewelry selection and add to cart. </p>
+                    <div
+                        style={{
+                            textAlign: "center",
+                            marginTop: "25px",
+                        }}
+                    >
+                        <h3> There are no items in your cart yet. </h3> 
+                        <h3> Please checkout our <a style={{textDecoration: "none", color: "gray"}} href="/jewelry"> jewelry selection </a> to start shopping. </h3>
+                    </div>
                     }
                 </>
             </>

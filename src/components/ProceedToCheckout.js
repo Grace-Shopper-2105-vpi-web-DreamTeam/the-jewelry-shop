@@ -21,11 +21,15 @@ export default function Checkout({cartItems, setCartItems}) {
         const getResult = async () => {
              const results = await getCart(userId, myToken)
              setCheckoutCart(results)
+             console.log("checkoutCart", checkoutCart)
              const itemsTocheckout = results.cart.cartItems
+             console.log("items to checkout", itemsTocheckout)
              setCartItems(itemsTocheckout)
         }
         getResult();
     }, []);
+
+    console.log(cartItems)
 
     function getTotal () {
         const total = cartItems.reduce(function(sum, num) {
@@ -65,16 +69,16 @@ export default function Checkout({cartItems, setCartItems}) {
                         <CheckoutItemCard key={item.productId} item={item}/>
                     ))}
                 </Grid>
-                <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px"}}> 
+                <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px", fontFamily: "sans-serif"}}> 
                     Grand Total: {`$${grandTotal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`} 
                 </div>
                 <br />
                 <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
 
                     {myToken ? 
-                        <>
-                            <Button onClick={(e) => {checkout(e)}} > Place Order </Button>
-                            <Link to="/cart"> <Button > Go Back </Button></Link>
+                        <>  
+                            <Link style={{textDecoration: "none"}} to="/cart"> <Button color="error"> Go Back </Button></Link>
+                            <Button color='success' onClick={(e) => {checkout(e)}} > Place Order </Button>
                         </>
                         :
                         <Link to="/login"> Please Login or Register to Checkout </Link>

@@ -59,9 +59,9 @@ export default function CartItem({item}) {
     };
 
     return (
-        <Box style={{marginLeft: "50px", marginTop: "25px", textAlign: 'center'}}>
+        <Box style={{marginLeft: "50px", marginTop: "25px", textAlign: 'center', fontFamily: "sans-serif"}}>
             <Divider style={{width: "90vw"}}/>     
-                <Grid container spacing={2} style={{ paddingTop: "10px"}} >
+                <Grid container spacing={2} style={{ paddingTop: "10px", paddingBottom: "10px"}} >
                     <Grid item>
                         <img style={{height: "200px"}} src={image} alt={title} />
                     </Grid> 

@@ -27,8 +27,10 @@ export default function Products({category, setCategory, setCart}) {
             /> 
             <h1
                 style={{
+                    marginTop: "10px",
                     marginBottom: "10px",
-                    fontFamily: "sans-serif"
+                    fontFamily: "sans-serif",
+                    textAlign: "center"
                 }}
                 >
                     Shop All Jewelry
