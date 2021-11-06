@@ -5,12 +5,10 @@ import { default as CategoryBanner } from "./CategoryBanner"
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { getAllProducts, createCart, getCart } from '../api';
+import { getAllProducts } from '../api';
 
-export default function Products({category, setCategory, setUserCart}) {
+export default function Products({category, setCategory, setCart}) {
     const [products, setProducts] = useState([]);
-
-    console.log("the products are", products)
 
     useEffect(() => {
         const getResult = async () => {
@@ -29,8 +27,10 @@ export default function Products({category, setCategory, setUserCart}) {
             /> 
             <h1
                 style={{
+                    marginTop: "10px",
                     marginBottom: "10px",
-                    fontFamily: "sans-serif"
+                    fontFamily: "sans-serif",
+                    textAlign: "center"
                 }}
                 >
                     Shop All Jewelry
@@ -56,7 +56,7 @@ export default function Products({category, setCategory, setUserCart}) {
                         >
                             <ProductCard
                                 product={product}
-                                setUserCart={setUserCart}
+                                setCart={setCart}
                             />
                         </Grid>
                     ))}

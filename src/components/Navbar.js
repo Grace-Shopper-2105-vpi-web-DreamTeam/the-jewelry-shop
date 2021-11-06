@@ -24,13 +24,15 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const Navbar = ({ authenticated, setAuthenticated, setToken, admin }) => {
+const Navbar = ({ authenticated, setAuthenticated, setToken, admin, setCart }) => {
     let history = useHistory();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const classes = useStyles();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
+
+    const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -44,7 +46,21 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin }) => {
         history.push("/account")
     };
     const handleCartClick = () => {
-        history.push("/cart")
+        try {
+            console.count()
+            if (userDetails) {
+                const myToken = userDetails.token;
+                const userId = userDetails.user.id;
+                setCart(userId, myToken)
+            }
+            console.count()
+        } catch (error) {
+            console.error(error)
+        } finally {
+            history.push("/cart")
+        }
+        
+        
     };
     const handleLogoClick = () => {
         history.push("/")
@@ -80,6 +96,7 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin }) => {
                         onClose={() => setAnchorEl(null)}
                     >
                         <MenuItem onClick={() => handleMenuClick('/')}>Home</MenuItem>
+                        <MenuItem onClick={() => handleMenuClick('/jewelry')}>Shop</MenuItem>
                         {!authenticated ? (
                             <MenuItem onClick={() => handleMenuClick('/login')}>Login/Register</MenuItem>) : null}
                         {admin ? (
@@ -110,8 +127,10 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin }) => {
                                 color="inherit"
                                 aria-label="menu"
                                 sx={{ mr: 2 }}
+                                onClick={handleAccountClick}
                             >
-                                <AccountCircle onClick={handleAccountClick} />
+                                <AccountCircle  />
+                                {/* onClick={handleAccountClick} */}
                             </IconButton>
                         </div>) : null}
                     <div className={classes.menuButton}>
@@ -121,8 +140,10 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin }) => {
                             color="inherit"
                             aria-label="menu"
                             sx={{ mr: 2 }}
+                            onClick={handleCartClick}
                         >
-                            <ShoppingCartIcon onClick={handleCartClick} />
+                            <ShoppingCartIcon /> 
+                            {/* onClick={handleCartClick}  */}
                         </IconButton>
                     </div>
                 </Toolbar>

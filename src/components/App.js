@@ -16,6 +16,7 @@ import {
   OrderPlaced
 } from "."
 
+import { getCart, createCart } from "../api"
 
 // import {
 //   getUserOrders
@@ -28,10 +29,8 @@ export default function App() {
   const [admin, setAdmin] = useState(false)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
-  const [userCart, setUserCart] = useState([]);
   const [cartItems, setCartItems] = useState([])
   const cart = JSON.parse(localStorage.getItem('cart'));
-
 
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
@@ -52,7 +51,24 @@ export default function App() {
     } else {
       setUserOrders([])
     }
-  }, [token])
+  }, [token]);
+
+  const setCart = async (userId, token) => {
+    try {
+        const getExistingCart = await getCart(userId, token);
+
+        if(!getExistingCart.message) {
+            const cartId = getExistingCart.cart.id;
+            localStorage.setItem("cartId", cartId);
+        } else { 
+            const createUserCart = await createCart(userId, token);
+            const cartId = createUserCart.cart.id;
+            localStorage.setItem("cartId", cartId);
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}  
 
   return (
     <div className="App">
@@ -62,17 +78,16 @@ export default function App() {
           setAuthenticated={setAuthenticated}
           setToken={setToken}
           admin={admin}
+          setCart={setCart}
         />
-        <Testing
+        {/* <Testing
           category={category}
-        />
-
+        /> */}
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register
               setAuthenticated={setAuthenticated}
               setToken={setToken}
-              setUserCart={setUserCart} 
               cart={cart}
               />
           </Route>
@@ -81,7 +96,7 @@ export default function App() {
               setAuthenticated={setAuthenticated}
               setToken={setToken}
               setUserInfo={setUserInfo}
-              setUserCart={setUserCart}
+              setCart={setCart}
               cart={cart}
             />
           </Route>
@@ -98,13 +113,14 @@ export default function App() {
             <Products
               category={category}
               setCategory={setCategory}
-              setUserCart={setUserCart}
+              setCart={setCart}
             />
           </Route>
           <Route path="/jewelry/:category" component={ProductByCategory}>
             <ProductByCategory
               category={category}
               setCategory={setCategory}
+              setCart={setCart}
             />
           </Route>
           {/* <Route> */}
@@ -113,6 +129,7 @@ export default function App() {
            <Route exact path="/cart">
             <Cart 
               setCartItems={setCartItems}
+              cartItems={cartItems}
             />
           </Route>
           <Route exact path="/checkout">

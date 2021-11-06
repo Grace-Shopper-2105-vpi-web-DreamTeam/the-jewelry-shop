@@ -1,4 +1,7 @@
 import React, { useState} from "react";
+
+import { updateCartItems } from "../api";
+
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import { Grid } from "@mui/material";
@@ -7,54 +10,25 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function CartItem({item}) {
+export default function UserCartItem({item, deleteItem}) {
+    const { cart_item_id, title, image, price, inventory, total } = item;
 
-    const { productId, quantity, title, image, price, inventory } = item;
+    function getQuantity() {
+        const rawNum = total / price;
+        return Math.floor(rawNum);
+    }
+
+    const quantity = getQuantity();
 
     const [cartQuantity, setCartQuantity] = useState(quantity);
     const [cartCounter, setCartCounter] = useState(quantity);
 
-    let cartObj = JSON.parse(localStorage.getItem('cart'))
+    let money = price * 1
 
-    function prepCartObj() {
-        let temp = []
+    let totalPrice = total * 1
 
-        for (let i of cartObj ) {
-            i && temp.push(i);
-        }
-
-        cartObj = temp;
-
-        const index = cartObj.map((item) => {
-            return item.productId
-        }).indexOf(productId) 
-
-        return index;
-    }
-
-    const updateCartItem = (productId, title, price, image, inventory, quantity) => {
-
-        let index = prepCartObj();
-
-          let updateItem = {
-            productId: productId,
-            title: title,
-            price: price,
-            image: image,
-            inventory: inventory,
-            quantity: quantity
-          };
-        
-        cartObj.splice(index, 1, updateItem)
-
-        localStorage.setItem("cart", JSON.stringify(cartObj));
-        window.location.href = "/cart";
-    };
-
-    const deleteCartItem = () => {
-        let index = prepCartObj();
-        cartObj.splice(index, 1)
-        localStorage.setItem("cart", JSON.stringify(cartObj));
+    const updateCartItem = async (quantity, cartItemId) => {
+        await updateCartItems(quantity, cartItemId);
         window.location.href = "/cart";
     };
 
@@ -76,7 +50,7 @@ export default function CartItem({item}) {
                                 <br />
                                 <br />
                                 <br />
-                                <p>${(price * 1)}</p>
+                                <p>{`$${money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -95,7 +69,7 @@ export default function CartItem({item}) {
                                             () => {
                                                 setCartCounter(cartCounter+1);
                                                 setCartQuantity(cartCounter+1);
-                                                updateCartItem(productId, title, price, image, inventory, (cartQuantity+1));
+                                                updateCartItem((cartQuantity+1), cart_item_id);
                                             }}
                                     >
                                         <ArrowDropUpIcon />
@@ -116,7 +90,7 @@ export default function CartItem({item}) {
                                             () => {
                                                 setCartCounter(cartCounter-1);
                                                 setCartQuantity(cartCounter-1);
-                                                updateCartItem(productId, title, price, image, inventory, (cartQuantity-1));
+                                                updateCartItem((cartQuantity-1), cart_item_id);
                                             }}
                                     >
                                         <ArrowDropDownIcon />
@@ -124,7 +98,7 @@ export default function CartItem({item}) {
                                 </Grid> 
                             </Grid>
                             <Grid item xs> 
-                                <IconButton onClick={() => {deleteCartItem()}} >
+                                <IconButton onClick={() => {deleteItem(cart_item_id)}} >
                                     <DeleteIcon fontSize="small"/>
                                 </ IconButton>
                             </Grid>
@@ -138,7 +112,7 @@ export default function CartItem({item}) {
                                 <br />
                                 <br />
                                 <br />
-                            <p>${(cartQuantity * price).toFixed(2)}</p>
+                            <p>{`$${totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>

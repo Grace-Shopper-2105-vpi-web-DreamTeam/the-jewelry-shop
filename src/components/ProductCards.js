@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { createCart, getCart } from '../api';
+import { createCartItems } from '../api';
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -11,16 +11,33 @@ import Typography from '@mui/material/Typography';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-export default function ProductCard({product, setUserCart}) {
+export default function ProductCard({product, setCart}) {
     const [counter, setCoutner] = useState(0);
     const [quantity, setQuantity] = useState(0);
-    //const [productId, setProductId] = useState(0);
-
+    const [open, setOpen] = useState(false);
+  
     const cartId = localStorage.getItem('cartId');
     const userDetails = JSON.parse(localStorage.getItem('userDetails'));
     const token = localStorage.getItem('token');
+
+    const handleClick = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpen(false);
+    };
 
     const { image, title, description, price, inventory, id} = product;
 
@@ -31,39 +48,28 @@ export default function ProductCard({product, setUserCart}) {
       setQuantity(0); 
     }
 
-    const setCart = async (userId, token) => {
-      try {
-          const getExistingCart = await getCart(userId, token);
-
-          const createUserCart = await createCart(userId, token);
-
-          if(getExistingCart && !createUserCart.id) {
-              const cartId = getExistingCart.cart.id;
-              console.log(cartId)
-              localStorage.setItem("cartId", cartId);
-              console.log("cart exists", getExistingCart)
-          } else {
-              const cartId = createUserCart.cart.id;
-              console.log(cardId)
-              localStorage.setItem("cartId", cartId);
-              console.log("cart created", createUserCart)
-          }
-      } catch (error) {
-          console.error(error)
-      }
-  }
-
     const addToCart = async (e, productId, title, price, image, inventory, quantity) => {
       e.preventDefault();
-
-      console.count()
       
       if (token && !cartId || cartId === undefined) {
-        console.count()
-          const myUserId = userDetails.user.id
-          console.count()
-          setCart(myUserId, token)
+          const myUserId = userDetails.user.id;
+          setCart(myUserId, token);
+          const cart_id = Number(cartId);
+          const newItem = await createCartItems({productId, quantity, cart_id});
+          if (newItem.id) {
+            handleClick();
+          }
+          
+          reset();
       }
+      if (token && cartId) {
+        const cart_id = Number(cartId);
+        const newItem = await createCartItems({productId, quantity, cart_id});
+          if (newItem.id) {
+            handleClick();
+          }
+        reset();
+      } else {
         let cartObj = JSON.parse(localStorage.getItem('cart')) || []
           if(!cartObj) {
             cartObj[productId] = {
@@ -75,6 +81,7 @@ export default function ProductCard({product, setUserCart}) {
                 quantity: quantity
             };
             localStorage.setItem("cart", JSON.stringify(cart));
+            handleClick();
             reset();
           } else {
             let newItems = {
@@ -86,13 +93,13 @@ export default function ProductCard({product, setUserCart}) {
               quantity: quantity
             };
             cartObj[productId] = newItems;
-          
             localStorage.setItem("cart", JSON.stringify(cartObj));
+            handleClick();
             reset();
-          }  
+          } 
+      }  
     };
-
-
+    
     return (
         <Card varient="outlined" sx={{minHeight: 360}} >
         <CardMedia
@@ -149,13 +156,22 @@ export default function ProductCard({product, setUserCart}) {
           {inventory === 0 ?
           <Button disabled >Sold Out</Button>
           :
+          <>
           <Button 
             disabled={counter <= 0}
             size="small"
             onClick={(e) => addToCart(e, id, title, price, image, inventory, quantity)}
           >
+            
             Add to Cart
-          </Button>}
+          </Button>
+          
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                Item added to cart
+              </Alert>
+          </Snackbar>
+          </>}
         </CardActions>
       </Card>
     );

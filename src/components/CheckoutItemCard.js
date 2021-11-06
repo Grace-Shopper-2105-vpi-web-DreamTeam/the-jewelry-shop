@@ -3,8 +3,6 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import { Grid } from "@mui/material";
 
-
-
 export default function CheckoutItemCard({item}) {
 
     const { title, price, total } = item;
@@ -23,7 +21,7 @@ export default function CheckoutItemCard({item}) {
     return (
         <Box style={{marginLeft: "50px", marginTop: "25px", textAlign: 'center'}}>
             <Divider style={{width: "90vw"}}/>     
-                <Grid container spacing={2} style={{ paddingTop: "10px", paddingBottom: "10px"}} >
+                <Grid container spacing={2} style={{ paddingTop: "10px", paddingBottom: "10px", fontFamily: "sans-serif"}} >
                     <Grid item>
                         <h3>{title}</h3> 
                     </Grid> 

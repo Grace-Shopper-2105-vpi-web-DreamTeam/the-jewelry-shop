@@ -81,7 +81,7 @@ const getCartItemByCartId = async (cartId) => {
 const attachProductInfoToCartItem = async (cartId) => {
     try {
         const { rows: cartItems } = await client.query(`
-            SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, cart_item.quantity*products.price as total
+            SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, products.image, products.inventory, cart_item.quantity*products.price as total
             FROM cart_item
             INNER JOIN products
             ON products.id = cart_item."productId"

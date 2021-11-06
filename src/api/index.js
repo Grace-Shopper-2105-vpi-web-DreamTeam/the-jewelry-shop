@@ -1,4 +1,5 @@
 import axios from 'axios';
+//import { response } from 'express';
 
 const url = "https://frozen-lake-03331.herokuapp.com"
 
@@ -73,6 +74,17 @@ export const createCart = async (userId, token) => {
   }).then((response) => response.data)
 }
 
+export const cartToCheckout = async (userId, token) => {
+  return axios({
+    method:"DELETE",
+    url: `${url}/api/cart/${userId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((response) => response.data)
+}
+
 export const createCartItems = async ({productId, quantity, cart_id}) => {
   return axios({
     method: "POST", 
@@ -84,14 +96,21 @@ export const createCartItems = async ({productId, quantity, cart_id}) => {
   }).then((response) => response.data)
 }
 
-export const cartToCheckout = async (userId, token) => {
+
+export const updateCartItems = async (quantity, cartItemId) => {
   return axios({
-    method:"DELETE",
-    url: `${url}/api/cart/${userId}`,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+    method: "PATCH", 
+    url: `${url}/api/cartitem/${cartItemId}`,
+    data: {
+      quantity
     }
+  }).then((response) => response.data)
+}
+
+export const deleteCartItem = async (cartItemId) => {
+  return axios({
+    method: "DELETE", 
+    url: `${url}/api/cartitem/${cartItemId}`
   }).then((response) => response.data)
 }
 
