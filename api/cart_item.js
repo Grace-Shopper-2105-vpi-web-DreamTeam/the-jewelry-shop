@@ -35,32 +35,38 @@ cartItemRouter.get('/', async (req, res, next) => {
 //I think we only want to send back the new cart item sent.... then when you got to view your cart, it would show up with all the information there...or do we send the whole updated cart back? 
   cartItemRouter.post('/:cartId/items', async (req, res, next) => {
     const { productId, quantity } = req.body
-    const { cartId } = req.params
+    const { cartId } = req.params;
 
     try {
+
       const cart = await getCartByCartId(cartId);
 
       if (!cart) {
+     
             next({
                 name: "Cart Not Found",
                 message: `A Cart with Id ${cartId} Was Not Found`
             });  
 
       } else{
+
         const newCartItem = await addItemToCart({
           cartId,
           productId,
           quantity
         })          
           if (newCartItem) {
+     
               // const newCartItemWithProductInfo = await attachProductInfoToCartItem(cartId)
               // res.send(newCartItemWithProductInfo);
               res.send(newCartItem);
           } else {
+        
             next();
           }
         }
     }catch (err) {
+  
       next(err);
     }
   });

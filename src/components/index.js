@@ -16,3 +16,7 @@ export {default as AdminOrders } from './AdminOrders'
 export {default as AdminProducts } from './AdminProducts'
 export {default as NewProduct } from './NewProduct'
 export {default as AdminEditProduct } from './AdminEditProduct'
+export { default as Cart } from './Cart'
+export { default as Checkout } from './ProceedToCheckout'
+export { default as OrderPlaced } from './OrderPlaced'
+

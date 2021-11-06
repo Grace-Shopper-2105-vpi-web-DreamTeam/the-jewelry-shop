@@ -13,14 +13,18 @@ import {
   UserProfile,
   AdminProfile,
   NewProduct,
-  AdminEditProduct
+  AdminEditProduct,
+  Cart, 
+  Checkout, 
+  OrderPlaced
 } from "."
 
 import {
   getUserOrders,
-  getAllProducts
+  getAllProducts,
+  getCart, 
+  createCart 
 } from "../api"
-
 
 export default function App() {
   const [category, setCategory] = useState('');
@@ -31,6 +35,8 @@ export default function App() {
   const [userOrders, setUserOrders] = useState([]);
   const [productEdit, setProductEdit] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([])
+  const cart = JSON.parse(localStorage.getItem('cart'));
 
   useEffect(() => {
     const getResult = async () => {
@@ -39,7 +45,6 @@ export default function App() {
     }
     getResult();
 }, []);
- 
 
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
@@ -60,18 +65,24 @@ export default function App() {
       }
       fetchUserInfo();
     } 
-  }, [token])
+  }, [token]);
 
+  const setCart = async (userId, token) => {
+    try {
+        const getExistingCart = await getCart(userId, token);
 
-  // useEffect(() => {
-  //   getSomething()
-  //     .then(response => {
-  //       setMessage(response.message);
-  //     })
-  //     .catch(error => {
-  //       setMessage(error.message);
-  //     });
-  // });
+        if(!getExistingCart.message) {
+            const cartId = getExistingCart.cart.id;
+            localStorage.setItem("cartId", cartId);
+        } else { 
+            const createUserCart = await createCart(userId, token);
+            const cartId = createUserCart.cart.id;
+            localStorage.setItem("cartId", cartId);
+        }
+    } catch (error) {
+        console.error(error)
+    }
+}  
 
   return (
     <div className="App">
@@ -80,23 +91,27 @@ export default function App() {
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
           setToken={setToken}
-          userInfo={userInfo}
+          userInfo={userInfo} 
+          setCart={setCart}
         />
     {/* <Testing
       category={category}
     /> */}
-
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register
               setAuthenticated={setAuthenticated}
-              setToken={setToken} />
+              setToken={setToken}
+              cart={cart}
+              />
           </Route>
           <Route exact path="/login" component={Login}>
             <Login
               setAuthenticated={setAuthenticated}
               setToken={setToken}
               setUserInfo={setUserInfo}
+              setCart={setCart}
+              cart={cart}
             />
           </Route>
           <Route exact path="/account" component={UserProfile}>
@@ -125,20 +140,34 @@ export default function App() {
             <Products
               category={category}
               setCategory={setCategory}
+              setCart={setCart}
             />
           </Route>
           <Route path="/jewelry/:category" component={ProductByCategory}>
             <ProductByCategory
               category={category}
               setCategory={setCategory}
+              setCart={setCart}
             />
           </Route>
           {/* <Route> */}
           {/*<Orders />*/}
-          {/* </Route>
-          <Route> */}
-          {/*<Cart />*/}
           {/* </Route> */}
+           <Route exact path="/cart">
+            <Cart 
+              setCartItems={setCartItems}
+              cartItems={cartItems}
+            />
+          </Route>
+          <Route exact path="/checkout">
+            <Checkout
+              setCartItems={setCartItems}
+              cartItems={cartItems}
+            />
+          </Route>
+          <Route exact path="/ordersuccess">
+            <OrderPlaced />
+          </Route>
           <Route path="*">
             <NotFound />
           </Route>

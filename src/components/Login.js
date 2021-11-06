@@ -22,12 +22,9 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
 
-
-
-
 const theme = createTheme();
 
-const Login = ({ setAuthenticated, setToken, setUserInfo }) => {
+const Login = ({ setAuthenticated, setToken, setUserInfo, cart, setCart }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -39,7 +36,8 @@ const Login = ({ setAuthenticated, setToken, setUserInfo }) => {
             const data = await login(username, password);
             console.log("USER RESPONSE", data)
             if (data.token) {
-                const token = data.token
+                const token = data.token;
+                const userId = data.user.id;
                 setUserInfo(data)
                 setToken(data.token)
                 localStorage.setItem('token', token)
@@ -47,6 +45,7 @@ const Login = ({ setAuthenticated, setToken, setUserInfo }) => {
                 localStorage.setItem('userDetails', JSON.stringify(data))
                 setFormSubmittedSuccessfully(true);
                 setAuthenticated(true);
+                setCart(userId, token)
             } else {
                 setError(data.message)
             }
@@ -55,7 +54,12 @@ const Login = ({ setAuthenticated, setToken, setUserInfo }) => {
             console.log(error)
         }
     }
-    if (formSubmittedSuccessfully) {
+
+    if (formSubmittedSuccessfully && cart) {
+        return <Redirect to="/cart" />
+    } 
+      
+    if (formSubmittedSuccessfully && !cart) {
         return <Redirect to="/" />
     }
     

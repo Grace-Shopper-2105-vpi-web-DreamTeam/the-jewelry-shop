@@ -9,7 +9,7 @@ import { getProductsByCategory } from '../api';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
-export default function ProductsByCategory({category, setCategory}) {
+export default function ProductsByCategory({category, setCategory, setCart}) {
 
     const [productsCategory, setProductsCategory ] = useState([]);
 
@@ -23,22 +23,29 @@ export default function ProductsByCategory({category, setCategory}) {
         getProductbyCategoryResults();
     }, [category]);
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    const pageCategory = capitalizeFirstLetter(category)
+
     if(productsCategory.length > 0) {
         return (
             <Container>
-                <h2>Products By Category Page in the works </h2> 
                 <CategoryBanner 
                     category={category}
                     setCategory={setCategory}
                 /> 
                 <h1
                     style={{
+                        marginTop: "10px",
                         marginBottom: "10px",
-                        fontFamily: "sans-serif"
+                        fontFamily: "sans-serif",
+                        textAlign: "center"
                     }}
-                    >
-                    {`Shop by ${category}`}
-                    </h1>
+                >
+                    {`Shop by ${pageCategory}`}
+                </h1>
                 <div
                     style={{
                     display: "flex",
@@ -60,6 +67,7 @@ export default function ProductsByCategory({category, setCategory}) {
                             >
                                 <ProductCard
                                     product={product}
+                                    setCart={setCart}
                                 />
                             </Grid>
                         ))}
