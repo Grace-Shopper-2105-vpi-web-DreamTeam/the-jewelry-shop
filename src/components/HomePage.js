@@ -1,0 +1,84 @@
+import React, { useEffect, useState } from 'react';
+
+import { Link } from "react-router-dom"
+
+import { default as ProductCard } from "./ProductCards";
+import { default as CategoryBanner } from "./CategoryBanner"
+
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import { getAllProducts} from '../api';
+
+export default function HomePage() {
+    const [products, setProducts] = useState([]);
+    const [ randomProducts, setRandomProducts ] = useState([]);
+
+    useEffect(() => {
+        const getResult = async () => {
+             const results = await getAllProducts()
+             setProducts(results)
+        }
+        
+        function getSixRandomProducts() {
+            let randomProductsArray = products.sort(() => .5 - Math.random()).slice(0, 6)
+            setRandomProducts(randomProductsArray)
+            
+        }
+        getResult();
+        getSixRandomProducts()
+    }, []);
+
+    return (
+        <Container>
+           <h1
+                style={{
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                    fontFamily: "sans-serif",
+                    textAlign: "center"
+                }}
+                >
+                   Welcome to Loops <span>&#38;</span>  Strings! 
+                   <br />
+                </h1>
+            <h2
+                style={{
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                    fontFamily: "sans-serif",
+                    textAlign: "center"
+                }}
+                >
+                   View a selection of our Top Sellers Below
+                   <br />
+                   <Link style={{textDecoration: "none"}} to="/jewelry"> Click Here to Shop All our Jewelry</Link>
+                </h2>
+            <div
+                style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                marginBottom: "50px",
+                }}
+            >
+                <Grid container spacing={3} alignItems="stretch">
+                    {randomProducts.map((product) => (
+                        <Grid
+                            item
+                            xs={12}
+                            md={6}
+                            lg={4}
+                            key={product.id}
+                            style={{ height: "100%" }}
+                        >
+                            <ProductCard
+                                product={product}
+                            />
+                        </Grid>
+                    ))}
+            </Grid>        
+            </div>
+        </Container>
+    )
+}
