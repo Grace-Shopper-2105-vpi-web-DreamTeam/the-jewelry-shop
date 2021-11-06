@@ -21,57 +21,64 @@ export default function Cart({setCartItems, cartItems}) {
 
     let LocalStorageToDisplay = [];
 
-    console.log("the cart", cart)
-
     //functions to create and modify cart if logged in user has cart items saved to database
     
     useEffect(() => {
         const getResult = async () => {
-            if (userDetails && !cart) {
+            try {
+                if (userDetails && !cart) {
                 const userId = userDetails.user.id
                 const results = await getCart(userId, myToken)
-                if (results) {
-                const items = results.cart.cartItems
-                setCartItems(items)
+                    if (results) {
+                    const items = results.cart.cartItems
+                    setCartItems(items)
+                    }
                 }
+                if (userDetails && cart) {
+                    const userId = userDetails.user.id
+                    const results = await getCart(userId, myToken)
+                    if (results) {
+                        LocalStorageToDisplay  = getCurrentCartFromLocalStorage();
+                        const LocalStorageItems = await createNewCartItems();
+                        const items = results.cart.cartItems
+                        setCartItems(items, LocalStorageItems)
+                    }
+                }
+            } catch (error) {
+                console.error(error);
             }
-             
         }
         getResult();
     }, [itemDeleted]);
 
+    function getCurrentCartFromLocalStorage() {
+            if(cart && cart.length > 0 ) {
+                let temp = [];
+                for (let i of cart ) {
+                    i && temp.push(i);
+                }
+                cart = temp;
+            } 
+            return cart;
+        }
     async function deleteItem(id) {
         const result = await deleteCartItem(id);
         if(result) {
-            console.log(result)
             setItemDeleted(itemDeleted +1);
         }
     }
-
-       console.log("cartItems", cartItems)
 
     function getUserTotal () {
         const total = cartItems.reduce(function(sum, num) {
             return sum + Number(num.total);
             }, 0)
-            console.log(total)
         return total.toFixed(2)
     }
 
     const grandTotalWithUser = getUserTotal();
 
-
     //functions to create and modify cart if users is a guest or the logged in user has items saved locally. 
-    function getCurrentCartFromLocalStorage() {
-        if(cart && cart.length > 0 ) {
-            let temp = [];
-            for (let i of cart ) {
-                i && temp.push(i);
-            }
-            cart = temp;
-        } 
-        return cart;
-    }
+    
 
     function getTotal () {
         LocalStorageToDisplay  = getCurrentCartFromLocalStorage();
@@ -91,10 +98,7 @@ export default function Cart({setCartItems, cartItems}) {
 
     const grandTotal = getTotal();
 
-    console.log("before prep", LocalStorageToDisplay)
-
-    const prepCheckout = async (e) => {
-        e.preventDefault();
+    async function createNewCartItems() {
         const cartId = JSON.parse(localStorage.getItem('cartId'));
         LocalStorageToDisplay.map((cartItem) => {
             cartItem.cart_id = cartId,
@@ -103,10 +107,14 @@ export default function Cart({setCartItems, cartItems}) {
             delete cartItem.price;
             delete cartItem.title;
         });
-        console.log("cart items to create", LocalStorageToDisplay)
         const cartItemsCreated = await Promise.all(LocalStorageToDisplay.map(createCartItems))
-        console.log("cart Items are", cartItemsCreated)
-        setCartItems(cartItemsCreated)
+        return cartItemsCreated;
+    }
+
+    const prepCheckout = async (e) => {
+        e.preventDefault();
+        const createdItems = await createNewCartItems();
+        setCartItems(createdItems)
         window.location.href = "/checkout";
     }
 

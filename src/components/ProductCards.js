@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { createCart, getCart, createCartItems } from '../api';
+import { createCartItems } from '../api';
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -44,7 +44,7 @@ export default function ProductCard({product, setCart}) {
       }
       if (token && cartId) {
         const cart_id = Number(cartId);
-        await createCartItems({productId, quantity, cart_id});
+        let newCartItem = await createCartItems({productId, quantity, cart_id});
         reset();
       } else {
         let cartObj = JSON.parse(localStorage.getItem('cart')) || []

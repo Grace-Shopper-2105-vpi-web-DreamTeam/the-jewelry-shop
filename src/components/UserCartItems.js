@@ -1,6 +1,6 @@
 import React, { useState} from "react";
 
-import { updateCartItems, deleteCartItem } from "../api";
+import { updateCartItems } from "../api";
 
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -10,8 +10,8 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-export default function UserCartItem({item, deleteItem, itemDeleted, setItemDeleted}) {
-    const { cart_item_id, productId, title, image, price, inventory, total } = item;
+export default function UserCartItem({item, deleteItem}) {
+    const { cart_item_id, title, image, price, inventory, total } = item;
 
     function getQuantity() {
         const rawNum = total / price;
@@ -22,30 +22,15 @@ export default function UserCartItem({item, deleteItem, itemDeleted, setItemDele
 
     const [cartQuantity, setCartQuantity] = useState(quantity);
     const [cartCounter, setCartCounter] = useState(quantity);
-    const [itemTotal, setItemTotal] = useState(total * 1)
 
     let money = price * 1
 
-    // update cart item 
+    let totalPrice = total * 1
+
     const updateCartItem = async (quantity, cartItemId) => {
         await updateCartItems(quantity, cartItemId);
         window.location.href = "/cart";
     };
-
-    // const deleteCartItem = async () => {
-    //     try {
-    //         const deletedItem = await deleteCartItem(cart_item_id);
-    //     if(deletedItem)
-    //     console.log(deletedItem)
-    //     } catch (error) {
-    //         console.error(error)
-    //     } 
-
-    //     // let index = prepCartObj();
-    //     // cartObj.splice(index, 1)
-    //     // localStorage.setItem("cart", JSON.stringify(cartObj));
-    //     // window.location.href = "/cart";
-    // };
 
     return (
         <Box style={{marginLeft: "50px", marginTop: "25px", textAlign: 'center'}}>
@@ -127,7 +112,7 @@ export default function UserCartItem({item, deleteItem, itemDeleted, setItemDele
                                 <br />
                                 <br />
                                 <br />
-                            <p>{`$${itemTotal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
+                            <p>{`$${totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>

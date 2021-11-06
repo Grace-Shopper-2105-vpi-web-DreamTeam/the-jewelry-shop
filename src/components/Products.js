@@ -5,12 +5,10 @@ import { default as CategoryBanner } from "./CategoryBanner"
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { getAllProducts, createCart, getCart } from '../api';
+import { getAllProducts } from '../api';
 
 export default function Products({category, setCategory, setCart}) {
     const [products, setProducts] = useState([]);
-
-    console.log("the products are", products)
 
     useEffect(() => {
         const getResult = async () => {

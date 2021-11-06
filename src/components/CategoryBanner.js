@@ -7,16 +7,10 @@ import braceletCategory from "../imgs/braceletCategory.jpg";
 import earringsCategory from "../imgs/earringsCategory.jpg";
 import necklaceCategory from "../imgs/necklaceCategory.png";
 
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import IconButton from '@mui/material/IconButton';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
-import ProductsByCategory from "./ProductsByCategory";
 
 const images = [
   {
@@ -114,77 +108,70 @@ export default function CategoryBanner({category, setCategory}) {
 
   const [showSection, setShowSection] = useState({ watches: false, rings: false, bracelets: false, earrings: false, necklaces: false })
 
-  const CustomLink = (props) => <Link to={to} {...props} />;
-
   let history = useHistory();
 
-  function toWatches() {
-    history.push("/jewelry/watches")
-  }
-    useEffect(() => {
-        localStorage.setItem("category", JSON.stringify(category));   
-    }, [category]);
+  useEffect(() => {
+      localStorage.setItem("category", JSON.stringify(category));   
+  }, [category]);
 
   return (
     <div>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
-                {images.map((image) => (
-                    <ImageButton
-                        focusRipple
-                        key={image.title}
-                        component={Link} to={`jewlery/${image.id}`}
-                        onClick={() => {
-                            const type = image.id
-                            console.log("type", type)
-                            if (type === 'watches') {
-                                history.push("/jewelry/watches")
-                                setCategory("watches");
-                                setShowSection({ ...showSection, watches: true, rings: false, bracelets: false, earrings: false, necklaces: false });
-                            } else if (type === 'rings') {
-                                history.push("/jewelry/rings")
-                                setCategory("rings");
-                                setShowSection({ ...showSection, watches: false, rings: true, bracelets: false, earrings: false, necklaces: false })
-                            } else if (type === 'bracelets') {
-                              history.push("/jewelry/bracelets");
-                              setCategory("bracelets");
-                              setShowSection({ ...showSection, watches: false, rings: false, bracelets: true, earrings: false, necklaces: false })
-                            } else if (type === 'earrings') {
-                              history.push("/jewelry/earrings");
-                              setCategory("earrings");
-                              setShowSection({ ...showSection, watches: false, rings: false, bracelets: false, earrings: true, necklaces: false })
-                            } else {
-                              history.push("/jewelry/necklaces");
-                              setCategory("necklaces");
-                              setShowSection({ ...showSection, watches: false, rings: false, bracelets: false, earrings: false, necklaces: true })
-                            }
-                        }
-                        }
-                        style={{
-                            width: image.width,
-                        }}
-                    >
-                        <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
-                        <ImageBackdrop className="MuiImageBackdrop-root" />
-                        <Image>
-                            <Typography
-                                component="span"
-                                variant="subtitle1"
-                                color="inherit"
-                                sx={{
-                                    position: 'relative',
-                                    p: 4,
-                                    pt: 2,
-                                    pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                                }}
-                            >
-                                {image.title}
-                                <ImageMarked className="MuiImageMarked-root" />
-                            </Typography>
-                        </Image>
-                    </ImageButton> 
-                ))}
-            </Box>
-      </div> 
-    )
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
+        {images.map((image) => (
+          <ImageButton
+            focusRipple
+            key={image.title}
+            component={Link} to={`jewlery/${image.id}`}
+            onClick={() => {
+              const type = image.id
+              if (type === 'watches') {
+                  history.push("/jewelry/watches")
+                  setCategory("watches");
+                  setShowSection({ ...showSection, watches: true, rings: false, bracelets: false, earrings: false, necklaces: false });
+              } else if (type === 'rings') {
+                  history.push("/jewelry/rings")
+                  setCategory("rings");
+                  setShowSection({ ...showSection, watches: false, rings: true, bracelets: false, earrings: false, necklaces: false })
+              } else if (type === 'bracelets') {
+                history.push("/jewelry/bracelets");
+                setCategory("bracelets");
+                setShowSection({ ...showSection, watches: false, rings: false, bracelets: true, earrings: false, necklaces: false })
+              } else if (type === 'earrings') {
+                history.push("/jewelry/earrings");
+                setCategory("earrings");
+                setShowSection({ ...showSection, watches: false, rings: false, bracelets: false, earrings: true, necklaces: false })
+              } else {
+                history.push("/jewelry/necklaces");
+                setCategory("necklaces");
+                setShowSection({ ...showSection, watches: false, rings: false, bracelets: false, earrings: false, necklaces: true })
+              }
+            }}
+            style={{
+                width: image.width,
+            }}
+          >
+          <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
+          <ImageBackdrop className="MuiImageBackdrop-root" />
+          <Image>
+            <Typography
+              component="span"
+              variant="subtitle1"
+              color="inherit"
+              sx={{
+                  position: 'relative',
+                  p: 4,
+                  pt: 2,
+                  pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+              }}
+            >
+              {image.title}
+              <ImageMarked className="MuiImageMarked-root" />
+            </Typography>
+          </Image>
+          </ImageButton> 
+        ))}
+      </Box>
+    </div> 
+  )
 };
 

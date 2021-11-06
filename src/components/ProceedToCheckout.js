@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import { Typography } from "@mui/material";
@@ -10,10 +10,7 @@ import { getCart, cartToCheckout } from '../api';
 import CheckoutItemCard from "./CheckoutItemCard";
 
 export default function Checkout({cartItems, setCartItems}) {
-    console.log("the cart itmes in checkout", cartItems)
     const [checkoutCart, setCheckoutCart] = useState([]);
-
-    const cartId = JSON.parse(localStorage.getItem('cartId'));
     const userDetails = JSON.parse(localStorage.getItem('userDetails'));
 
     const myToken = userDetails.token;
@@ -24,14 +21,11 @@ export default function Checkout({cartItems, setCartItems}) {
         const getResult = async () => {
              const results = await getCart(userId, myToken)
              setCheckoutCart(results)
-             console.log(results)
              const itemsTocheckout = results.cart.cartItems
              setCartItems(itemsTocheckout)
         }
         getResult();
     }, []);
-
-    console.log("the cart is", checkoutCart);
 
     function getTotal () {
         const total = cartItems.reduce(function(sum, num) {
@@ -45,19 +39,15 @@ export default function Checkout({cartItems, setCartItems}) {
 
     async function checkout(e) {
         e.preventDefault();
-        console.log("checkout")
         const order = await cartToCheckout(userId, myToken)
-        console.log(order)
         if(order) {
             localStorage.removeItem('cartId')
             localStorage.removeItem('cart')
-            console.log("success")
             window.location.href ="/ordersuccess" 
         } else {
             alert("Error Placing order. Please try again")
             window.location.href = "/jewelry";
         }
-
     }
 
   return (

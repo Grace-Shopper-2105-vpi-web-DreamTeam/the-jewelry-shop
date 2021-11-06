@@ -57,14 +57,12 @@ export default function App() {
     try {
         const getExistingCart = await getCart(userId, token);
 
-        if(getExistingCart) {
+        if(getExistingCart.id) {
             const cartId = getExistingCart.cart.id;
-            console.log("existing cart", cartId)
             localStorage.setItem("cartId", cartId);
         } else { 
             const createUserCart = await createCart(userId, token);
             const cartId = createUserCart.cart.id;
-            console.log("new cart", cartId)
             localStorage.setItem("cartId", cartId);
         }
     } catch (error) {
