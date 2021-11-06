@@ -1,5 +1,4 @@
 import axios from 'axios';
-//import { response } from 'express';
 
 const url = "https://frozen-lake-03331.herokuapp.com"
 
@@ -41,27 +40,113 @@ export const register = async (username, password, emailAddress) => {
 };
 
 export const getUserOrders = async (userDetails) => {
-  console.log('userDetails',userDetails)
   return axios({
     method: "GET",
     url: `${url}/api/orders/${userDetails.user.id}`,
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${userDetails.token}`
-  }
-  }).then((response) => response.data)
-}
-
-export const getCart = async (userId, token) => {
-  return axios({
-    method: "GET",
-    url: `${url}/api/cart/${userId}/usercart`,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     }
   }).then((response) => response.data)
 }
+
+
+export const getAllUsers = async (userDetails) => {
+  return axios({
+    method: "GET",
+    url: `${url}/api/users/admin`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+    }
+  }).then((response) => response.data)
+}
+
+export const getAllOrders = async (userDetails) => {
+  return axios({
+    method: "GET",
+    url: `${url}/api/orders`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+    }
+  }).then((response) => response.data)
+}
+
+
+export const updateUserAdmin = async (userId, userDetails) => {
+  console.log('userDetailsAllOrders', userDetails)
+  console.log('userIdUPDATEADMIN', userId)
+  return axios({
+    method: "PATCH",
+    url: `${url}/api/users/admin/${userId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+    }
+  }).then((response) => { console.log('RESPONSE', response); return response.data })
+
+}
+
+export const deleteProduct = async (productId, userDetails) => {
+  return axios({
+    method: "DELETE",
+    url: `${url}/api/products/${productId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`
+    }
+  }).then((response) => response.data)
+
+}
+
+export const createNewProduct = async (title, description, category, price, inventory, image, isActive, userDetails) => {
+  return axios({
+    method: "POST",
+    url: `${url}/api/products`,
+    data: {
+      title: title,
+      description: description,
+      category: category,
+      price: price,
+      inventory: inventory,
+      image: image,
+      isActive: isActive
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`,
+    },
+  })
+  .catch((error) => {
+    throw error.response.data.error
+  })
+  .then((response) => response.data);
+};
+
+export const updateProduct = async (productId, title, description, category, price, inventory, image, isActive, userDetails) => {
+  return axios({
+    method: "PATCH",
+    url: `${url}/api/products/${productId}`,
+    data: {
+      title: title,
+      description: description,
+      category: category,
+      price: price,
+      inventory: inventory,
+      image: image,
+      isActive: isActive
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userDetails.token}`,
+    },
+  })
+  .catch((error) => {
+    throw error.response.data.error
+  })
+  .then((response) => response.data);
+};
 
 export const createCart = async (userId, token) => {
   return axios({
@@ -114,26 +199,19 @@ export const deleteCartItem = async (cartItemId) => {
   }).then((response) => response.data)
 }
 
-// export async function login(username, password) {
-//   try {
-//     const body = {username, password}
-//     const { data } = await axios.post('/api/users/login',body);
-//     return data;
-//   } catch (error) {
-//     return error;
-//   }
-// }
+export const getCart = async (userId, token) => {
+  return axios({
+    method: "GET",
+    url: `${url}/api/cart/${userId}/usercart`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((response) => response.data)
+}
 
-// export async function register(username, password, emailAddress) {
-//   try {
-//     const body = { username, password, emailAddress }
-//     const { data } = await axios.post('/api/users/register', body);
-//     return data;
-//   } catch (error) {
-//     return error;
-//   }
-// }
-  
+
+
 
 
 

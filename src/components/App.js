@@ -11,16 +11,20 @@ import {
   Navbar,
   Logout,
   UserProfile,
+  AdminProfile,
+  NewProduct,
+  AdminEditProduct,
   Cart, 
   Checkout, 
   OrderPlaced
 } from "."
 
-import { getCart, createCart } from "../api"
-
-// import {
-//   getUserOrders
-// } from "../api"
+import {
+  getUserOrders,
+  getAllProducts,
+  getCart, 
+  createCart 
+} from "../api"
 
 export default function App() {
   const [category, setCategory] = useState('');
@@ -29,8 +33,18 @@ export default function App() {
   const [admin, setAdmin] = useState(false)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
+  const [productEdit, setProductEdit] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [cartItems, setCartItems] = useState([])
   const cart = JSON.parse(localStorage.getItem('cart'));
+
+  useEffect(() => {
+    const getResult = async () => {
+         const results = await getAllProducts()
+         setAllProducts(results)
+    }
+    getResult();
+}, []);
 
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
@@ -38,19 +52,19 @@ export default function App() {
       setToken(localStorageToken)
       setAuthenticated(true)
       setUserInfo(JSON.parse(localStorage.getItem('userDetails')))
-      //setAdmin(userInfo.user.isAdmin)
+      console.log("UserInfo!!!!!!!!!",userInfo)
+//       setAdmin(userInfo.user.isAdmin)
+// console.log("ISADMIN",admin)
 
-      // const fetchUserInfo = async () => {
-      //   const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
-      //   if (response) {
-      //     console.log("UserOrders", response)
-      //     setUserOrders(response)
-      //   }
-      // }
-      // fetchUserInfo();
-    } else {
-      setUserOrders([])
-    }
+      const fetchUserInfo = async () => {
+        const response = await getUserOrders(JSON.parse(localStorage.getItem('userDetails')))
+        if (response) {
+          console.log("UserOrders", response)
+          setUserOrders(response)
+        }
+      }
+      fetchUserInfo();
+    } 
   }, [token]);
 
   const setCart = async (userId, token) => {
@@ -77,12 +91,12 @@ export default function App() {
           authenticated={authenticated}
           setAuthenticated={setAuthenticated}
           setToken={setToken}
-          admin={admin}
+          userInfo={userInfo} 
           setCart={setCart}
         />
-        {/* <Testing
-          category={category}
-        /> */}
+    {/* <Testing
+      category={category}
+    /> */}
         <Switch>
           <Route exact path="/register" component={Register}>
             <Register
@@ -106,9 +120,22 @@ export default function App() {
               userInfo={userInfo}
             />
           </Route>
-          {/* <Route>
-            <AdminProfile />
-          </Route> */}
+          <Route exact path = "/admin">
+            <AdminProfile 
+            userInfo={userInfo}
+            />
+          </Route>
+          <Route exact path="/newproduct">
+            <NewProduct
+             setAllProducts={setAllProducts}
+              />
+            </Route>
+            <Route exact path="/editproduct/:id">
+            <AdminEditProduct
+             setAllProducts={setAllProducts}
+             allProducts={allProducts}
+              />
+            </Route>
           <Route exact path="/jewelry" component={Products}>
             <Products
               category={category}

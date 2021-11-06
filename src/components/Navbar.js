@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-const Navbar = ({ authenticated, setAuthenticated, setToken, admin, setCart }) => {
+const Navbar = ({ authenticated, setAuthenticated, setToken, userInfo, setCart }) => {
     let history = useHistory();
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -99,7 +99,7 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin, setCart }) =
                         <MenuItem onClick={() => handleMenuClick('/jewelry')}>Shop</MenuItem>
                         {!authenticated ? (
                             <MenuItem onClick={() => handleMenuClick('/login')}>Login/Register</MenuItem>) : null}
-                        {admin ? (
+                        {userInfo.user && userInfo.user.isAdmin ? (
                             <MenuItem onClick={() => handleMenuClick('/admin')}>Admin</MenuItem>) : null}
                         {authenticated ? (
                             <MenuItem >
@@ -130,7 +130,6 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin, setCart }) =
                                 onClick={handleAccountClick}
                             >
                                 <AccountCircle  />
-                                {/* onClick={handleAccountClick} */}
                             </IconButton>
                         </div>) : null}
                     <div className={classes.menuButton}>
@@ -143,7 +142,6 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, admin, setCart }) =
                             onClick={handleCartClick}
                         >
                             <ShoppingCartIcon /> 
-                            {/* onClick={handleCartClick}  */}
                         </IconButton>
                     </div>
                 </Toolbar>
