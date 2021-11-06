@@ -78,8 +78,8 @@ productsRouter.get("/category/:category", async (req, res, next) => {
 // create product (ADMIN) 
 productsRouter.post("/", requireAdmin, async (req, res, next) => {
     try {
-        const { title, description, category, price, inventory, isActive } = req.body;
-        const product = await createProduct({title, description, category, price, inventory, isActive});
+        const { title, description, category, price, inventory, image, isActive } = req.body;
+        const product = await createProduct({title, description, category, price, inventory, image, isActive});
         if (product) {
             res.send({product});
         } else {
