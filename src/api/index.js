@@ -73,7 +73,6 @@ export const getAllOrders = async (userDetails) => {
   }).then((response) => response.data)
 }
 
-
 export const updateUserAdmin = async (userId, userDetails) => {
   console.log('userDetailsAllOrders', userDetails)
   console.log('userIdUPDATEADMIN', userId)

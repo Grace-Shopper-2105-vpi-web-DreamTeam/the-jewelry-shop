@@ -19,4 +19,5 @@ export {default as AdminEditProduct } from './AdminEditProduct'
 export { default as Cart } from './Cart'
 export { default as Checkout } from './ProceedToCheckout'
 export { default as OrderPlaced } from './OrderPlaced'
+export { default as HomePage } from './HomePage'
 

@@ -16,7 +16,8 @@ import {
   AdminEditProduct,
   Cart, 
   Checkout, 
-  OrderPlaced
+  OrderPlaced, 
+  HomePage
 } from "."
 
 import {
@@ -167,6 +168,9 @@ export default function App() {
           </Route>
           <Route exact path="/ordersuccess">
             <OrderPlaced />
+          </Route>
+          <Route exact path="/">
+            <HomePage />
           </Route>
           <Route path="*">
             <NotFound />
