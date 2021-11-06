@@ -170,7 +170,9 @@ export default function App() {
             <OrderPlaced />
           </Route>
           <Route exact path="/">
-            <HomePage />
+            <HomePage 
+              allProducts={allProducts}  
+            />
           </Route>
           <Route path="*">
             <NotFound />

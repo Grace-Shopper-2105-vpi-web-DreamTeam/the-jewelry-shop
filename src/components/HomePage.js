@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { Link } from "react-router-dom"
 
@@ -9,24 +9,20 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { getAllProducts} from '../api';
 
-export default function HomePage() {
-    const [products, setProducts] = useState([]);
-    const [ randomProducts, setRandomProducts ] = useState([]);
+export default function HomePage({allProducts}) {
+    const [featuredProducts, setFeaturedProducts] = useState([]);
+
+    const inputRef = useRef();
 
     useEffect(() => {
-        const getResult = async () => {
-             const results = await getAllProducts()
-             setProducts(results)
-        }
-        
+
         function getSixRandomProducts() {
-            let randomProductsArray = products.sort(() => .5 - Math.random()).slice(0, 6)
-            setRandomProducts(randomProductsArray)
-            
+            let randomProductsArray = allProducts.sort(() => .5 - Math.random()).slice(0, 6)
+            setFeaturedProducts(randomProductsArray);  
         }
-        getResult();
-        getSixRandomProducts()
-    }, []);
+            getSixRandomProducts();
+        
+    }, [allProducts]);
 
     return (
         <Container>
@@ -50,7 +46,7 @@ export default function HomePage() {
                 }}
                 >
                    View a selection of our Top Sellers Below
-                   <br />
+                   < br />
                    <Link style={{textDecoration: "none"}} to="/jewelry"> Click Here to Shop All our Jewelry</Link>
                 </h2>
             <div
@@ -63,7 +59,7 @@ export default function HomePage() {
                 }}
             >
                 <Grid container spacing={3} alignItems="stretch">
-                    {randomProducts.map((product) => (
+                    {featuredProducts.map((product) => (
                         <Grid
                             item
                             xs={12}
