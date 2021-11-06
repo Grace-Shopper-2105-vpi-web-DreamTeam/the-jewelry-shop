@@ -88,7 +88,7 @@ const AdminEditProduct = ({ setAllProducts}) => {
                         value={category}
                         onChange=
                         {(event) => setCategory(event.target.value)}></input>
-                    <label for="price"><b>Price</b></label>
+                    <label for="price"><b>Price (Do not include dollar sign)</b></label>
                     <input
                         type="text" required
                         name="price"
@@ -104,7 +104,7 @@ const AdminEditProduct = ({ setAllProducts}) => {
                         value={inventory}
                         onChange=
                         {(event) => setInventory(event.target.value)}></input>
-                    <label for="image"><b>Image</b></label>
+                    <label for="image"><b>Image Link</b></label>
                     <input
                         type="text" required
                         name="image"

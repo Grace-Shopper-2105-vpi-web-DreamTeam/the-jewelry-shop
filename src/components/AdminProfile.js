@@ -21,19 +21,19 @@ import Typography from '@mui/material/Typography';
 
 const images = [
     {
-        url: 'https://thejewelryshop.s3.us-east-2.amazonaws.com/Icons/shoppers2.png',
+        url: 'https://thejewelryshop.s3.us-east-2.amazonaws.com/Icons/usersphoto.png',
         title: 'USERS',
         id: 'users',
         width: '30%',
     },
     {
-        url: '',
+        url: 'https://thejewelryshop.s3.us-east-2.amazonaws.com/Icons/productsphoto.png',
         title: 'PRODUCTS',
         id: 'products',
         width: '40%',
     },
     {
-        url: 'https://thejewelryshop.s3.us-east-2.amazonaws.com/Icons/cartIcon.png',
+        url: 'https://thejewelryshop.s3.us-east-2.amazonaws.com/Icons/orderphoto.png',
         title: 'ORDERS',
         id: 'orders',
         width: '30%',
@@ -142,7 +142,7 @@ const AdminProfile = ({ userInfo }) => {
         <div>
             <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
                 <Typography variant="h4">
-                    Welcome to the Admin DashBoard
+                    Welcome to the Admin Dashboard
                 </Typography>
             </Box>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
