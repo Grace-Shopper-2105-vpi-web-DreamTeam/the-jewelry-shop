@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
+import ProductsByCategory from "./ProductsByCategory";
 
 const images = [
   {
@@ -109,42 +110,50 @@ const ImageMarked = styled('span')(({ theme }) => ({
   transition: theme.transitions.create('opacity'),
 }));
 
-
-
-
 export default function CategoryBanner({category, setCategory}) {
 
   const [showSection, setShowSection] = useState({ watches: false, rings: false, bracelets: false, earrings: false, necklaces: false })
 
+  const CustomLink = (props) => <Link to={to} {...props} />;
 
+  let history = useHistory();
+
+  function toWatches() {
+    history.push("/jewelry/watches")
+  }
     useEffect(() => {
         localStorage.setItem("category", JSON.stringify(category));   
     }, [category]);
 
   return (
-      <div>
+    <div>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
                 {images.map((image) => (
                     <ImageButton
                         focusRipple
                         key={image.title}
-                        onClick={(e) => {
+                        component={Link} to={`jewlery/${image.id}`}
+                        onClick={() => {
                             const type = image.id
                             console.log("type", type)
                             if (type === 'watches') {
+                                history.push("/jewelry/watches")
                                 setCategory("watches");
-                                setShowSection({ ...showSection, watches: true, rings: false, bracelets: false, earrings: false, necklaces: false })
-                                
+                                setShowSection({ ...showSection, watches: true, rings: false, bracelets: false, earrings: false, necklaces: false });
                             } else if (type === 'rings') {
+                                history.push("/jewelry/rings")
                                 setCategory("rings");
                                 setShowSection({ ...showSection, watches: false, rings: true, bracelets: false, earrings: false, necklaces: false })
                             } else if (type === 'bracelets') {
+                              history.push("/jewelry/bracelets");
                               setCategory("bracelets");
                               setShowSection({ ...showSection, watches: false, rings: false, bracelets: true, earrings: false, necklaces: false })
                             } else if (type === 'earrings') {
+                              history.push("/jewelry/earrings");
                               setCategory("earrings");
                               setShowSection({ ...showSection, watches: false, rings: false, bracelets: false, earrings: true, necklaces: false })
                             } else {
+                              history.push("/jewelry/necklaces");
                               setCategory("necklaces");
                               setShowSection({ ...showSection, watches: false, rings: false, bracelets: false, earrings: false, necklaces: true })
                             }
@@ -172,131 +181,10 @@ export default function CategoryBanner({category, setCategory}) {
                                 <ImageMarked className="MuiImageMarked-root" />
                             </Typography>
                         </Image>
-                    </ImageButton>
+                    </ImageButton> 
                 ))}
             </Box>
-            {/* {showSection.users && <AdminUsers
-                allUsers={allUsers}
-                toggleAdminStatus={toggleAdminStatus} />}
-            {showSection.orders && <AdminOrders
-                allOrders={allOrders}
-            />} */}
-
-        {/* <ImageList sx={{ width: 1000, height: 250 }} cols={5} style={{justifyContent: "center"}}>
-          <ImageListItem key="1" >
-              <img
-                src={`${watchCategory}?w=248&fit=crop&auto=format`}
-                srcSet={`${watchCategory}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt="click to shop watches"
-                loading="lazy"
-              />
-           
-                <ImageListItemBar
-                    title="Watches"
-                    actionIcon={
-                        <IconButton 
-                            onClick={() => {
-                                setCategory("watches");
-                            }}
-                        >
-                            <Link to="/jewelry/watches"> 
-                            <ArrowForwardIosIcon />
-                            </Link> 
-                        </IconButton>
-                      }
-                />
-        
-            </ImageListItem>
-            <ImageListItem key="2" >
-              <img
-                src={`${ringCategory}?w=248&fit=crop&auto=format`}
-                srcSet={`${ringCategory}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt="click to shop watches"
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title="Rings"
-                actionIcon={
-                    <IconButton 
-                        onClick={() => {
-                            setCategory("rings");
-                        }}
-                    >
-                        <Link to="/jewelry/rings"> 
-                        <ArrowForwardIosIcon />
-                        </Link> 
-                    </IconButton>
-                  }
-              />
-            </ImageListItem>
-            <ImageListItem key="3 " >
-              <img
-                src={`${earringsCategory}?w=248&fit=crop&auto=format`}
-                srcSet={`${earringsCategory}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt="click to shop watches"
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title="Earrings"
-                actionIcon={
-                    <IconButton 
-                        onClick={() => {
-                            setCategory("earrings");
-                        }}
-                    >
-                        <Link to="/jewelry/earrings"> 
-                        <ArrowForwardIosIcon />
-                        </Link> 
-                    </IconButton>
-                  }
-              />
-            </ImageListItem>
-            <ImageListItem key="4">
-              <img
-                src={`${necklaceCategory}?w=248&fit=crop&auto=format`}
-                srcSet={`${necklaceCategory}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt="click to shop watches"
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title="Necklaces"
-                actionIcon={
-                    <IconButton 
-                        onClick={() => {
-                            setCategory("necklaces");
-                        }}
-                    >
-                        <Link to="/jewelry/necklaces"> 
-                        <ArrowForwardIosIcon />
-                        </Link> 
-                    </IconButton>
-                  }
-              />
-            </ImageListItem>
-            <ImageListItem key="5">
-              <img
-                src={`${braceletCategory}?w=248&fit=crop&auto=format`}
-                srcSet={`${braceletCategory}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                alt="click to shop watches"
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title="Bracelets"
-                actionIcon={
-                    <IconButton 
-                        onClick={() => {
-                            setCategory("bracelets");
-                        }}
-                    >
-                        <Link to="/jewelry/bracelets"> 
-                        <ArrowForwardIosIcon />
-                        </Link> 
-                    </IconButton>
-                  }
-              />
-            </ImageListItem>
-        </ImageList> */}
-      </div>
+      </div> 
     )
 };
 
