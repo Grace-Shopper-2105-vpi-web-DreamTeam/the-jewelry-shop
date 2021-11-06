@@ -27,10 +27,12 @@ function productRandomizor(min, max) {
 
 function getSixRandomProducts() {
     randomProductArray = []
-    for(i= 0; i < 7; i++) {
+    while(randomProductArray.length < 7) {
         productId = productRandomizor(1, 105);
         randomProduct = getProductById(productId)
+        if(randomProduct.quantity != 0) {
         randomProductArray.push(randomProduct)
+        }
     }
 
 getSixRandomProducts();
