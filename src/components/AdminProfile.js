@@ -18,6 +18,8 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import diamonds2 from "../imgs/diamonds2.png";
 
 const images = [
     {
@@ -137,14 +139,30 @@ const AdminProfile = ({ userInfo }) => {
             setAllUsers(users)
         }
     }
-
     return (
         <div>
-            <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
-                <Typography variant="h4">
-                    Welcome to the Admin Dashboard
-                </Typography>
-            </Box>
+            {userInfo.user && (
+                    <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
+                        <Paper
+                            sx={{
+                                position: 'relative',
+                                backgroundColor: '#dccdc6',
+                                color: 'black',
+                                mb: 4,
+                        
+                            }}
+                        >
+                            <Typography variant="h4">
+                                <br></br>
+                                Welcome to the Admin Dashboard, {userInfo.user.username}
+                                <br></br>
+                                <br></br>
+                            </Typography>
+                            <br></br>
+                        </Paper>
+                    </Box>
+
+                )}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
                 {images.map((image) => (
                     <ImageButton
