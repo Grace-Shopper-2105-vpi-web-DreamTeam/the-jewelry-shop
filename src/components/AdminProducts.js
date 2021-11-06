@@ -1,42 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { default as AdminProductCard } from "./AdminProductCard";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button'
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import { Box } from "@mui/material";
+import Typography from '@mui/material/Typography';
 
 import {
     useHistory,
 } from "react-router-dom"
 
 const AdminProducts = ({ allProducts, setAllProducts, setProductEdit }) => {
-let history = useHistory();
+    let history = useHistory();
     return (
         <Container>
+            <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
+                <Paper
+                    sx={{
+                        position: 'relative',
+                        backgroundColor: '#dccdc6',
+                        color: 'black',
+                        mb: 4,
 
-            <h1
-                style={{
-                    marginBottom: "10px",
-                    fontFamily: "sans-serif"
-                }}
-            >
-                Loops & Strings Current Inventory
-            </h1>
-            <Stack direction="row" spacing={2}>
-                  
-                    <Button onClick={() => history.push('/newproduct')} variant="contained" startIcon={<AddBoxIcon />}>
-                        Add A New Product
-                    </Button>
-                </Stack>
-
-            {/* <button className="btn-add-routine" onClick={() => history.push('/newproduct')}>+ Add A New Product</button> */}
-
-
+                    }}
+                >
+                    <Typography variant="h4">
+                        <br></br>
+                        Loops & Strings Current Inventory
+                        <br></br>
+                        <br></br>
+                    </Typography>
+                    <br></br>
+                </Paper>
+            </Box>
+            <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
+                <Button style={{ alignItems: 'center' }} onClick={() => history.push('/newproduct')} variant="contained" startIcon={<AddBoxIcon />}>
+                    Add A New Product
+                </Button>
+                <br></br>
+                <br></br>
+            </Box>
             <div
                 style={{
                     display: "flex",

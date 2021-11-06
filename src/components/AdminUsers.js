@@ -7,8 +7,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const AdminUsers = ({allUsers, toggleAdminStatus}) => {
@@ -35,10 +33,6 @@ const AdminUsers = ({allUsers, toggleAdminStatus}) => {
               </TableCell>
               <TableCell align="right">{user.id}</TableCell>
               <TableCell align="right">{user.emailAddress}</TableCell>
-
-              {/* <Button onClick={() => history.push(`/editproduct/${product.id}`)}variant="contained" startIcon={<EditIcon />}>
-                        Edit
-                    </Button> */}
               { !user.isAdmin ?  ( <TableCell align="right"> <Button onClick = {()=>toggleAdminStatus(user.id)}variant="contained" startIcon={<PersonAddIcon />}>
                   Add Admin Status</Button></TableCell>) :null}
             </TableRow>
