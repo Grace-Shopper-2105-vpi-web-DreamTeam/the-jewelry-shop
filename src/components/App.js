@@ -11,12 +11,16 @@ import {
   Navbar,
   Logout,
   UserProfile,
-  AdminProfile
+  AdminProfile,
+  NewProduct,
+  AdminEditProduct
 } from "."
 
 import {
-  getUserOrders
+  getUserOrders,
+  getAllProducts
 } from "../api"
+
 
 export default function App() {
   const [category, setCategory] = useState('');
@@ -25,6 +29,17 @@ export default function App() {
   const [admin, setAdmin] = useState(false)
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
+  const [productEdit, setProductEdit] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+
+  useEffect(() => {
+    const getResult = async () => {
+         const results = await getAllProducts()
+         setAllProducts(results)
+    }
+    getResult();
+}, []);
+ 
 
   useEffect(() => {
     const localStorageToken = localStorage.getItem('token')
@@ -95,6 +110,17 @@ export default function App() {
             userInfo={userInfo}
             />
           </Route>
+          <Route exact path="/newproduct">
+            <NewProduct
+             setAllProducts={setAllProducts}
+              />
+            </Route>
+            <Route exact path="/editproduct/:id">
+            <AdminEditProduct
+             setAllProducts={setAllProducts}
+             allProducts={allProducts}
+              />
+            </Route>
           <Route exact path="/jewelry" component={Products}>
             <Products
               category={category}
