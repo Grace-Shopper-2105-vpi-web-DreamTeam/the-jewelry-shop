@@ -50,8 +50,8 @@ export const getUserOrders = async (userDetails) => {
   }).then((response) => response.data)
 }
 
+
 export const getAllUsers = async (userDetails) => {
-  console.log('userDetailsAllUsers', userDetails)
   return axios({
     method: "GET",
     url: `${url}/api/users/admin`,
@@ -63,7 +63,6 @@ export const getAllUsers = async (userDetails) => {
 }
 
 export const getAllOrders = async (userDetails) => {
-  console.log('userDetailsAllOrders', userDetails)
   return axios({
     method: "GET",
     url: `${url}/api/orders`,
@@ -73,6 +72,7 @@ export const getAllOrders = async (userDetails) => {
     }
   }).then((response) => response.data)
 }
+
 
 export const updateUserAdmin = async (userId, userDetails) => {
   console.log('userDetailsAllOrders', userDetails)
@@ -148,25 +148,69 @@ export const updateProduct = async (productId, title, description, category, pri
   .then((response) => response.data);
 };
 
-// export async function login(username, password) {
-//   try {
-//     const body = {username, password}
-//     const { data } = await axios.post('/api/users/login',body);
-//     return data;
-//   } catch (error) {
-//     return error;
-//   }
-// }
+export const createCart = async (userId, token) => {
+  return axios({
+    method: "POST", 
+    url: `${url}/api/cart/${userId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((response) => response.data)
+}
 
-// export async function register(username, password, emailAddress) {
-//   try {
-//     const body = { username, password, emailAddress }
-//     const { data } = await axios.post('/api/users/register', body);
-//     return data;
-//   } catch (error) {
-//     return error;
-//   }
-// }
+export const cartToCheckout = async (userId, token) => {
+  return axios({
+    method:"DELETE",
+    url: `${url}/api/cart/${userId}`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((response) => response.data)
+}
+
+export const createCartItems = async ({productId, quantity, cart_id}) => {
+  return axios({
+    method: "POST", 
+    url: `${url}/api/cartitem/${cart_id}/items`,
+    data: {
+      productId,
+      quantity
+    }
+  }).then((response) => response.data)
+}
+
+
+export const updateCartItems = async (quantity, cartItemId) => {
+  return axios({
+    method: "PATCH", 
+    url: `${url}/api/cartitem/${cartItemId}`,
+    data: {
+      quantity
+    }
+  }).then((response) => response.data)
+}
+
+export const deleteCartItem = async (cartItemId) => {
+  return axios({
+    method: "DELETE", 
+    url: `${url}/api/cartitem/${cartItemId}`
+  }).then((response) => response.data)
+}
+
+export const getCart = async (userId, token) => {
+  return axios({
+    method: "GET",
+    url: `${url}/api/cart/${userId}/usercart`,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  }).then((response) => response.data)
+}
+
+
 
 
 

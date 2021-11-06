@@ -63,22 +63,23 @@ cartRouter.get("/:userId/usercart", requireLogin, async (req, res, next) => {
 cartRouter.post("/:userId", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
 
-    const cartToCheck = await getCartByUserId(userId);
-
-        if(cartToCheck) {
-            next({
-                name: "ActiveCartExistsError",
-                message: `An active cart already exists for this user`
-            })
-        }
-
     try {
+        const cartToCheck = await getCartByUserId(userId);
+        console.log(cartToCheck)
 
+            if(cartToCheck) {
+                next({
+                    name: "ActiveCartExistsError",
+                    message: `An active cart already exists for this user`
+                })
+            }
         const cart = await createCart({ userId });
+
         if (cart) {
             res.send(cart);
 
-        } else if (req.user.id !== +userId) {
+        } 
+        else if (req.user.id !== +userId) {
             next({
                 name: "Not Authorized",
                 message: `Logged In User Does Not Match Requested User`
