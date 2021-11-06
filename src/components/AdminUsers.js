@@ -6,6 +6,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const AdminUsers = ({allUsers, toggleAdminStatus}) => {
 
@@ -13,14 +15,14 @@ const AdminUsers = ({allUsers, toggleAdminStatus}) => {
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
-          <TableRow>
-            <TableCell>Username</TableCell>
-            <TableCell align="right">User&nbsp;Id</TableCell>
-            <TableCell align="right">Email&nbsp;Address</TableCell>
-            <TableCell align="right">Change&nbsp;Status&nbsp;to&nbsp;Admin</TableCell>
+          <TableRow style={{backgroundColor: "#dccdc6" }}>
+            <TableCell><h2>Username</h2></TableCell>
+            <TableCell align="right"><h2>User&nbsp;Id</h2></TableCell>
+            <TableCell align="right"><h2>Email&nbsp;Address</h2></TableCell>
+            <TableCell align="right"><h2>Change&nbsp;Status&nbsp;to&nbsp;Admin</h2></TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody >
           {allUsers.map((user) => (
             <TableRow
               key={user.id}
@@ -31,7 +33,8 @@ const AdminUsers = ({allUsers, toggleAdminStatus}) => {
               </TableCell>
               <TableCell align="right">{user.id}</TableCell>
               <TableCell align="right">{user.emailAddress}</TableCell>
-              { !user.isAdmin ?  ( <TableCell align="right"> <button onClick = {()=>toggleAdminStatus(user.id)}>Add Admin Status</button></TableCell>) :null}
+              { !user.isAdmin ?  ( <TableCell align="right"> <Button onClick = {()=>toggleAdminStatus(user.id)}variant="contained" startIcon={<PersonAddIcon />}>
+                  Add Admin Status</Button></TableCell>) :null}
             </TableRow>
           ))}
         </TableBody>
@@ -40,36 +43,7 @@ const AdminUsers = ({allUsers, toggleAdminStatus}) => {
   );
 }
 
-// const AdminUsers = ({allUsers, toggleAdminStatus}) => {
 
-
-    
-//     return (
-//         <div>
-//             {
-//                 allUsers.map(user => (
-//                     <div key={user.id}>
-//                         <h1>User Name: {user.username}</h1>
-//                         <h3>Id: {user.id}</h3>
-//                         <h3>Email Address: {user.emailAddress}</h3>
-//                         { user.isAdmin ? (
-//                         <>
-//                         <h3>Type: Admin</h3>
-//                         </>
-//                         ) : (
-//                         <>
-//                         <h3>Type: User</h3>
-//                         <button onClick = {()=>toggleAdminStatus(user.id)}>Add Admin Status</button>
-//                         </>
-//                         )
-//                         }
-//                     </div>
-
-//                 ))
-//             }
-//         </div>
-//     )
-// }
 
 export default AdminUsers
 

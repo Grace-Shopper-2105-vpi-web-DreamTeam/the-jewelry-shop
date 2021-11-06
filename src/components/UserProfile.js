@@ -44,9 +44,7 @@ const UserProfile = ({ userOrders, userInfo }) => {
                         >
                             <Typography variant="h2">
                                 <br></br>
-                                <br></br>
                                 Welcome to Your Account Profile, {userInfo.user.username}
-                                <br></br>
                                 <br></br>
                                 <br></br>
                             </Typography>
