@@ -147,7 +147,7 @@ const AdminProfile = ({ userInfo }) => {
                         
                             }}
                         >
-                            <Typography variant="h4">
+                            <Typography variant="h2">
                                 <br></br>
                                 Welcome to the Admin Dashboard, {userInfo.user.username}
                                 <br></br>
