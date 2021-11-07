@@ -34,7 +34,6 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, cart, setCart }) => {
         event.preventDefault();
         try {
             const data = await login(username, password);
-            console.log("USER RESPONSE", data)
             if (data.token) {
                 const token = data.token;
                 const userId = data.user.id;

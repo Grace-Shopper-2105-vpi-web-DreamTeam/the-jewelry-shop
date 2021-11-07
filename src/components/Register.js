@@ -37,7 +37,6 @@ const Register = ({ setAuthenticated, setToken, cart }) => {
         if(createUserCart) {
             const cartId = createUserCart.id;
             localStorage.setItem("cartId", cartId);
-            console.log("cart created", createUserCart)
         }
     } catch (error) {
         console.error(error)
@@ -52,7 +51,6 @@ const Register = ({ setAuthenticated, setToken, cart }) => {
     }
     try {
       const data = await register(username, password, email);
-      console.log ("USER RESPONSE", data)
       if (data.token) {
         const token = data.token;
         const userId = data.user.id;

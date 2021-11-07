@@ -113,7 +113,7 @@ const UserProfile = ({ userOrders, userInfo }) => {
                 </Paper>
             </Box>
             <div style={{ height: '100%', width: "100%" }}>
-                {userOrders.map((singleOrder) => (
+                {userOrders.length && userOrders.map((singleOrder) => (
                     <>
                         <Box
                             sx={{

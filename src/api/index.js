@@ -74,8 +74,6 @@ export const getAllOrders = async (userDetails) => {
 }
 
 export const updateUserAdmin = async (userId, userDetails) => {
-  console.log('userDetailsAllOrders', userDetails)
-  console.log('userIdUPDATEADMIN', userId)
   return axios({
     method: "PATCH",
     url: `${url}/api/users/admin/${userId}`,

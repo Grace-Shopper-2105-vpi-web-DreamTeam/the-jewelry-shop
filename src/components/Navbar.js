@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 
 const Navbar = ({ authenticated, setAuthenticated, setToken, userInfo, setCart }) => {
     let history = useHistory();
-    const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const classes = useStyles();
     const theme = useTheme();
