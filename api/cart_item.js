@@ -12,17 +12,12 @@ const {
 
 const { getCartByCartId } = require("../db/cart");
 
-const { requiredNotSent } = require("./utils");
-
-
-
 cartItemRouter.use((req, res, next) => {
     console.log("A request is being made to /cartItem");
 
     next();
 });
 
-//this works, but don't think we will actually need on front end
 cartItemRouter.get('/', async (req, res, next) => {
     try {
         const allCartItems = await getAllCartItems();
@@ -32,49 +27,37 @@ cartItemRouter.get('/', async (req, res, next) => {
     }
 });
 
-//I think we only want to send back the new cart item sent.... then when you got to view your cart, it would show up with all the information there...or do we send the whole updated cart back? 
-  cartItemRouter.post('/:cartId/items', async (req, res, next) => {
-    console.count()
-    const { productId, quantity } = req.body
-    console.count()
-    const { cartId } = req.params;
-    console.count()
-    try {
-      console.count()
-      const cart = await getCartByCartId(cartId);
-      console.count()
-      if (!cart) {
-        console.count()
-            next({
-                name: "Cart Not Found",
-                message: `A Cart with Id ${cartId} Was Not Found`
-            });  
+cartItemRouter.post('/:cartId/items', async (req, res, next) => {
+  const { productId, quantity } = req.body
+  const { cartId } = req.params;
 
-      } else{
-        console.count()
-        const newCartItem = await addItemToCart({
-          cartId,
-          productId,
-          quantity
-        })          
-          if (newCartItem) {
-            console.count()
-              // const newCartItemWithProductInfo = await attachProductInfoToCartItem(cartId)
-              // res.send(newCartItemWithProductInfo);
-              res.send(newCartItem);
-          } else {
-            console.count()
-            next();
-          }
+  try {
+
+    const cart = await getCartByCartId(cartId);
+
+    if (!cart) {
+          next({
+              name: "Cart Not Found",
+              message: `A Cart with Id ${cartId} Was Not Found`
+          });  
+    } else{
+
+      const newCartItem = await addItemToCart({
+        cartId,
+        productId,
+        quantity
+      })          
+        if (newCartItem) {
+            res.send(newCartItem);
+        } else {
+          next();
         }
-    }catch (err) {
-      console.count()
-      next(err);
-    }
-  });
+      }
+  }catch (err) {
+    next(err);
+  }
+});
 
-
-//this seems to work 
 cartItemRouter.patch("/:cartItemId", async (req, res, next) => {
   const { cartItemId } = req.params;
   const { quantity } = req.body;
@@ -100,8 +83,7 @@ cartItemRouter.patch("/:cartItemId", async (req, res, next) => {
     next(error);
   }
 })
-
-//this seems to work 
+ 
 cartItemRouter.delete("/:cartItemId", async (req, res, next) => {
     const { cartItemId } = req.params;
 
@@ -121,6 +103,5 @@ cartItemRouter.delete("/:cartItemId", async (req, res, next) => {
         next(error);
     }
 })
-
 
 module.exports = cartItemRouter;

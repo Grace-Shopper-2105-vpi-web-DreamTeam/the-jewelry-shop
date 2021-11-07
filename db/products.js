@@ -1,9 +1,5 @@
 const {client} = require("./index.js");
 
-// adaptors needed 
-
-// create product (ADMIN)
-
 const createProduct = async ({title, description, category, price, inventory, image, isActive}) => {
 
     if(!isActive && isActive !== false ) {
@@ -28,8 +24,6 @@ const createProduct = async ({title, description, category, price, inventory, im
     }
 }
 
-// get all products
-
 const getAllProducts = async () => {
     try {
         const {
@@ -46,8 +40,6 @@ const getAllProducts = async () => {
         throw error;
     }
 }
-
-//getAllAvailableProducts 
 
 const getAllActiveProducts = async () => {
     try {
@@ -66,8 +58,6 @@ const getAllActiveProducts = async () => {
     }
 }
 
-// get product by id
-
 const getProductById = async (id) => {
     try {
         const {
@@ -85,8 +75,6 @@ const getProductById = async (id) => {
         throw error;
     }
 }
-
-// get products by catagory 
 
 const getProductByCategory = async (category) => {
     try {
@@ -107,8 +95,6 @@ const getProductByCategory = async (category) => {
     }
 }
 
-// edit product (ADMIN)
-
 const updateProduct = async (id, fields = {}) => {
 
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index +1}`).join(", ");
@@ -116,8 +102,6 @@ const updateProduct = async (id, fields = {}) => {
     if(setString.length === 0 ) {
         return;
     }
-
-   
 
     try {
         const {
@@ -136,8 +120,6 @@ const updateProduct = async (id, fields = {}) => {
      throw error;   
     }
 }
-
-// delete product (ADMIN)
 
 const deleteProduct = async (id) => {
     try {
@@ -185,7 +167,6 @@ const deactivateProduct = async (id) => {
         throw error;
     }
 }
-// add product to cart (TBC if this is something that should be in the cart file)
 
 module.exports = {
     createProduct,

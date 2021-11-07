@@ -6,6 +6,5 @@ const client = new Client(
 
 // export
 module.exports = {
-  client,
-  
+  client
 } 

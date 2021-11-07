@@ -1,8 +1,6 @@
 const { client } = require("./index");
 const { attachProductInfoToOrderItem, attachAllProductInfoToOrderItemAndToOrder } = require("./orderItems");
 
-//need to attach order items to order via orderID
-
 async function getAllOrders() {
     try {
         const { rows: orders } = await client.query(`

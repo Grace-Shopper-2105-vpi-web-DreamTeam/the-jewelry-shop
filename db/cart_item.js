@@ -1,7 +1,4 @@
 const {client} = require("./index.js");
-//need to check that the manipulator of the cart item is the use
-
-// create cart item 
 
 const addItemToCart = async ({cartId, productId, quantity}) => {
 
@@ -23,7 +20,6 @@ const addItemToCart = async ({cartId, productId, quantity}) => {
     }
 } 
 
-//this exists just for testing purposes 
 const getAllCartItems = async () => {
     try {
         const {
@@ -40,8 +36,6 @@ const getAllCartItems = async () => {
     }
 }
 
-
-//this seems to be working
 const getCartItemById = async (cartItemId) => {
 
     try {
@@ -58,7 +52,7 @@ const getCartItemById = async (cartItemId) => {
         return cart_item;
 
     } catch (error) {
-        
+        throw error;
     }
 }
 
@@ -72,16 +66,14 @@ const getCartItemByCartId = async (cartId) => {
 
         return cartItems;
     } catch (error) {
-        throw (error)
+        throw error;
     }
 }
-
-//this seems to be working
 
 const attachProductInfoToCartItem = async (cartId) => {
     try {
         const { rows: cartItems } = await client.query(`
-            SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, cart_item.quantity*products.price as total
+            SELECT cart_item.id as cart_item_id, cart_item."productId", cart_item."cartId", products.title, products.description, products.price, products.image, products.inventory, cart_item.quantity*products.price as total
             FROM cart_item
             INNER JOIN products
             ON products.id = cart_item."productId"
@@ -94,8 +86,6 @@ const attachProductInfoToCartItem = async (cartId) => {
     }
     
 }
-
-// edit cart item qantity - this seems to be working
 
 const updateCartItemQuantity = async (quantity, cartItemId) => {
     try {
@@ -112,11 +102,9 @@ const updateCartItemQuantity = async (quantity, cartItemId) => {
         
         return updatedCartItem;
     } catch (error) {
-        
+        throw error;
     }
 }
-
-// delete cart item - this seems to be working
 
 const deleteCartItem = async (cartItemId) => {
     try {
@@ -132,7 +120,7 @@ const deleteCartItem = async (cartItemId) => {
         return deletedCartItem;
         
     } catch (error) {
-        
+        throw error;
     }
 }
 
@@ -145,32 +133,3 @@ module.exports = {
     getAllCartItems,
     updateCartItemQuantity
 }
-
-
-// const attachProductInfoToCartItemAndToCart = async (carts) => {
-//     const cartsToReturn = [...carts];
-//     const binds = carts.map((_, index) => `$${index + 1}`).join(", ");
-//     const cartIds = carts.map((cart) => cart.id);
-
-//     if (!cartIds?.length) return;
-
-//     try {
-//         const { rows: cartItems } = await client.query(`
-//             SELECT cart_item.*, products.title, products.description, products.price, cart_item.quantity
-//             FROM products
-//             JOIN cart_item ON products.id = cart_item."productId"
-//             WHERE cart_item."cartId" IN(${binds});
-//         `, cartIds);
-
-//         for (const cart of cartsToReturn) {
-//             const itemsToAdd = cartItems.filter((cartItem) => cartItem.cartId = cart.id);
-
-//             cart.cart_items = itemsToAdd;
-//         }
-
-//         return cartsToReturn;
-//     } catch (error) {
-//         throw error;
-//     }
-
-// }

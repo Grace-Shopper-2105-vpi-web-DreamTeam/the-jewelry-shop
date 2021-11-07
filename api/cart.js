@@ -36,7 +36,6 @@ cartRouter.get("/:cartId/cart", async (req, res, next) => {
     }
 });
 
-//make a check to confirm that the user getting the cart has the same id as the cart's user id
 cartRouter.get("/:userId/usercart", requireLogin, async (req, res, next) => {
     try {
         const { userId } = req.params;
@@ -60,13 +59,11 @@ cartRouter.get("/:userId/usercart", requireLogin, async (req, res, next) => {
     }
 });
 
-cartRouter.post("/:userId",  async (req, res, next) => {
-    // requireLogin,
+cartRouter.post("/:userId", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
 
     try {
         const cartToCheck = await getCartByUserId(userId);
-        console.log(cartToCheck)
 
             if(cartToCheck) {
                 next({
@@ -96,8 +93,6 @@ cartRouter.post("/:userId",  async (req, res, next) => {
     }
 })
 
-
-//make a check to confirm that the user getting the cart has the same id as the cart's user id
 cartRouter.delete("/deactivatecart/:cartId", requireLogin, async (req, res, next) => {
   const { cartId } = req.params;
 
@@ -122,8 +117,6 @@ cartRouter.delete("/deactivatecart/:cartId", requireLogin, async (req, res, next
   }
 })
 
-
-//make a check to confirm that the user getting the cart has the same id as the cart's user id
 cartRouter.delete("/:userId", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
   
@@ -149,7 +142,6 @@ cartRouter.delete("/:userId", requireLogin, async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-  })
-
+})
 
 module.exports = cartRouter;

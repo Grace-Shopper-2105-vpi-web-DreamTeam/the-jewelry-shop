@@ -32,7 +32,6 @@ usersRouter.get("/me", requireLogin, async (req, res, next) => {
     }
 });
 
-// this only works if we just delete user. Not cart or order 
 usersRouter.delete("/admin/:userId", requireAdmin, async (req, res, next) => {
     const { userId } = req.params
     try {
@@ -83,19 +82,6 @@ usersRouter.patch("/admin/:userId", requireLogin, async (req, res, next) => {
         next(error);
     }
 });
-
-// usersRouter.get("/:userId/orders", async (req, res, next) => {
-//     const { userId } = req.params;
-//     const userOrders = await getUserById({ userId });
-//     res.send(userOrders)
-// });
-
-
-// usersRouter.get("/:userId/cart", async (req, res, next) => {
-//     const { userId } = req.params;
-//     const userCart = await getUserById({ userId });
-//     res.send(userCart);
-// });
 
 usersRouter.patch('/:userId', requireLogin, async (req, res, next) => {
     try {
@@ -218,7 +204,6 @@ usersRouter.post("/login", async (req, res, next) => {
             });
         }
     } catch (error) {
-        console.log("error", error)
         next(error);
     }
 });

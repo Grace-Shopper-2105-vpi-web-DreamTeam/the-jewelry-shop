@@ -3,7 +3,7 @@ import {
     //   Link,
     Redirect
 } from "react-router-dom"
-import { login, createCart } from '../api';
+import { login } from '../api';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -22,43 +22,18 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
 
-
-
-
 const theme = createTheme();
 
-const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) => {
+const Login = ({ setAuthenticated, setToken, setUserInfo, cart, setCart }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
-    const setCart = async (userId) => {
-        try {
-            const getExistingCart = await getCart(userId);
-            const createUserCart = await createCart(userId);
-
-            if(getExistingCart && !createUserCart) {
-                setUserCart(getExistingCart);
-                const cartId = getExistingCart.id;
-                localStorage.setItem("cartId", cartId);
-                console.log("cart exists", getExistingCart)
-            } else {
-                setUserCart(createUserCart);
-                const cartId = createUserCart.id;
-                localStorage.setItem("cartId", cartId);
-                console.log("cart created", createUserCart)
-            }
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             const data = await login(username, password);
-            console.log("USER RESPONSE", data)
             if (data.token) {
                 const token = data.token;
                 const userId = data.user.id;
@@ -69,7 +44,7 @@ const Login = ({ setAuthenticated, setToken, setUserInfo, setUserCart, cart }) =
                 localStorage.setItem('userDetails', JSON.stringify(data))
                 setFormSubmittedSuccessfully(true);
                 setAuthenticated(true);
-                setCart(userId)
+                setCart(userId, token)
             } else {
                 setError(data.message)
             }

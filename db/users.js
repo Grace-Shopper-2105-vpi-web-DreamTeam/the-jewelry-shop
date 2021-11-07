@@ -2,7 +2,6 @@ const { client } = require('./index');
 
 const bcrypt = require("bcrypt");
 const SALT_COUNT = 10;
-//tookout on conflict  ON CONFLICT ("emailAddress") DO NOTHING
 
 const createUser = async ({ username, emailAddress, password, isAdmin }) => {
 
@@ -11,7 +10,6 @@ const createUser = async ({ username, emailAddress, password, isAdmin }) => {
     if(isAdmin === null || isAdmin === undefined){
       isAdmin = false;
     }
-    console.log("isAdmin",isAdmin)
     const {
       rows: [user]
     } = await client.query(
@@ -102,7 +100,6 @@ async function updateUserToAdminById(userId) {
   }
 }
 
-//do we want this to be select all so user can see their profile.
 async function getUserByUsername(username) {
   try {
     const { rows: [user] } = await client.query(`
@@ -146,16 +143,6 @@ async function getAllUsers() {
 
 async function deleteUser(id) {
   try {
-//     await client.query(`
-//           DELETE FROM cart
-//           WHERE "userId"=$1;
-//       `, [id]);
-
-//     await client.query(`
-//       DELETE FROM orders
-//       WHERE "userId"=$1;
-//   `, [id]);
-
     const { rows: [user] } = await client.query(`
           DELETE FROM users
           WHERE id = $1
@@ -167,7 +154,6 @@ async function deleteUser(id) {
     throw error;
   }
 }
-
 
 module.exports = {
   createUser,

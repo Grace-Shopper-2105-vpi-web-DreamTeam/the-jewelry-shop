@@ -23,7 +23,7 @@ import Stack from '@mui/material/Stack';
 
 const theme = createTheme();
 
-const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
+const Register = ({ setAuthenticated, setToken, cart }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -31,14 +31,12 @@ const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
   const [error, setError] = useState('');
   const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
-  const setCart = async (userId, token) => {
+  const createNewCart = async (userId, token) => {
     try {
         const createUserCart = await createCart(userId, token);
         if(createUserCart) {
-            setUserCart(createUserCart);
             const cartId = createUserCart.id;
             localStorage.setItem("cartId", cartId);
-            console.log("cart created", createUserCart)
         }
     } catch (error) {
         console.error(error)
@@ -53,7 +51,6 @@ const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
     }
     try {
       const data = await register(username, password, email);
-      console.log ("USER RESPONSE", data)
       if (data.token) {
         const token = data.token;
         const userId = data.user.id;
@@ -63,7 +60,7 @@ const Register = ({ setAuthenticated, setToken, setUserCart, cart }) => {
         localStorage.setItem('userDetails', JSON.stringify(data))
         setFormSubmittedSuccessfully(true);
         setAuthenticated(true);
-        setCart(userId, token)
+        createNewCart(userId, token)
       } else {
         setError(data.message)
       }
