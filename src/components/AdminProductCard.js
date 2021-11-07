@@ -63,7 +63,7 @@ export default function AdminProductCard({ product, setAllProducts, setProductEd
                     Category: {category}
                 </Typography>
                 { !product.isActive ? <Typography variant="body2" color="text.secondary">
-                    Product is inActive, Please Edit to Make Active
+                   <b style={{color:'red'}}> Product is InActive. Please Edit to Make Active.</b>
                 </Typography> : null}
             </CardContent>
             <CardActions>
