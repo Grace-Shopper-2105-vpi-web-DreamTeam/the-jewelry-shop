@@ -9,7 +9,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { getAllProducts} from '../api';
 
-export default function HomePage({allProducts}) {
+export default function HomePage({allProducts, setCart}) {
     const [featuredProducts, setFeaturedProducts] = useState([]);
 
     const inputRef = useRef();
@@ -70,6 +70,7 @@ export default function HomePage({allProducts}) {
                         >
                             <ProductCard
                                 product={product}
+                                setCart={setCart}
                             />
                         </Grid>
                     ))}

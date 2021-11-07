@@ -172,6 +172,7 @@ export default function App() {
           <Route exact path="/">
             <HomePage 
               allProducts={allProducts}  
+              setCart={setCart}
             />
           </Route>
           <Route path="*">
