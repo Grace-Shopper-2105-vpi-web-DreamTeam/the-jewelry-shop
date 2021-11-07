@@ -46,20 +46,16 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, userInfo, setCart }
     };
     const handleCartClick = () => {
         try {
-            console.count()
             if (userDetails) {
                 const myToken = userDetails.token;
                 const userId = userDetails.user.id;
                 setCart(userId, myToken)
             }
-            console.count()
         } catch (error) {
             console.error(error)
         } finally {
             history.push("/cart")
-        }
-        
-        
+        } 
     };
     const handleLogoClick = () => {
         history.push("/")

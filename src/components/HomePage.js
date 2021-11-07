@@ -1,19 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Link } from "react-router-dom"
 
 import { default as ProductCard } from "./ProductCards";
-import { default as CategoryBanner } from "./CategoryBanner"
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { getAllProducts } from '../api';
 import featured from "../imgs/featured.png";
 
 export default function HomePage({allProducts, setCart}) {
     const [featuredProducts, setFeaturedProducts] = useState([]);
 
-    const inputRef = useRef();
 
     useEffect(() => {
 
@@ -107,6 +104,7 @@ export default function HomePage({allProducts, setCart}) {
                             >
                                 <ProductCard
                                     product={product}
+                                    setCart={setCart}
                                 />
                             </Grid>
                         ))}

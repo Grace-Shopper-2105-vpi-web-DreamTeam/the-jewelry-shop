@@ -78,7 +78,6 @@ export default function Cart({setCartItems, cartItems}) {
     const grandTotalWithUser = getUserTotal();
 
     //functions to create and modify cart if users is a guest or the logged in user has items saved locally. 
-    
 
     function getTotal () {
         LocalStorageToDisplay  = getCurrentCartFromLocalStorage();

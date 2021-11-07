@@ -44,6 +44,7 @@ const images = [
     width: '20%',
   },
 ];
+
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
   height: 200,
@@ -64,6 +65,7 @@ const ImageButton = styled(ButtonBase)(({ theme }) => ({
       },
   },
 }));
+
 const ImageSrc = styled('span')({
   position: 'absolute',
   left: 0,
@@ -73,6 +75,7 @@ const ImageSrc = styled('span')({
   backgroundSize: 'cover',
   backgroundPosition: 'center 40%',
 });
+
 const Image = styled('span')(({ theme }) => ({
   position: 'absolute',
   left: 0,
@@ -84,6 +87,7 @@ const Image = styled('span')(({ theme }) => ({
   justifyContent: 'center',
   color: theme.palette.common.white,
 }));
+
 const ImageBackdrop = styled('span')(({ theme }) => ({
   position: 'absolute',
   left: 0,
@@ -94,6 +98,7 @@ const ImageBackdrop = styled('span')(({ theme }) => ({
   opacity: 0.4,
   transition: theme.transitions.create('opacity'),
 }));
+
 const ImageMarked = styled('span')(({ theme }) => ({
   height: 3,
   width: 18,

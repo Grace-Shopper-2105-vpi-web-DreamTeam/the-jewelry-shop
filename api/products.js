@@ -5,7 +5,6 @@ const productsRouter = express.Router();
 const {
     createProduct,
     getAllProducts,
-    getAllActiveProducts,
     getProductById,
     getProductByCategory,
     updateProduct,
@@ -14,21 +13,9 @@ const {
 } = require("../db/products");
 
 const {
-    requireLogin,
     requireAdmin,
     requiredNotSent
 } = require("./utils");
-
-// get all products -- ASK IF WE WANT IT TO SHOW products or not {}
-
-// productsRouter.get("/", async (req, res, next) => {
-//     try {    
-//         const products = await getAllProducts();
-//         res.send({products});
-//     } catch (error) {
-//         next(error);
-//     }
-// })
 
 productsRouter.get("/", async (req, res, next) => {
     try {
@@ -47,7 +34,7 @@ productsRouter.get("/:productId", async (req, res, next) => {
             next({
                 name: "ProductNotFound",
                 message: `No product found with Id ${productId}`
-              })
+            })
         }
 
         res.send({product})
@@ -56,7 +43,6 @@ productsRouter.get("/:productId", async (req, res, next) => {
     }
 })
 
-// get products by category 
 productsRouter.get("/category/:category", async (req, res, next) => {
     try {
         const { category } = req.params;
@@ -75,7 +61,6 @@ productsRouter.get("/category/:category", async (req, res, next) => {
     }
 })
 
-// create product (ADMIN) 
 productsRouter.post("/", requireAdmin, async (req, res, next) => {
     try {
         const { title, description, category, price, inventory, image, isActive } = req.body;
@@ -93,7 +78,6 @@ productsRouter.post("/", requireAdmin, async (req, res, next) => {
     }
 } )
 
-// edit product (ADMIN)
 productsRouter.patch("/:productId", requireAdmin, requiredNotSent({requiredParams: ["title", "description", "category", "price", "inventory", "isActive"], atLeastOne: true}), 
 async (req, res, next) => {
   const { productId } = req.params;
@@ -145,8 +129,6 @@ async (req, res, next) => {
   }
 })
 
-// delete product (ADMIN)
-
 productsRouter.delete("/:productId", requireAdmin, async (req, res, next) => {
     const { productId } = req.params;
     
@@ -186,8 +168,5 @@ productsRouter.delete("/deactivate/:productId", requireAdmin, async (req, res, n
         next(error);
     }
 }) 
-
-
-// add product to cart (TBC if this is something that should be in the cart file)
 
 module.exports = productsRouter;

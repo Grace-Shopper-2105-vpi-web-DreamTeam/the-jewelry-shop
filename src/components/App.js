@@ -5,7 +5,6 @@ import {
   NotFound,
   Products,
   ProductByCategory,
-  Testing,
   Login,
   Register,
   Navbar,
@@ -31,10 +30,10 @@ export default function App() {
   const [category, setCategory] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [token, setToken] = useState('');
-  const [admin, setAdmin] = useState(false)
+  const [admin, setAdmin] = useState(false) // do we need this? 
   const [userInfo, setUserInfo] = useState({});//userInfo.user.id
   const [userOrders, setUserOrders] = useState([]);
-  const [productEdit, setProductEdit] = useState([]);
+  const [productEdit, setProductEdit] = useState([]); //do we need this
   const [allProducts, setAllProducts] = useState([]);
   const [cartItems, setCartItems] = useState([])
   const cart = JSON.parse(localStorage.getItem('cart'));

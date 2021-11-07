@@ -21,9 +21,7 @@ export default function Checkout({cartItems, setCartItems}) {
         const getResult = async () => {
              const results = await getCart(userId, myToken)
              setCheckoutCart(results)
-             console.log("checkoutCart", checkoutCart)
              const itemsTocheckout = results.cart.cartItems
-             console.log("items to checkout", itemsTocheckout)
              setCartItems(itemsTocheckout)
         }
         getResult();

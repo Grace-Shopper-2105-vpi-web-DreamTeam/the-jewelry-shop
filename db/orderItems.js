@@ -1,7 +1,5 @@
 const { client } = require("./index")
 
-// need to attach product infor 
-
 async function addOrderItemToOrder({orderId, productId, quantity}) {
     try {
         const { rows: [order] } = await client.query(`

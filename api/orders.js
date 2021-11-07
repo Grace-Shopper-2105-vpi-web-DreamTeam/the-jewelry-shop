@@ -5,10 +5,6 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { getOrderItemsByOrder, addOrderItemToOrder } = require('../db/orderItems');
 
-//db functions we need 
-//getOrderById
-//deleteOrder
-
 const {
     getAllOrders,
     createOrder,
@@ -19,7 +15,6 @@ const {
 const {
     requireLogin,
     requireAdmin,
-    requiredNotSent
 } = require("./utils");
 
 ordersRouter.get("/",requireLogin,requireAdmin, async (req, res, next) => {
@@ -29,8 +24,7 @@ ordersRouter.get("/",requireLogin,requireAdmin, async (req, res, next) => {
         next(error);
     }
 })
-
-// i think this should be something only admins can do if we need this route at all...not sure. 
+ 
 ordersRouter.get("/:orderId/order", requireLogin, requireAdmin, async (req, res, next) => {
     try {
         const { orderId } = req.params;
@@ -81,7 +75,6 @@ ordersRouter.get("/:userId",requireLogin, async (req, res, next) => {
     }
 });
 
-//Do we even need this if we are going to create the order on checkout?
 ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     const { userId } = req.params;
 
@@ -109,8 +102,6 @@ ordersRouter.post("/:userId/order", requireLogin, async (req, res, next) => {
     }
 })
 
-
-// Maybe not necessary, I was thinking maybe this should be done during the checkout phase in the cart.js checkoutCart db function
 ordersRouter.post('/:orderId/items', async (req, res, next) => {
     const { productId, quantity } = req.body
     const { orderId } = req.params
@@ -148,6 +139,5 @@ ordersRouter.post('/:orderId/items', async (req, res, next) => {
         next(err);
     }
 });
-
 
 module.exports = ordersRouter;
