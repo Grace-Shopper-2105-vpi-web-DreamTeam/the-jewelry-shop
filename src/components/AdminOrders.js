@@ -77,7 +77,7 @@ const AdminOrders = ({ allOrders }) => {
                                     <h3>User Id: {singleOrder.userId}</h3>
                                 </div>
                                 <div>
-                                    <h3>Total: {singleOrder.total}</h3>
+                                    <h3>Total: $ {singleOrder.total}</h3>
                                 </div>
                             </Box>
                             <Box style={{ height: '30vh', width: "100%", backgroundColor: "#e8d9d4" }}>

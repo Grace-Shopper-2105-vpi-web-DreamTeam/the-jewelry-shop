@@ -13,16 +13,11 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Stack from '@mui/material/Stack';
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const theme = createTheme();
@@ -34,10 +29,9 @@ const NewProduct = ({ setAllProducts }) => {
     const [price, setPrice] = useState("");
     const [inventory, setInventory] = useState("");
     const [image, setImage] = useState("");
-    const [isActive, setIsActive] = useState(true)
+    const [isActive, setIsActive] = useState(false)
     let history = useHistory();
     const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -51,13 +45,16 @@ const NewProduct = ({ setAllProducts }) => {
             setPrice("");
             setInventory("");
             setImage("");
-            setIsActive(true);
+            setIsActive(false);
             setFormSubmittedSuccessfully(true);
         }
     }
     if (formSubmittedSuccessfully) {
         history.push("/admin")
     }
+    const handleChange = (event) => {
+        setIsActive(event.target.checked);
+      };
 
     return (
         <ThemeProvider theme={theme}>
@@ -136,7 +133,7 @@ const NewProduct = ({ setAllProducts }) => {
                                 required
                                 fullWidth
                                 name="price"
-                                label="Enter the Jewelry's Price"
+                                label="Enter the Jewelry's Price (Do not include dollar sign)"
                                 type="price"
                                 id="price"
                                 autoComplete="price"
@@ -172,6 +169,10 @@ const NewProduct = ({ setAllProducts }) => {
                                     setImage(event.target.value)
                                 }}
                             />
+                            <FormControlLabel
+                                control={<Checkbox isActive={isActive} onChange={handleChange} />}
+                                label="Check to Make Product Active"
+                            />
                             <Button
                                 type="submit"
                                 fullWidth
@@ -190,65 +191,3 @@ const NewProduct = ({ setAllProducts }) => {
 }
 
 export default NewProduct;
-
- // <div className="card">
-        //     <form onSubmit={handleSubmit}>
-        //         <h1 className="form-title">Add A New Product</h1>
-        //         <div className="form-fields">
-        //             <label for="title"><b>Title</b></label>
-        //             <input
-        //                 type="text" required
-        //                 name="title"
-        //                 placeholder="Enter Your Title"
-        //                 value={title}
-        //                 onChange=
-        //                 {(event) => setTitle(event.target.value)}></input>
-        //             <label for="description"><b>Description</b></label>
-        //             <input
-        //                 type="text" required
-        //                 name="description"
-        //                 placeholder="Enter Your Description"
-        //                 value={description}
-        //                 onChange=
-        //                 {(event) => setDescripton(event.target.value)}></input>
-        //                 <label for="category"><b>Category</b></label>
-        //             <input
-        //                 type="text" required
-        //                 name="category"
-        //                 placeholder="Enter Your Category"
-        //                 value={category}
-        //                 onChange=
-        //                 {(event) => setCategory(event.target.value)}></input>
-        //             <label for="price"><b>Price (Do not include dollar sign)</b></label>
-        //             <input
-        //                 type="text" required
-        //                 name="price"
-        //                 placeholder="Enter Your Price"
-        //                 value={price}
-        //                 onChange=
-        //                 {(event) => setPrice(event.target.value)}></input>
-        //             <label for="inventory"><b>Inventory</b></label>
-        //             <input
-        //                 type="text" required
-        //                 name="inventory"
-        //                 placeholder="Enter the Inventory"
-        //                 value={inventory}
-        //                 onChange=
-        //                 {(event) => setInventory(event.target.value)}></input>
-        //             <label for="image"><b>Image Link</b></label>
-        //             <input
-        //                 type="text" required
-        //                 name="image"
-        //                 placeholder="Enter An Image Link"
-        //                 value={image}
-        //                 onChange=
-        //                 {(event) => setImage(event.target.value)}></input>
-        //         </div>
-        //         <label>Would You Like This Product To Be Active?</label>
-        //         <input
-        //             type="checkbox"
-        //             value={isActive} onChange={(event) => setIsActive(event.target.checked)}></input>
-
-        //         <button className="btn-form" type="submit" >Submit</button>
-        //     </form>
-        // </div>
