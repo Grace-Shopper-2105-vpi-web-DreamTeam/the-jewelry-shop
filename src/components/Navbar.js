@@ -99,7 +99,7 @@ const Navbar = ({ authenticated, setAuthenticated, setToken, userInfo, setCart }
                         <MenuItem onClick={() => handleMenuClick('/jewelry')}>Shop</MenuItem>
                         {!authenticated ? (
                             <MenuItem onClick={() => handleMenuClick('/login')}>Login/Register</MenuItem>) : null}
-                        {userInfo.user && userInfo.user.isAdmin ? (
+                        {authenticated && userInfo.user && userInfo.user.isAdmin ? (
                             <MenuItem onClick={() => handleMenuClick('/admin')}>Admin</MenuItem>) : null}
                         {authenticated ? (
                             <MenuItem >
