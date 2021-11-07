@@ -31,7 +31,7 @@ const AdminEditProduct = ({ setAllProducts }) => {
     const [price, setPrice] = useState("");
     const [inventory, setInventory] = useState("");
     const [image, setImage] = useState("");
-    const [isActive, setIsActive] = useState(true)
+    const [isActive, setIsActive] = useState(false)
     let history = useHistory();
     const [formSubmittedSuccessfully, setFormSubmittedSuccessfully] = useState(false);
 
@@ -45,7 +45,7 @@ const AdminEditProduct = ({ setAllProducts }) => {
             setPrice(productToEdit.price)
             setInventory(productToEdit.inventory)
             setImage(productToEdit.image)
-            setIsActive(true)
+            setIsActive(productToEdit.isActive)
 
         }
         getResult();
