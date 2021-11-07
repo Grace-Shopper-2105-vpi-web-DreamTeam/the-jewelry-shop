@@ -18,6 +18,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 const images = [
     {
@@ -44,7 +45,7 @@ const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: 'relative',
     height: 200,
     [theme.breakpoints.down('sm')]: {
-        width: '100% !important', // Overrides inline-style
+        width: '100% !important', 
         height: 100,
     },
     '&:hover, &.Mui-focusVisible': {
@@ -115,15 +116,12 @@ const AdminProfile = ({ userInfo }) => {
         const getAllData = async () => {
             try {
                 const users = await getAllUsers(JSON.parse(localStorage.getItem('userDetails')))
-                console.log("AllUsers", users)
                 setAllUsers(users)
                 const orders = await getAllOrders(JSON.parse(localStorage.getItem('userDetails')))
-                console.log("AllOrders", orders)
                 setAllOrders(orders)
                 const products = await getAllProducts()
                 setAllProducts(products)
             } catch (error) {
-                console.log(error)
             }
         }
         getAllData();
@@ -133,18 +131,33 @@ const AdminProfile = ({ userInfo }) => {
         const response = await updateUserAdmin(userId, JSON.parse(localStorage.getItem('userDetails')))
         if (response) {
             const users = await getAllUsers(JSON.parse(localStorage.getItem('userDetails')))
-            console.log("AllUsers", users)
             setAllUsers(users)
         }
     }
-
     return (
         <div>
-            <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
-                <Typography variant="h4">
-                    Welcome to the Admin Dashboard
-                </Typography>
-            </Box>
+            {userInfo.user && (
+                    <Box sx={{ p: 2, border: '1px white', textAlign: "center" }}>
+                        <Paper
+                            sx={{
+                                position: 'relative',
+                                backgroundColor: '#dccdc6',
+                                color: 'black',
+                                mb: 4,
+                        
+                            }}
+                        >
+                            <Typography variant="h4">
+                                <br></br>
+                                Welcome to the Admin Dashboard, {userInfo.user.username}
+                                <br></br>
+                                <br></br>
+                            </Typography>
+                            <br></br>
+                        </Paper>
+                    </Box>
+
+                )}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
                 {images.map((image) => (
                     <ImageButton
@@ -152,7 +165,6 @@ const AdminProfile = ({ userInfo }) => {
                         key={image.title}
                         onClick={(e) => {
                             const type = image.id
-                            console.log("type", type)
                             if (type === 'orders') {
                                 setShowSection({ ...showSection, orders: true, users: false, products: false })
                             } else if (type === 'users') {
@@ -197,9 +209,7 @@ const AdminProfile = ({ userInfo }) => {
                  allProducts={allProducts}
                  setAllProducts={setAllProducts}
             />}
-
         </div>
-
     )
 }
 

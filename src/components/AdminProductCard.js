@@ -32,14 +32,9 @@ export default function AdminProductCard({ product, setAllProducts, setProductEd
         const response = await deleteProduct(productId, JSON.parse(localStorage.getItem('userDetails')))
         if (response) {
             const products = await getAllProducts(JSON.parse(localStorage.getItem('userDetails')))
-            console.log("AllProducts", products)
             setAllProducts(products)
         }
     }
-    // const editClickHandlerProduct = (e, product) => {
-    //     setProductEdit(product)
-    //     history.push('/editproduct')
-    // }
     return (
         <Card varient="outlined" sx={{ minHeight: 360 }} >
             <CardMedia
@@ -70,8 +65,6 @@ export default function AdminProductCard({ product, setAllProducts, setProductEd
             </CardContent>
             <CardActions>
                 <Stack direction="row" spacing={2}>
-
-                
                     <Button onClick={() => history.push(`/editproduct/${product.id}`)}variant="contained" startIcon={<EditIcon />}>
                         Edit
                     </Button>

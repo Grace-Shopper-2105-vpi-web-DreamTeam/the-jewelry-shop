@@ -23,9 +23,7 @@ const NewProduct = ({ setAllProducts }) => {
         event.preventDefault();
         const response = await createNewProduct(title, description, category, price, inventory, image, isActive, JSON.parse(localStorage.getItem('userDetails')))
         if (response) {
-            console.log("RESPONSE ADD NEW PRODUCT", response)
             const products = await getAllProducts(JSON.parse(localStorage.getItem('userDetails')))
-            console.log("AllProducts", products)
             setAllProducts(products)
             setTitle("");
             setDescripton("");
