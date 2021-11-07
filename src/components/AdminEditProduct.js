@@ -24,6 +24,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import EditIcon from '@mui/icons-material/Edit';
 
 const theme = createTheme();
 
@@ -103,10 +105,10 @@ const AdminEditProduct = ({ setAllProducts}) => {
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: 'grey' }}>
-                        <LockOutlinedIcon />
+                        <EditIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Add New Loops & Strings Product
+                        Edit A Loops & Strings Product
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
                         <TextField
@@ -116,7 +118,8 @@ const AdminEditProduct = ({ setAllProducts}) => {
                             id="title"
                             label="Enter the Jewelry's Title"
                             name="title"
-                            autoComplete="setTitle"
+                            value={title}
+                            autoComplete="title"
                             autoFocus
                             onChange={(event) => {
                                 setTitle(event.target.value)
@@ -128,6 +131,7 @@ const AdminEditProduct = ({ setAllProducts}) => {
                             fullWidth
                             name="description"
                             label="Enter the Jewelry's Description"
+                            value={description}
                             type="description"
                             id="description"
                             autoComplete="description"
@@ -141,6 +145,7 @@ const AdminEditProduct = ({ setAllProducts}) => {
                             fullWidth
                             name="category"
                             label="Enter the Jewelry's Category"
+                            value={category}
                             type="category"
                             id="category"
                             autoComplete="category"
@@ -154,6 +159,7 @@ const AdminEditProduct = ({ setAllProducts}) => {
                             fullWidth
                             name="price"
                             label="Enter the Jewelry's Price"
+                            value={price}
                             type="price"
                             id="price"
                             autoComplete="price"
@@ -169,6 +175,7 @@ const AdminEditProduct = ({ setAllProducts}) => {
                             name="inventory"
                             label="Enter the Jewelry's Inventory"
                             type="inventory"
+                            value={inventory}
                             id="inventory"
                             autoComplete="inventory"
                             onChange={(event) => {
@@ -182,7 +189,8 @@ const AdminEditProduct = ({ setAllProducts}) => {
                             fullWidth
                             name="image"
                             label="Enter the Jewelry's Image"
-                            type="image"
+                            value={image}
+                            type="anything"
                             id="image"
                             autoComplete="image"
                             onChange={(event) => {

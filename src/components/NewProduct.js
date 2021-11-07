@@ -23,6 +23,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const theme = createTheme();
 
@@ -85,7 +86,7 @@ const NewProduct = ({ setAllProducts }) => {
                         }}
                     >
                         <Avatar sx={{ m: 1, bgcolor: 'grey' }}>
-                            <LockOutlinedIcon />
+                            <AddCircleIcon />
                         </Avatar>
                         <Typography component="h1" variant="h5">
                             Add New Loops & Strings Product
@@ -164,7 +165,7 @@ const NewProduct = ({ setAllProducts }) => {
                                 fullWidth
                                 name="image"
                                 label="Enter the Jewelry's Image"
-                                type="image"
+                                type="anything"
                                 id="image"
                                 autoComplete="image"
                                 onChange={(event) => {
