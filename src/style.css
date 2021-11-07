@@ -6,54 +6,6 @@
     font-family: sans-serif;
   }
 
-.card {
-    width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 3em;
-    margin-bottom:3em;
-    border-radius: 10px;
-    background-color: white;
-    padding: 1.8rem;
-    box-shadow: 2px 5px 20px rgba(0, 0, 0, 0.1);
-}
-
-.form-title {
-    text-align: center;
-    font-weight: bold;
-    margin: 0;
-    padding-bottom: 3rem;
-}
-
-.form-fields {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-fields label {
-    color: rgb(170 166 166);
-}
-
-input[type="text"],
-input[type="password"] {
-    padding: 15px 20px;
-    margin-top: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-}
-
-.btn-form {
-    background-color: #545454;
-    color: white;
-    padding: 18px 20px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 100%;
-    border-radius: 10px;
-    border: none;
-}
 .banner {
     width: 100%;
     height: auto;
