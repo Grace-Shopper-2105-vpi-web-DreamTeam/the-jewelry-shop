@@ -22,7 +22,7 @@ import {
 
 
 export default function AdminProductCard({ product, setAllProducts, setProductEdit }) {
-    const { image, title, description, price, inventory, id, category } = product;
+    const { image, title, description, price, inventory, id, category, isActive } = product;
 
     const money = price * 1;
 
@@ -62,6 +62,9 @@ export default function AdminProductCard({ product, setAllProducts, setProductEd
                 <Typography variant="body2" color="text.secondary">
                     Category: {category}
                 </Typography>
+                { !product.isActive ? <Typography variant="body2" color="text.secondary">
+                    Product is inActive, Please Edit to Make Active
+                </Typography> : null}
             </CardContent>
             <CardActions>
                 <Stack direction="row" spacing={2}>
