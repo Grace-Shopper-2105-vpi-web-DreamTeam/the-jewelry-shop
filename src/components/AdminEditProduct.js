@@ -41,9 +41,7 @@ const AdminEditProduct = ({ setAllProducts}) => {
         event.preventDefault();
         const response = await updateProduct(id, title, description, category, price, inventory, image, isActive, JSON.parse(localStorage.getItem('userDetails')))
         if (response) {
-            console.log("RESPONSE UPDATE PRODUCT", response)
             const products = await getAllProducts(JSON.parse(localStorage.getItem('userDetails')))
-            console.log("AllProducts", products)
             setAllProducts(products)
             setTitle("");
             setDescription("");

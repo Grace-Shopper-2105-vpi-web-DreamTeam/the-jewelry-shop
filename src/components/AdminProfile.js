@@ -116,15 +116,12 @@ const AdminProfile = ({ userInfo }) => {
         const getAllData = async () => {
             try {
                 const users = await getAllUsers(JSON.parse(localStorage.getItem('userDetails')))
-                console.log("AllUsers", users)
                 setAllUsers(users)
                 const orders = await getAllOrders(JSON.parse(localStorage.getItem('userDetails')))
-                console.log("AllOrders", orders)
                 setAllOrders(orders)
                 const products = await getAllProducts()
                 setAllProducts(products)
             } catch (error) {
-                console.log(error)
             }
         }
         getAllData();
@@ -134,7 +131,6 @@ const AdminProfile = ({ userInfo }) => {
         const response = await updateUserAdmin(userId, JSON.parse(localStorage.getItem('userDetails')))
         if (response) {
             const users = await getAllUsers(JSON.parse(localStorage.getItem('userDetails')))
-            console.log("AllUsers", users)
             setAllUsers(users)
         }
     }
@@ -169,7 +165,6 @@ const AdminProfile = ({ userInfo }) => {
                         key={image.title}
                         onClick={(e) => {
                             const type = image.id
-                            console.log("type", type)
                             if (type === 'orders') {
                                 setShowSection({ ...showSection, orders: true, users: false, products: false })
                             } else if (type === 'users') {
@@ -214,9 +209,7 @@ const AdminProfile = ({ userInfo }) => {
                  allProducts={allProducts}
                  setAllProducts={setAllProducts}
             />}
-
         </div>
-
     )
 }
 

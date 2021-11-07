@@ -14,7 +14,6 @@ const Logout = ({ setAuthenticated, setToken, setUserInfo }) => {
     localStorage.removeItem('cart');
     setAuthenticated(false);
     setToken("");
-    // setUserInfo({});
     history.push("/Login");
   }
 
