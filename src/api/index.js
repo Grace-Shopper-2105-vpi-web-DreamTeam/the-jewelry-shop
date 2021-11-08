@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = "https://frozen-lake-03331.herokuapp.com"
+const url = "https://loops-and-strings.herokuapp.com/"
 
 export const getAllProducts = async () => {
   return axios({
