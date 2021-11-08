@@ -51,7 +51,7 @@ export default function AdminProductCard({ product, setAllProducts, setProductEd
                     Product Id: {id}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    Price: {`$${money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}
+                    Price: {`$${money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     Description: {description}

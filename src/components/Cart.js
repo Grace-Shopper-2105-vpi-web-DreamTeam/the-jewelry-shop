@@ -134,7 +134,7 @@ export default function Cart({setCartItems, cartItems}) {
                                 ))}
                             </Grid>
                             <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px", fontFamily: "sans-serif"}}> 
-                                Grand Total: {`$${grandTotalWithUser.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`} 
+                                Grand Total: {`$${grandTotalWithUser.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`} 
                             </div>
                             <br />
                             <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>
@@ -165,7 +165,7 @@ export default function Cart({setCartItems, cartItems}) {
                                 ))}
                             </Grid>
                             <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px", paddingTop: "10px", fontFamily: "sans-serif"}}> 
-                                Grand Total: {`$${grandTotal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`} 
+                                Grand Total: {`$${grandTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`} 
                             </div>
                             <br />
                             <div style={{display: "flex", justifyContent:"flex-end", paddingRight: "50px"}}>

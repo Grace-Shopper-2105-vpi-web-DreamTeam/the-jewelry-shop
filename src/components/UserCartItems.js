@@ -50,7 +50,7 @@ export default function UserCartItem({item, deleteItem}) {
                                 <br />
                                 <br />
                                 <br />
-                                <p>{`$${money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
+                                <p>{`$${money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -112,7 +112,7 @@ export default function UserCartItem({item, deleteItem}) {
                                 <br />
                                 <br />
                                 <br />
-                            <p>{`$${totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
+                            <p>{`$${totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>

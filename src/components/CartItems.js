@@ -14,7 +14,11 @@ export default function CartItem({item}) {
     const [cartQuantity, setCartQuantity] = useState(quantity);
     const [cartCounter, setCartCounter] = useState(quantity);
 
-    let cartObj = JSON.parse(localStorage.getItem('cart'))
+    let cartObj = JSON.parse(localStorage.getItem('cart'));
+
+    const money = price * 1;
+    
+    const totalPrice = (cartQuantity * price).toFixed(2);
 
     function prepCartObj() {
         let temp = []
@@ -76,7 +80,7 @@ export default function CartItem({item}) {
                                 <br />
                                 <br />
                                 <br />
-                                <p>${(price * 1)}</p>
+                                <p>{`$${money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -138,7 +142,7 @@ export default function CartItem({item}) {
                                 <br />
                                 <br />
                                 <br />
-                            <p>${(cartQuantity * price).toFixed(2)}</p>
+                                <p>{`$${totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>
