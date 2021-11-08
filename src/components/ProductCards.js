@@ -113,7 +113,7 @@ export default function ProductCard({product, setCart}) {
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {`$${money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}
+            {`$${money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             {description}

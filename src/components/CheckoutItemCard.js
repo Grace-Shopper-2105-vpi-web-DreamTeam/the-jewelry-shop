@@ -31,7 +31,7 @@ export default function CheckoutItemCard({item}) {
                                 <p>Price: </p> 
                                 <br />
                                 <br />
-                                <p>{`$${money.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
+                                <p>{`$${money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -51,7 +51,7 @@ export default function CheckoutItemCard({item}) {
                             <p>Total: </p> 
                             <br />
                             <br />
-                            <p>{`$${totalPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}`}</p>
+                            <p>{`$${totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}</p>
                             </Grid>
                         </Grid>
                     </Grid>
