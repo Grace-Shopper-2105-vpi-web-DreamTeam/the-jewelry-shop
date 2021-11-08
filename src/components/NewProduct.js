@@ -170,7 +170,7 @@ const NewProduct = ({ setAllProducts }) => {
                                 }}
                             />
                             <FormControlLabel
-                                control={<Checkbox isActive={isActive} onChange={handleChange} />}
+                                control={<Checkbox defaultChecked  isActive={isActive} onChange={handleChange} />}
                                 label="Check to Make Product Active"
                             />
                             <Button
