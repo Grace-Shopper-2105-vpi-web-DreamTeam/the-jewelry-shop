@@ -25,7 +25,7 @@ export default function HomePage({allProducts, setCart}) {
     return (
         <div >
             <div>
-            {/* <Link to="/jewelry"><img className="banner" src={featured} alt="site banner"></img></Link> */}
+            <Link to="/jewelry"><img className="banner" src={featured} alt="site banner"></img></Link>
             </div>
             <Container>
                 <h1
