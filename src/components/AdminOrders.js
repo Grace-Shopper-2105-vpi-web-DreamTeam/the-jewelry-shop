@@ -9,8 +9,8 @@ const AdminOrders = ({ allOrders }) => {
     const columns = [
         { field: "order_item_id", hide: true },
         {
-            field: "description",
-            headerName: "Descriptions",
+            field: "title",
+            headerName: "Item Ordered",
             width: 500
         },
         {
